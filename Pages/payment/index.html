@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" 
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>Payment</title>
+  </head>
+  <body>
+    <!---------------- PAGE Header with navbar ----------------->
+    <div id="pagehead">
+      <div id="pagename">
+        <div class="sitelogo">
+          <img src="../../assets/logo.png" alt="sitelogo" />
+        </div>
+        <div id="name">
+          <a href="../../index.html">Zaika</a>
+          <sub><p class="moto">The Place for taste!!</p></sub>
+        </div>
+        <!-- <div id="Hlinks">
+          <nav>
+            <ul>
+              <li><a href="../login/index.html">Login</a></li>
+              <li><a href="../signup/index.html">Sign Up</a></li>
+            </ul>
+          </nav>
+        </div> -->
+      </div>
+      <div id="navbar">
+        <nav>
+          <ul>
+            <li><a href="../offers/index.html">New Offers</a></li>
+            <li><a href="../Locations/index.html">Locations</a></li>
+            <li><a href="../ContactUs/index.html">Contact Us</a></li>
+            <li><a href="../cart/index.html">My Cart</a></li>
+            <li><a href="../faqs/index.html">Help</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <!--------------------- Page Body ----------------------->
+    <div class="container" id="pagebody">
+      <h1>You Are Just Step Away From Placing The Order! </h1><br>
+        <p id="p" class="text-right">
+          <img src="https://www.pinclipart.com/picdir/big/544-5440422_back-arrow-icon-transparent-png-clipart-free-download.png">
+          <a href="../cart/index.html">Go Back To Previous Page</a>
+        </p>
+        <br>
+        <h2 align="center">Please Complete Your Payment</h2>
+        <center>
+            <div class="main">
+                <br>
+                <div class="payment_container">
+                    <p><strong>Select Your Payment Method Below</strong></p>
+                    <button type="button" class="PaymentOpt" id="button"> Pay Using UPI </button>
+                    <button type="button" class="PaymentOpt" id="button"> Pay Using PayPal </button>
+                </div>
+                <br>
+                <div class="Card_Options">
+                    <br>
+                    <p>Pay Using Debit/Credit Cards (VISA/MASTERCARD/RUPAY CARDS ACCEPTED)</p>
+                    <label>Enter Card Number</label><br>
+                    <input type="text" class="cardnumber" placeholder="Similar To This ->-> XXXX-XXXX-XXXX-XXXX" id="input">
+                </div>
+                <br>
+                <br>
+                <div class="DateFeild">
+                    <label>Expiry Date</label><br>
+                    <input type="text" class="dateofexp" placeholder="->-> MM ">
+                    <input type="text" class="dateofexp" placeholder="->-> YYYY ">
+                </div>
+                <br>
+                <br>
+                <div class="SecurityCode">
+                    <label>Enter The CVV Code</label><br>
+                    <input type="text" class="CVV" placeholder="->-> XXX ">
+                </div>
+                <br>
+                <br>
+                <div class="NameOnCard">
+                    <label>Enter The CardHolder's Name</label><br>
+                    <input type="text" class="nameoncard" placeholder="Full Name -> Eg: ->-> Alice WhitMan " id="input">
+                </div>
+                <br>
+                <br>
+                <center><button type="button" class="pay" id="pay"> Pay Now </button></center>
+            </div>
+        </center>
+    </div>
+    </div>
+    <section class="social-box">
+      <div class="copyTxt">
+        Copyright 
+        <script>
+          document.write(new Date().getFullYear());
+        </script>. All Rights Reserved.
+      </div>
+      <div class="icons">
+        <ul>
+          <li><a href="#" class="facebook"><i class="fa fa-facebook"></i></a></li>
+          <li><a href="#" class="twitter"><i class="fa fa-twitter"></i></a></li>
+          <li><a href="#" class="instagram"><i class="fa fa-instagram"></i></a></li>
+        </ul>
+      </div>
+    </section>
+    <script>
+      // When the user scrolls the page, execute myFunction
+      window.onscroll = function() {myFunction()};
+
+      // Get the header
+      var header = document.getElementById("navbar");
+
+      // Get the offset position of the navbar
+      var sticky = header.offsetTop;
+
+      // Add the sticky class to the header when you reach its scroll position. Remove "sticky" when you leave the scroll position
+      function myFunction() {
+        if (window.pageYOffset > sticky) {
+          header.classList.add("sticky");
+        } else {
+          header.classList.remove("sticky");
+        }
+      }
+    </script>
+  </body>
+</html>

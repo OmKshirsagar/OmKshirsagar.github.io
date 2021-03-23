@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" 
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="icon" type="image/png" href="../../favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="../../favicon-16x16.png" sizes="16x16" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>Sign Up</title>
+  </head>
+  <body>
+    <!---------------- PAGE Header with navbar ----------------->
+    <div id="pagehead">
+      <div id="pagename">
+        <div class="sitelogo">
+          <img src="../../assets/logo.png" alt="sitelogo" />
+        </div>
+        <div id="name">
+          <a href="../../index.html">Zaika</a>
+          <sub><p class="moto">The Place for taste!!</p></sub>
+        </div>
+        <!-- <div id="Hlinks">
+          <nav>
+            <ul>
+              <li><a href="../login/index.html">Login</a></li>
+              <li><a href="../signup/index.html">Sign Up</a></li>
+            </ul>
+          </nav>
+        </div>-->
+      </div>
+      <div id="navbar">
+        <nav>
+          <ul>
+            <li><a href="../offers/index.html">New Offers</a></li>
+            <li><a href="../Locations/index.html">Locations</a></li>
+            <li><a href="../contactUs/index.html">Contact Us</a></li>
+            <li><a href="../cart/index.html">My Cart</a></li>
+            <li><a href="../faqs/index.html">Help</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <!--------------------- Page Body ----------------------->
+    <div class="container text-center pt5" id="pagebody">
+      <form id="sign-up" method="post">
+        <label class="me">SIGN UP</label><br />
+        <label><b>User Name</b></label> <br />
+        <br />
+        <input type="text" name="Uname" id="Uname" placeholder="Username" />
+        <br /><br />
+        <label><b>E-mail</b></label> <br />
+        <br />
+        <input type="e-mail" name="E-mail" id="E-mail" placeholder="E-mail" />
+        <br /><br />
+        <label> <b> Password </b> </label><br />
+        <br />
+        <input type="Password" name="Pass" id="Pass" placeholder="Password" />
+        <br /><br />
+        <label> <b>Confirm Password </b> </label><br />
+        <br />
+        <input
+          type="confirm password"
+          name="Confirm Password"
+          id="Pass"
+          placeholder="Confirm Password"
+        />
+        <br /><br /><br />
+        <input
+          type="button"
+          name="log"
+          id="log"
+          value="Create an Account...."
+        />
+        <br /><br />
+          <a href="../login/index.html"
+            >Already have an account?</a
+          >
+      </form>
+    </div>
+    <section class="social-box">
+      <div class="copyTxt">
+        Copyright 
+        <script>
+          document.write(new Date().getFullYear());
+        </script>. All Rights Reserved.
+      </div>
+      <div class="icons">
+        <ul>
+          <li><a href="#" class="facebook"><i class="fa fa-facebook"></i></a></li>
+          <li><a href="#" class="twitter"><i class="fa fa-twitter"></i></a></li>
+          <li><a href="#" class="instagram"><i class="fa fa-instagram"></i></a></li>
+        </ul>
+      </div>
+    </section>
+    <script>
+      // When the user scrolls the page, execute myFunction
+      window.onscroll = function() {myFunction()};
+
+      // Get the header
+      var header = document.getElementById("navbar");
+
+      // Get the offset position of the navbar
+      var sticky = header.offsetTop;
+
+      // Add the sticky class to the header when you reach its scroll position. Remove "sticky" when you leave the scroll position
+      function myFunction() {
+        if (window.pageYOffset > sticky) {
+          header.classList.add("sticky");
+        } else {
+          header.classList.remove("sticky");
+        }
+      }
+    </script>
+  </body>
+</html>

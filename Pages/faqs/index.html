@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="../../favicon-32x32.png"
+      sizes="32x32"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="../../favicon-16x16.png"
+      sizes="16x16"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>Help</title>
+  </head>
+  <body>
+    <!---------------- PAGE Header with navbar ----------------->
+    <div id="pagehead">
+      <div id="pagename">
+        <div class="sitelogo">
+          <img src="../../assets/logo.png" alt="sitelogo" />
+        </div>
+        <div id="name">
+          <a href="../../index.html">Zaika</a>
+          <sub><p class="moto">The Place for taste!!</p></sub>
+        </div>
+        <div id="Hlinks">
+          <nav>
+            <ul>
+              <li><a href="../login/index.html">Login</a></li>
+              <li><a href="../signup/index.html">Sign Up</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <div id="navbar">
+        <nav>
+          <ul>
+            <li><a href="../offers/index.html">New Offers</a></li>
+            <li><a href="../Locations/index.html">Locations</a></li>
+            <li><a href="../contactUs/index.html">Contact Us</a></li>
+            <li><a href="../cart/index.html">My Cart</a></li>
+            <li><a href="../faqs/index.html">Help</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <!--------------------- Page Body ----------------------->
+    <div class="container" id="pagebody">
+      <h1 class="heading">FAQs</h1>
+      <div class="faqs">
+        <details>
+          <summary>I don't remember my password?</summary>
+          <p class="text">
+            Answer: You have already created an account but you can't remember
+            your password? Click on 'Login/Sign Up' at the top of the page. Then
+            click on 'Forgot Password?'. Fill out your email id and a password
+            recovery will be sent to your email.
+          </p>
+        </details>
+        <details>
+          <summary>How will the food be delivered to me?</summary>
+          <p class="text">
+            One of our awesome Zaika drivers will deliver it right to your door!
+            Remember, they work for tips. So, if they did an awesome job, please
+            show your appreciation.
+          </p>
+        </details>
+        <details>
+          <summary>What payment types do you accept?</summary>
+          <p class="text">
+            Getting your food to your face should be easy, so paying for your
+            food needs to be easy too. We accept all the major online payment
+            methods. This means you can use VISA, MasterCard, Debit, Credit
+            caards and PayPal. Or you can pay by Cash on delivery/pick up. Keep
+            in mind that it always comes down to what the restaurant accepts, so
+            double check when you place your order.
+          </p>
+        </details>
+        <details>
+          <summary>I haven’t received a confirmation email from Zaika.</summary>
+          <p class="text">
+            We bet it was gremlins, but it could be that we don’t have your
+            correct email address. You should probably call us on 1-855-4-47822
+            or 1-855-424-3382 so we can check it out.
+          </p>
+        </details>
+        <details>
+          <summary>Can I order from any location?</summary>
+          <p class="text">
+            We will deliver to any limited listed area of Mumbai. Initially, we
+            will be serving at the main Mumbai area and not to old Mumbai area.
+          </p>
+        </details>
+        <details>
+          <summary>How is the food packed?</summary>
+          <p class="text">
+            Packaging always depends on the type of food and restaurant you’re
+            ordering from. Restaurants take great care to use packaging that
+            maintains the correct temperature for as long as possible. Each
+            restaurant will package their meals appropriately - they know their
+            food best. Our delivery Gopher’s will ensure it arrives in the best
+            possible condition. appreciate your patience. Placing orders in
+            advance is appreciated.
+          </p>
+        </details>
+        <details>
+          <summary>How long does it take for a delivery?</summary>
+          <p class="text">
+            Answer: Our normal delivery time is between 45 minutes and 1 hour,
+            however certain situations such as traffic, weather, and restaurant
+            preparation time require extra time. Please know that we are always
+            working hard to get your food delivered as quickly as possible. We
+            appreciate your patience. Placing orders in advance is appreciated.
+          </p>
+        </details>
+        <details>
+          <summary>I want an invoice of my order?</summary>
+          <p class="text">
+            Answer: Invoice Copy is sent via email & Text Message.
+          </p>
+        </details>
+        <details>
+          <summary>Do you have a delivery fee?</summary>
+          <p class="text">
+            Answer: Yes, our delivery fee varies depending on the restaurant.
+            and locations. Most restaurants have a Rs.99 delivery fee and if the
+            fee differs, the price will be shown when you hover your mouse over
+            the name of the restaurant.
+          </p>
+        </details>
+      </div>
+    </div>
+    <section class="social-box">
+      <div class="copyTxt">
+        Copyright
+        <script>
+          document.write(new Date().getFullYear());
+        </script>
+        . All Rights Reserved.
+      </div>
+      <div class="icons">
+        <ul>
+          <li>
+            <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+          </li>
+          <li>
+            <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+          </li>
+          <li>
+            <a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <script>
+      // When the user scrolls the page, execute myFunction
+      window.onscroll = function () {
+        myFunction();
+      };
+
+      // Get the header
+      var header = document.getElementById("navbar");
+
+      // Get the offset position of the navbar
+      var sticky = header.offsetTop;
+
+      // Add the sticky class to the header when you reach its scroll position. Remove "sticky" when you leave the scroll position
+      function myFunction() {
+        if (window.pageYOffset > sticky) {
+          header.classList.add("sticky");
+        } else {
+          header.classList.remove("sticky");
+        }
+      }
+    </script>
+  </body>
+</html>

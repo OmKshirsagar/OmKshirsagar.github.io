@@ -10847,7 +10847,7 @@ body {
   min-width: 800px;
   min-height: 600px;
   margin: 0;
-  font-family: 'Montserrat', 'Nunito', sans-serif;
+  font-family: "Georgia", 'Nunito', sans-serif;
   padding: 0;
   margin: 0;
 }
@@ -10930,8 +10930,8 @@ body #pagehead #pagename #Hlinks ul li a {
 }
 
 body #pagehead #pagename #Hlinks ul li a:hover {
-  background-color: #ff6060;
-  color: white;
+  background-color: #cfcece;
+  color: black;
 }
 
 body #pagehead #pagename #Hlinks ul li .active {
@@ -10973,8 +10973,8 @@ body #pagehead #navbar ul li a {
 }
 
 body #pagehead #navbar ul li a:hover {
-  background-color: #ff6060;
-  color: white;
+  background-color: #cfcece;
+  color: black;
   text-decoration: underline;
 }
 

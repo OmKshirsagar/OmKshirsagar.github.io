@@ -11002,10 +11002,12 @@ body #pagebody {
 }
 
 body #pagebody .demo {
+  font-family: "Montserrat", "Nunito", "sans-serif" i !important;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   margin: 30px;
+  margin-right: 0;
   padding: 100px 5px;
   height: 200px;
   width: 100%;
@@ -11019,10 +11021,12 @@ body #pagebody .demo {
 }
 
 body #pagebody .demo h1 {
+  font-family: "Montserrat", "Nunito", "sans-serif" i !important;
   text-align: center;
 }
 
 body #pagebody .demo .me {
+  font-family: "Montserrat", "Nunito", "sans-serif" i !important;
   background-image: radial-gradient(circle, #bdecd4, #a3d6ee, #76a9ec);
   border-radius: 15px;
   width: 40%;
@@ -11030,6 +11034,7 @@ body #pagebody .demo .me {
 }
 
 body #pagebody .demo h2 {
+  font-family: "Montserrat", "Nunito", "sans-serif" i !important;
   text-align: center;
   margin: 0px 0px 20px;
   font-size: 19px;

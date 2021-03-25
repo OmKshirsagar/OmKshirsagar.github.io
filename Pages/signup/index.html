@@ -48,26 +48,34 @@
     <div class="container text-center pt5" id="pagebody">
       <form id="sign-up" method="post">
         <label class="me">SIGN UP</label><br />
-        <label><b>User Name</b></label> <br />
+        <div class="container text-left">
+          <label><b>User Name</b></label>
+          <br />
+          <input type="text" name="Uname" id="Uname" placeholder="Username" />
+        </div>
         <br />
-        <input type="text" name="Uname" id="Uname" placeholder="Username" />
-        <br /><br />
-        <label><b>E-mail</b></label> <br />
+        <div class="container text-left">
+          <label><b>E-mail</b></label>
+          <br />
+          <input type="e-mail" name="E-mail" id="E-mail" placeholder="E-mail" />
+        </div>
         <br />
-        <input type="e-mail" name="E-mail" id="E-mail" placeholder="E-mail" />
-        <br /><br />
-        <label> <b> Password </b> </label><br />
+        <div class="container text-left">
+          <label> <b> Password </b> </label>
+          <br />
+          <input type="Password" name="Pass" id="Pass" placeholder="Password" />
+        </div>
         <br />
-        <input type="Password" name="Pass" id="Pass" placeholder="Password" />
-        <br /><br />
-        <label> <b>Confirm Password </b> </label><br />
-        <br />
-        <input
-          type="confirm password"
-          name="Confirm Password"
-          id="Pass"
-          placeholder="Confirm Password"
-        />
+        <div class="container text-left">
+          <label> <b>Confirm Password </b> </label><br />
+          <input
+            type="confirm password"
+            name="Confirm Password"
+            id="Pass"
+            placeholder="Confirm Password"
+          />
+        </div>
+        
         <br /><br /><br />
         <input
           type="button"

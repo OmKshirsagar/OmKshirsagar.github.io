@@ -10988,39 +10988,72 @@ html {
 }
 
 body {
-  background-image: url("./../../../assets/contact.jpg");
+  background-image: url("./../../../assets/fp.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
   margin: 0;
   padding: 0;
-  color: white;
+  color: black;
 }
 
 body #pagebody {
   overflow: hidden;
-  margin-top: 2vw;
-  margin-bottom: 2vw;
-  padding: 0;
-  color: white;
 }
 
-body #pagebody .me {
-  background-image: radial-gradient(circle, #e4bc80, #ffd755, #f5a700);
+body #pagebody .demo {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 30px;
+  padding: 100px 5px;
+  height: 200px;
+  width: 100%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: black;
 }
 
-body #pagebody .am {
+body #pagebody .demo h1 {
+  text-align: center;
+}
+
+body #pagebody .demo .me {
+  background-image: radial-gradient(circle, #bdecd4, #a3d6ee, #76a9ec);
+  border-radius: 15px;
+  width: 40%;
+  padding: 15px 20px;
+}
+
+body #pagebody .demo h2 {
+  text-align: center;
+  margin: 0px 0px 20px;
+  font-size: 19px;
+}
+
+body #pagebody .demo .am {
   margin: 0px 0px 15px;
 }
 
-body #pagebody .am input[type="text"] {
+body #pagebody .demo .am input[type="text"] {
   padding: 5px 8px;
   border-radius: 3px;
   border: 1px solid #353535;
   width: 90%;
 }
 
-body #pagebody .submit {
+body #pagebody .demo .am input[type="text"] {
+  padding: 5px 8px;
+  border-radius: 3px;
+  border: 1px solid #353535;
+  width: 100%;
+}
+
+body #pagebody .demo .submit {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -11029,7 +11062,7 @@ body #pagebody .submit {
           justify-content: center;
 }
 
-body #pagebody .submit input[type="submit"] {
+body #pagebody .demo .submit input[type="submit"] {
   padding: 4px 10px;
   border: none;
   border-radius: 2px;

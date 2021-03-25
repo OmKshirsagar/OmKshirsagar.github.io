@@ -11038,9 +11038,10 @@ body #pagebody .txtb label {
 
 body #pagebody .txtb input,
 body #pagebody .txtb textarea {
+  color: white;
   width: 100%;
   border: 10px;
-  background: none;
+  background: gray;
   outline: none;
   font-size: 18px;
   border-radius: 5px;

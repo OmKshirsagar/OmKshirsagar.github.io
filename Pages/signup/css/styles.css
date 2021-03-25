@@ -11007,6 +11007,7 @@ body #pagebody {
   color: black;
   -ms-flex-line-pack: center;
       align-content: center;
+  font-family: "Georgia", "Nunito", "sans-serif" !important;
   background-image: radial-gradient(circle, #ecd9a7, #e5d6c0, #fdce98);
   border-radius: 15px;
 }

@@ -10994,6 +10994,7 @@ body {
   background-attachment: fixed;
   margin: 0;
   font-weight: bold;
+  font-family: "Georgia", "Nunito", "sans-serif" !important;
   padding: 0;
 }
 

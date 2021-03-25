@@ -10996,6 +10996,7 @@ body {
   padding: 0;
   color: black;
   font-weight: bold;
+  font-family: "Georgia", "Nunito", "sans-serif" !important;
 }
 
 body #pagebody {

@@ -11048,6 +11048,22 @@ body #pagebody .txtb textarea {
   margin-top: 6px;
 }
 
+body #pagebody ::-webkit-input-placeholder {
+  color: #ebeae9;
+}
+
+body #pagebody :-ms-input-placeholder {
+  color: #ebeae9;
+}
+
+body #pagebody ::-ms-input-placeholder {
+  color: #ebeae9;
+}
+
+body #pagebody ::placeholder {
+  color: #ebeae9;
+}
+
 body #pagebody .btn {
   display: inline-black;
   background: maroon;

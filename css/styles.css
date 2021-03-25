@@ -10999,10 +10999,10 @@ body {
 body #pagebody {
   display: block;
   color: white;
-  background-color: rgba(20, 20, 20, 0.753);
 }
 
 body #pagebody .mission {
+  background-color: rgba(20, 20, 20, 0.753);
   float: left;
   display: table;
   width: 88vw;

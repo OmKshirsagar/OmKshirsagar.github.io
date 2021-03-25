@@ -11000,7 +11000,7 @@ body {
 }
 
 body #pagebody {
-  width: 40vw;
+  width: 35vw;
   overflow: hidden;
   margin-top: 2vw;
   margin-bottom: 2vw;
@@ -11022,7 +11022,7 @@ body #pagebody label {
 }
 
 body #pagebody #Uname {
-  width: 375px;
+  width: 350px;
   height: 30px;
   border: none;
   border-radius: 3px;
@@ -11030,7 +11030,7 @@ body #pagebody #Uname {
 }
 
 body #pagebody #Pass {
-  width: 375px;
+  width: 350px;
   height: 2rem;
   border: none;
   border-radius: 3px;
@@ -11038,7 +11038,7 @@ body #pagebody #Pass {
 }
 
 body #pagebody #log {
-  width: 385px;
+  width: 350px;
   height: 30px;
   border: none;
   border-radius: 17px;
@@ -11054,7 +11054,7 @@ body #pagebody span {
 }
 
 body #pagebody a {
-  color: #fff2bd;
+  color: #9900ff;
 }
 
 body .social-box {

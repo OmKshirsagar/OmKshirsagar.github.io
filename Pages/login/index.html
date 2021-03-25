@@ -59,18 +59,20 @@
     <div class="container text-center pt5" id="pagebody">
       <form id="login" method="post">
         <label class="me">LOGIN</label><br />
-        <label><b>User Name</b></label> <br />
+        <div class="container text-left">
+          <label style="text-align: left"><b>User Name</b></label>
+          <input type="text" name="Uname" id="Uname" placeholder="Username" />
+        </div>
         <br />
-        <input type="text" name="Uname" id="Uname" placeholder="Username" />
-        <br /><br />
-        <label> <b> Password </b> </label><br />
+        <div class="container text-left">
+          <label style="text-align: left"> <b> Password </b> </label><br />
+          <input type="Password" name="Pass" id="Pass" placeholder="Password" />
+        </div>
         <br />
-        <input type="Password" name="Pass" id="Pass" placeholder="Password" />
-        <br />
-        <div class="container">
+        <div class="container text-left">
           <a href="../Fpassword/index.html">Forgot Password</a>
         </div>
-        <br /><br />
+        <br />
         <input
           type="button"
           name="log"
@@ -78,8 +80,12 @@
           value="Log In / Sign In Here"
         />
         <br /><br />
-        <input type="checkbox" id="check" />
-        <span>Remember me</span> <br /><br />
+        <div class="container text-left">
+          <input type="checkbox" id="check" />
+          <span>Remember me</span> <br />
+        </div>
+        <br />
+
         <div class="container text-left text-white">
           <span
             >Don't have a account! <br />

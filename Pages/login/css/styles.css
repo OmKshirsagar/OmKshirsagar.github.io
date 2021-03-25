@@ -10994,7 +10994,8 @@ body {
   background-attachment: fixed;
   margin: 0;
   padding: 0;
-  color: white;
+  color: black;
+  font-weight: bold;
 }
 
 body #pagebody {
@@ -11015,7 +11016,7 @@ body #pagebody .me {
 }
 
 body #pagebody label {
-  color: white;
+  color: black;
   font-size: 17px;
 }
 
@@ -11047,7 +11048,7 @@ body #pagebody #log {
 }
 
 body #pagebody span {
-  color: white;
+  color: black;
   font-size: 17px;
 }
 

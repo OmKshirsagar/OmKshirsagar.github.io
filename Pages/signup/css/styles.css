@@ -10993,6 +10993,7 @@ body {
   background-size: cover;
   background-attachment: fixed;
   margin: 0;
+  font-weight: bold;
   padding: 0;
 }
 
@@ -11003,7 +11004,7 @@ body #pagebody {
   margin-bottom: 2vw;
   margin-left: width / 3;
   padding: 3vw;
-  color: white;
+  color: black;
   -ms-flex-line-pack: center;
       align-content: center;
   background-image: radial-gradient(circle, #ecd9a7, #e5d6c0, #fdce98);

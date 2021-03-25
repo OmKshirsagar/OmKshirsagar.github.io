@@ -10993,6 +10993,7 @@ body {
   background-size: cover;
   background-attachment: fixed;
   margin: 0;
+  font-weight: bold;
   padding: 0;
 }
 
@@ -11035,7 +11036,7 @@ body #pagebody details {
 }
 
 body #pagebody details > summary {
-  color: white;
+  color: black;
   background: #ffa803;
 }
 

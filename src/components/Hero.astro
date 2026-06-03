@@ -125,4 +125,22 @@ const hero = heroData();
       font-size: 56px;
     }
   }
+
+  /* Mobile: stack CTAs as two equal-weight full-width buttons */
+  @media (max-width: 600px) {
+    .cta,
+    .cta-second {
+      display: flex;
+      justify-content: center;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 360px;
+      padding: 14px 22px;
+      margin: 0 0 10px 0;
+    }
+    .cta-second {
+      margin-left: 0;
+      font-size: 13px;
+    }
+  }
 </style>

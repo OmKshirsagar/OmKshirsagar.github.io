@@ -5,7 +5,7 @@ describe('Selectors', () => {
   it('heroData returns name + current role', () => {
     const hero = heroData();
     expect(hero.name).toBeTruthy();
-    expect(hero.role).toBe('Analyst');
+    expect(hero.role).toBe('Software Engineer I');
     expect(hero.company).toBe('Deloitte');
   });
 

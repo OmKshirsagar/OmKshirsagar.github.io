@@ -24,7 +24,7 @@ personal:
   date_of_birth: 2002-10-24           # private by default — public page hides unless flagged
   nationality: Indian
 
-  current_role: Analyst                    # promoted from Software Engineer on 2026-06-01
+  current_role: Software Engineer I        # promoted from DC Associate Analyst on 2026-06-01
   current_functional_role: Full Stack AI Engineer   # what you actually do day-to-day
   current_company: Deloitte
   location:
@@ -191,7 +191,7 @@ professional_identity:
     - Proven ability to rapidly prototype and productionize new ideas
 
   career_narrative: >
-    Joined Deloitte in February 2024 as a Software Engineer and quickly
+    Joined Deloitte in February 2024 as a DC Associate Analyst and quickly
     established himself as a backend engineer through contributions to
     the pharmaceutical client's modernization initiatives. Over time expanded into platform
     engineering, cloud deployments, full-stack development, and Generative
@@ -200,7 +200,7 @@ professional_identity:
     systems, and agentic AI solutions. Later transitioned into
     client-facing healthcare AI programs, delivering production-grade
     voice assistants, RAG systems, policy intelligence platforms, and
-    enterprise AI applications. In June 2026 he was promoted to Analyst
+    enterprise AI applications. In June 2026 he was promoted to Software Engineer I
     while continuing to lead frontend, backend, deployment, and AI
     initiatives across US healthcare diagnostics provider engagements.
 
@@ -264,7 +264,7 @@ certifications:
 career:
   - id: deloitte
     company: Deloitte
-    role: Analyst                        # current OFFICIAL Deloitte title (since 2026-06-01)
+    role: Software Engineer I            # current OFFICIAL Deloitte title (since 2026-06-01)
     functional_role: Full Stack AI Engineer   # day-to-day functional role
     start_date: 2024-02
     end_date: present
@@ -275,7 +275,7 @@ career:
     # Official Deloitte title progression (vs functional roles which evolved
     # within these titles — see phases below for functional role per phase).
     title_progression:
-      - title: Software Engineer
+      - title: DC Associate Analyst
         start_date: 2024-02
         end_date: 2026-05-31
         summary: >
@@ -283,7 +283,7 @@ career:
           across backend systems, platform engineering, cloud deployments,
           RAG applications, real-time voice assistants, and enterprise AI
           solutions.
-      - title: Analyst
+      - title: Software Engineer I
         start_date: 2026-06-01           # promoted during RCM program
         end_date: present
         summary: >
@@ -334,7 +334,7 @@ career:
     phases:
       - order: 1
         name: Training Period
-        role: Software Engineer
+        role: DC Associate Analyst
         start_date: 2024-02
         end_date: 2024-04
         focus:
@@ -348,7 +348,7 @@ career:
       - order: 2
         name: Global pharmaceutical manufacturer
         type: client
-        role: Software Engineer            # official title — functioned as Backend Engineer
+        role: DC Associate Analyst         # official title — functioned as Backend Engineer
         start_date: 2024-04-22
         end_date: 2024-11-01
         engagement_ref: pharma-client             # full narrative in engagements: section
@@ -362,7 +362,7 @@ career:
       - order: 3
         name: SOP Program
         type: internal-program
-        role: Software Engineer
+        role: DC Associate Analyst
         start_date: 2024-10              # ~1 month overlap with Global pharmaceutical manufacturer
         end_date: 2025-08
         focus:
@@ -473,9 +473,9 @@ career_milestones:
     refs: [healthcare-policy-platform]
 
   - date: 2026-06-01
-    milestone: Promotion to Analyst
+    milestone: Promotion to Software Engineer I
     details: >
-      Promoted from Software Engineer to Analyst while supporting RCM SIT
+      Promoted from DC Associate Analyst to Software Engineer I while supporting RCM SIT
       and platform delivery.
     refs: [healthcare-policy-platform]
 
@@ -508,7 +508,7 @@ engagements:
     duration_months: 6.3
 
     role:
-      title: Software Engineer            # official Deloitte title
+      title: DC Associate Analyst         # official Deloitte title
       functional_role: Backend Engineer   # what you actually did day-to-day
       primary_focus:
         - Backend Engineering
@@ -586,7 +586,7 @@ engagements:
       deployment patterns, and engineering foundations.
 
     role:
-      title: Software Engineer              # functional role evolved into platform + AI engineer
+      title: DC Associate Analyst          # functional role evolved into platform + AI engineer
 
     primary_focus_areas:
       - Agentic AI
@@ -841,8 +841,8 @@ recognition_summary:
     applause_awards: 1
 
   promotions:
-    - from: Software Engineer
-      to: Analyst
+    - from: DC Associate Analyst
+      to: Software Engineer I
       date: 2026-06-01
 
   notable_achievements:
@@ -1144,7 +1144,7 @@ projects:
     title: Training Period
     company: deloitte
     type: training
-    role: Software Engineer
+    role: DC Associate Analyst
     start_date: 2024-02
     end_date: 2024-04
     focus_areas:
@@ -1172,7 +1172,7 @@ projects:
     domain: healthcare
     status: completed
     featured: false
-    role: Backend Engineer                # functional role; official title was Software Engineer
+    role: Backend Engineer                # functional role; official title was DC Associate Analyst
     team_size:                            # TODO
     start_date: 2024-04-22
     end_date: 2024-07-19
@@ -1377,7 +1377,7 @@ projects:
     domain: healthcare-supply-chain      # transport scenario simulation for pharma logistics
     status: completed
     featured: false
-    role: Backend Engineer                # functional role; official title was Software Engineer
+    role: Backend Engineer                # functional role; official title was DC Associate Analyst
     team_size: 3                          # 2 senior backend + Om (junior) + frontend team + Databricks engineer
     start_date: 2024-07-22                # picked up immediately after Insight Center ended (2024-07-19)
     end_date: 2024-11-01
@@ -1585,7 +1585,7 @@ projects:
     domain: enterprise-platform
     status: completed
     featured: false
-    role: Software Engineer               # evolved into platform + AI engineer functionally
+    role: DC Associate Analyst            # evolved into platform + AI engineer functionally
     start_date: 2024-10                   # ~1 month overlap with Global pharmaceutical manufacturer
     end_date: 2025-08
     summary: |
@@ -3023,7 +3023,7 @@ projects:
       tech selection, took ownership of frontend foundation (alpha in
       ~1 week despite no frontend lead), extended FastAPI Starter Kit to
       support DynamoDB. Currently in SIT/stabilization with fast-turnaround
-      delivery cadence. Promotion to Analyst (2026-06-01) happened
+      delivery cadence. Promotion to Software Engineer I (2026-06-01) happened
       during this program.
 
     outcomes: []

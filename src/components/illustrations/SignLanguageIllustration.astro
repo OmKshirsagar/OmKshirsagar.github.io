@@ -137,14 +137,21 @@
 
 <style>
   .illu {
-    width: 320px;
-    height: 320px;
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 1 / 1;
     background: radial-gradient(ellipse at center, rgba(255, 210, 154, 0.06) 0%, transparent 70%);
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex: 0 0 320px;
+    flex: 0 1 320px;
+    margin: 0 auto;
   }
-  .illu svg { width: 300px; height: 300px; display: block; }
+  .illu svg {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    display: block;
+  }
 </style>

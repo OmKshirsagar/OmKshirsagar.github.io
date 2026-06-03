@@ -3,13 +3,52 @@ import { recognizedItems } from '@/data/select';
 const items = recognizedItems();
 
 const icons: Record<string, string> = {
-  trophy: '<path d="M24 4 L33 12 L33 22 Q33 32 24 36 Q15 32 15 22 L15 12 Z" stroke="#ffd29a" stroke-width="1.5" fill="rgba(255,210,154,0.1)"/><circle cx="24" cy="20" r="5" fill="#ffd29a"/><path d="M19 36 L29 36 L27 44 L21 44 Z" fill="#ff9460"/>',
-  'arrow-up': '<polygon points="24,6 14,18 20,18 20,32 28,32 28,18 34,18" stroke="#ffd29a" stroke-width="1.5" fill="rgba(255,210,154,0.15)"/><rect x="14" y="34" width="20" height="8" rx="1" stroke="#ffd29a" stroke-width="1.2" fill="#14141c"/><text x="24" y="40" font-family="JetBrains Mono, monospace" font-size="5" font-weight="700" letter-spacing="1" fill="#ffd29a" text-anchor="middle">ANALYST</text>',
-  book: '<rect x="10" y="8" width="28" height="34" rx="1" stroke="#ffd29a" stroke-width="1.5" fill="#14141c"/><line x1="10" y1="8" x2="10" y2="42" stroke="#ffd29a" stroke-width="2"/><line x1="15" y1="14" x2="33" y2="14" stroke="#ffd29a" stroke-width="0.8"/><line x1="15" y1="18" x2="29" y2="18" stroke="#ffd29a" stroke-width="0.6" opacity="0.6"/><g transform="translate(15, 24)"><circle cx="3" cy="5" r="2.5" fill="#ffd29a"/><rect x="0.5" y="7" width="5" height="6" fill="#ffd29a"/><rect x="0" y="13" width="6" height="2" fill="#ffd29a"/></g><g transform="translate(28, 24)"><circle cx="3" cy="5" r="2.5" stroke="#ff9460" stroke-width="1.2" fill="none"/><rect x="0.5" y="7" width="5" height="6" stroke="#ff9460" stroke-width="1" fill="none"/><rect x="0" y="13" width="6" height="2" stroke="#ff9460" stroke-width="1" fill="none"/></g><text x="24" y="34" font-family="JetBrains Mono, monospace" font-size="4" font-weight="700" fill="#ffd29a" text-anchor="middle">vs</text>',
-  badge: '<rect x="8" y="10" width="32" height="22" rx="2" stroke="#888094" stroke-width="1.2" fill="none" stroke-dasharray="3 2"/><line x1="14" y1="18" x2="34" y2="18" stroke="#888094" stroke-width="0.8" stroke-dasharray="2 2"/><line x1="14" y1="22" x2="28" y2="22" stroke="#888094" stroke-width="0.8" stroke-dasharray="2 2"/><circle cx="34" cy="38" r="6" stroke="#888094" stroke-width="1.2" fill="none" stroke-dasharray="2 2"/><text x="34" y="40" font-family="JetBrains Mono, monospace" font-size="6" fill="#888094" text-anchor="middle">★</text>',
+  // Proper trophy: wide cup + two handles + stem + base
+  trophy: `
+    <path d="M14 8 L34 8 L33 22 Q24 30 15 22 Z" stroke="#ffd29a" stroke-width="1.5" fill="rgba(255,210,154,0.12)" stroke-linejoin="round"/>
+    <path d="M14 11 Q6 12 6 18 Q6 22 13 22" stroke="#ffd29a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <path d="M34 11 Q42 12 42 18 Q42 22 35 22" stroke="#ffd29a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <rect x="22" y="29" width="4" height="5" fill="#ffd29a"/>
+    <rect x="14" y="34" width="20" height="7" rx="1" fill="#ff9460"/>
+  `,
+  // Arrow-up promotion: cleaner shape
+  'arrow-up': `
+    <polygon points="24,6 14,18 20,18 20,32 28,32 28,18 34,18" stroke="#ffd29a" stroke-width="1.5" fill="rgba(255,210,154,0.15)" stroke-linejoin="round"/>
+    <rect x="13" y="36" width="22" height="7" rx="1" stroke="#ffd29a" stroke-width="1.2" fill="#14141c"/>
+    <text x="24" y="41.5" font-family="JetBrains Mono, monospace" font-size="5" font-weight="700" letter-spacing="1" fill="#ffd29a" text-anchor="middle">ANALYST</text>
+  `,
+  // Book (publication) — chess pieces on cover with "vs" between
+  book: `
+    <rect x="10" y="8" width="28" height="34" rx="1" stroke="#ffd29a" stroke-width="1.5" fill="#14141c"/>
+    <line x1="10" y1="8" x2="10" y2="42" stroke="#ffd29a" stroke-width="2"/>
+    <line x1="15" y1="14" x2="33" y2="14" stroke="#ffd29a" stroke-width="0.8"/>
+    <line x1="15" y1="18" x2="29" y2="18" stroke="#ffd29a" stroke-width="0.6" opacity="0.6"/>
+    <g transform="translate(13,24)">
+      <circle cx="3" cy="3" r="2.5" fill="#ffd29a"/>
+      <rect x="0.5" y="5" width="5" height="6" fill="#ffd29a"/>
+      <rect x="0" y="11" width="6" height="2" fill="#ffd29a"/>
+    </g>
+    <g transform="translate(29,24)">
+      <circle cx="3" cy="3" r="2.5" stroke="#ff9460" stroke-width="1.2" fill="none"/>
+      <rect x="0.5" y="5" width="5" height="6" stroke="#ff9460" stroke-width="1" fill="none"/>
+      <rect x="0" y="11" width="6" height="2" stroke="#ff9460" stroke-width="1" fill="none"/>
+    </g>
+    <text x="24" y="32" font-family="JetBrains Mono, monospace" font-size="4" font-weight="700" fill="#ffd29a" text-anchor="middle">vs</text>
+  `,
+  // Cert placeholder (dashed)
+  badge: `
+    <rect x="8" y="10" width="32" height="22" rx="2" stroke="#888094" stroke-width="1.2" fill="none" stroke-dasharray="3 2"/>
+    <line x1="14" y1="18" x2="34" y2="18" stroke="#888094" stroke-width="0.8" stroke-dasharray="2 2"/>
+    <line x1="14" y1="22" x2="28" y2="22" stroke="#888094" stroke-width="0.8" stroke-dasharray="2 2"/>
+    <circle cx="34" cy="38" r="6" stroke="#888094" stroke-width="1.2" fill="none" stroke-dasharray="2 2"/>
+    <text x="34" y="40.5" font-family="JetBrains Mono, monospace" font-size="6" fill="#888094" text-anchor="middle">★</text>
+  `,
 };
 
-const trophyVariant = (n: string) => icons.trophy + `<text x="24" y="22" font-family="Inter" font-size="6" font-weight="800" fill="#1a0f08" text-anchor="middle">${n}</text>`;
+// 1ST/2ND label sits in the centre of the new wider cup
+const trophyVariant = (n: string) =>
+  icons.trophy +
+  `<text x="24" y="19" font-family="Inter, system-ui, sans-serif" font-size="7" font-weight="800" fill="#ffd29a" text-anchor="middle">${n}</text>`;
 
 const applauseIcon = '<circle cx="24" cy="22" r="14" stroke="#ffaa78" stroke-width="1.5" fill="rgba(255,170,120,0.1)"/><g stroke="#ffaa78" stroke-width="1.5" fill="none"><path d="M16 22 Q19 14 24 14 Q29 14 32 22"/><path d="M14 24 Q18 12 24 12 Q30 12 34 24"/></g><circle cx="24" cy="24" r="3" fill="#ffaa78"/>';
 

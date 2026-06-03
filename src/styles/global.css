@@ -26,13 +26,11 @@ main > * {
   margin-right: auto;
 }
 
-/* Full-bleed exceptions (sections that intentionally span edge-to-edge) */
+/* Full-bleed exceptions (sections that intentionally span edge-to-edge).
+   The footer uses an inner wrapper (.footer-inner) for max-width centering,
+   so its direct children don't need per-child margin rules — they all share
+   the same 1200px column inside the wrapper. */
 .footer { max-width: none !important; }
-.footer > * {
-  max-width: var(--content-max);
-  margin-left: auto;
-  margin-right: auto;
-}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }

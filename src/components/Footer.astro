@@ -4,6 +4,7 @@ const data = footerData();
 const headingParts = data.heading.split('in touch');
 ---
 <footer class="footer" id="contact">
+  <div class="footer-inner">
   <h2 class="ttl">
     {headingParts.map((part, i) => (
       i === 0 ? <Fragment>{part}</Fragment> : <Fragment><em>in touch</em>{part}</Fragment>
@@ -120,12 +121,17 @@ const headingParts = data.heading.split('in touch');
       </span>
     </div>
   </div>
+  </div>
 </footer>
 
 <style>
   .footer {
-    padding: 60px 40px 80px;
     background: #060609;
+  }
+  .footer-inner {
+    max-width: var(--content-max, 1200px);
+    margin: 0 auto;
+    padding: 60px clamp(20px, 4vw, 60px) 80px;
   }
   .ttl {
     font: 700 26px/1 var(--font-display);

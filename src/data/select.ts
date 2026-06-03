@@ -341,3 +341,162 @@ export function careerArc(): ArcPhase[] {
       endDate: p.end_date ? String(p.end_date) : undefined,
     }));
 }
+
+// ===================================================================
+// Case studies (modal popups for the 3 featured projects)
+// ===================================================================
+export type ArchLayer = 'edge' | 'orchestrator' | 'ai' | 'storage' | 'ui';
+
+export interface ArchNode {
+  id: string;
+  label: string;
+  layer: ArchLayer;
+}
+
+export interface ArchEdge {
+  from: string;
+  to: string;
+  label?: string;
+}
+
+export interface CaseStudy {
+  slug: string;
+  title: string;
+  status: 'production' | 'shipped' | 'in-progress' | 'demo';
+  headline: string;
+  problem: string;
+  approach: string;
+  keyFeatures: string[];
+  architecture: { nodes: ArchNode[]; edges: ArchEdge[] };
+  myContributions: string[];
+  stack: Record<string, string[]>;
+  patterns: string[];
+  outcomes: string[];
+}
+
+interface RawCaseStudy {
+  status?: string;
+  headline?: string;
+  problem?: string;
+  approach?: string;
+  key_features?: unknown;
+  architecture?: { nodes?: unknown; edges?: unknown };
+  my_contributions?: unknown;
+  stack?: Record<string, unknown>;
+  patterns?: unknown;
+  outcomes?: unknown;
+}
+
+function strArr(v: unknown): string[] {
+  return Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : [];
+}
+
+function isLayer(v: unknown): v is ArchLayer {
+  return v === 'edge' || v === 'orchestrator' || v === 'ai' || v === 'storage' || v === 'ui';
+}
+
+function shapeCaseStudy(slug: string, title: string, raw: RawCaseStudy): CaseStudy {
+  const statusRaw = raw.status ?? 'shipped';
+  const status: CaseStudy['status'] =
+    statusRaw === 'production' || statusRaw === 'in-progress' || statusRaw === 'demo'
+      ? statusRaw
+      : 'shipped';
+
+  const nodes: ArchNode[] = Array.isArray(raw.architecture?.nodes)
+    ? (raw.architecture!.nodes as unknown[])
+        .filter(
+          (n): n is { id: string; label: string; layer: ArchLayer } =>
+            !!n &&
+            typeof n === 'object' &&
+            typeof (n as { id?: unknown }).id === 'string' &&
+            typeof (n as { label?: unknown }).label === 'string' &&
+            isLayer((n as { layer?: unknown }).layer)
+        )
+        .map((n) => ({ id: n.id, label: n.label, layer: n.layer }))
+    : [];
+
+  const edges: ArchEdge[] = Array.isArray(raw.architecture?.edges)
+    ? (raw.architecture!.edges as unknown[])
+        .filter(
+          (e): e is { from: string; to: string; label?: string } =>
+            !!e &&
+            typeof e === 'object' &&
+            typeof (e as { from?: unknown }).from === 'string' &&
+            typeof (e as { to?: unknown }).to === 'string'
+        )
+        .map((e) => ({
+          from: e.from,
+          to: e.to,
+          label: typeof e.label === 'string' && e.label.length > 0 ? e.label : undefined,
+        }))
+    : [];
+
+  const stack: Record<string, string[]> = {};
+  if (raw.stack && typeof raw.stack === 'object') {
+    for (const [layer, items] of Object.entries(raw.stack)) {
+      const arr = strArr(items);
+      if (arr.length > 0) stack[layer] = arr;
+    }
+  }
+
+  return {
+    slug,
+    title,
+    status,
+    headline: raw.headline ?? '',
+    problem: raw.problem ?? '',
+    approach: raw.approach ?? '',
+    keyFeatures: strArr(raw.key_features),
+    architecture: { nodes, edges },
+    myContributions: strArr(raw.my_contributions),
+    stack,
+    patterns: strArr(raw.patterns),
+    outcomes: strArr(raw.outcomes),
+  };
+}
+
+export function caseStudyBySlug(slug: string): CaseStudy | undefined {
+  // Search projects first
+  for (const p of portfolio.projects as unknown as Array<{
+    id: string;
+    title?: string;
+    case_study?: RawCaseStudy;
+  }>) {
+    if (p.id === slug && p.case_study) {
+      return shapeCaseStudy(slug, p.title ?? slug, p.case_study);
+    }
+  }
+  // Then hackathons
+  for (const h of portfolio.hackathons as unknown as Array<{
+    id: string;
+    project_built?: string;
+    name?: string;
+    case_study?: RawCaseStudy;
+  }>) {
+    if (h.id === slug && h.case_study) {
+      return shapeCaseStudy(slug, h.project_built ?? h.name ?? slug, h.case_study);
+    }
+  }
+  return undefined;
+}
+
+export function allCaseStudies(): Record<string, CaseStudy> {
+  const out: Record<string, CaseStudy> = {};
+  for (const p of portfolio.projects as unknown as Array<{
+    id: string;
+    title?: string;
+    case_study?: RawCaseStudy;
+  }>) {
+    if (p.case_study) out[p.id] = shapeCaseStudy(p.id, p.title ?? p.id, p.case_study);
+  }
+  for (const h of portfolio.hackathons as unknown as Array<{
+    id: string;
+    project_built?: string;
+    name?: string;
+    case_study?: RawCaseStudy;
+  }>) {
+    if (h.case_study)
+      out[h.id] = shapeCaseStudy(h.id, h.project_built ?? h.name ?? h.id, h.case_study);
+  }
+  return out;
+}

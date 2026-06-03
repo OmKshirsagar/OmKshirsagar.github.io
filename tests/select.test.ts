@@ -8,6 +8,8 @@ import {
   recognizedItems,
   contactInfo,
   footerData,
+  caseStudyBySlug,
+  allCaseStudies,
 } from '@/data/select';
 
 describe('Selectors', () => {
@@ -79,5 +81,43 @@ describe('contactInfo + footerData', () => {
     const f = footerData();
     expect(f.heading).toMatch(/in touch/i);
     expect(Array.isArray(f.links)).toBe(true);
+  });
+});
+
+describe('caseStudy selectors', () => {
+  it('allCaseStudies returns case studies for all 3 featured slugs', () => {
+    const cases = allCaseStudies();
+    expect(cases['healthcare-voice-assistant']).toBeDefined();
+    expect(cases['sop-fastapi-starter']).toBeDefined();
+    expect(cases['sign-language-ai']).toBeDefined();
+  });
+
+  it('caseStudyBySlug returns a fully shaped record', () => {
+    const cs = caseStudyBySlug('sop-fastapi-starter');
+    expect(cs).toBeDefined();
+    if (!cs) return;
+    expect(cs.headline).toBeTruthy();
+    expect(cs.problem).toBeTruthy();
+    expect(cs.approach).toBeTruthy();
+    expect(cs.architecture.nodes.length).toBeGreaterThan(0);
+    expect(cs.architecture.edges.length).toBeGreaterThan(0);
+    expect(cs.keyFeatures.length).toBeGreaterThan(0);
+    expect(cs.myContributions.length).toBeGreaterThan(0);
+    expect(Object.keys(cs.stack).length).toBeGreaterThan(0);
+    expect(cs.outcomes.length).toBeGreaterThan(0);
+  });
+
+  it('caseStudyBySlug returns undefined for an unknown slug', () => {
+    expect(caseStudyBySlug('does-not-exist')).toBeUndefined();
+  });
+
+  it('architecture nodes have valid layer enum values', () => {
+    const validLayers = new Set(['edge', 'ui', 'orchestrator', 'ai', 'storage']);
+    const cs = caseStudyBySlug('healthcare-voice-assistant');
+    expect(cs).toBeDefined();
+    if (!cs) return;
+    for (const node of cs.architecture.nodes) {
+      expect(validLayers.has(node.layer)).toBe(true);
+    }
   });
 });

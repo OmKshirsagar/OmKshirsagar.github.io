@@ -10,10 +10,12 @@ import CareerArc from '@/components/CareerArc.astro';
 import Recognized from '@/components/Recognized.astro';
 import WorkTimeline from '@/components/WorkTimeline.astro';
 import BottomNav from '@/components/BottomNav';
+import ProjectModal from '@/components/ProjectModal';
 import Footer from '@/components/Footer.astro';
-import { heroData } from '@/data/select';
+import { heroData, allCaseStudies } from '@/data/select';
 
 const hero = heroData();
+const caseStudies = allCaseStudies();
 const pageTitle = `${hero.name} — ${hero.role} @ ${hero.company}`;
 ---
 <BaseLayout title={pageTitle}>
@@ -34,6 +36,7 @@ const pageTitle = `${hero.name} — ${hero.role} @ ${hero.company}`;
       desc="Customers dial a 1-800 number, talk to an AI in real time, get medication and order help. <strong>Shipped to production, then white-labeled as a reusable Deloitte asset.</strong>"
       chips={['GPT Realtime', 'Azure ACS', 'Azure AI Search', 'RAG', 'FastAPI']}
       variant="left"
+      slug="healthcare-voice-assistant"
     >
       <RtvaIllustration slot="illustration" />
     </FeaturedBand>
@@ -47,6 +50,7 @@ const pageTitle = `${hero.name} — ${hero.role} @ ${hero.company}`;
       desc="A reusable framework with standardized architecture, full test infra, and MCP baked in. <strong>Adopted by 12+ projects.</strong>"
       chips={['FastAPI', 'FastMCP', 'SQLAlchemy 2.0', '100% coverage']}
       variant="right"
+      slug="sop-fastapi-starter"
     >
       <StarterKitIllustration slot="illustration" />
     </FeaturedBand>
@@ -60,6 +64,7 @@ const pageTitle = `${hero.name} — ${hero.role} @ ${hero.company}`;
       desc="A multimodal AI that turns live hand gestures into natural speech in real time. <strong>Built end-to-end in 3 days as the most ambitious accessibility hack of the event.</strong>"
       chips={['MediaPipe', 'TensorFlow', 'GPT Realtime', 'WebSockets']}
       variant="left"
+      slug="sign-language-ai"
     >
       <SignLanguageIllustration slot="illustration" />
     </FeaturedBand>
@@ -70,6 +75,7 @@ const pageTitle = `${hero.name} — ${hero.role} @ ${hero.company}`;
   <WorkTimeline />
   <BottomNav client:load />
   <Footer />
+  <ProjectModal cases={caseStudies} client:load />
 </BaseLayout>
 
 <style>

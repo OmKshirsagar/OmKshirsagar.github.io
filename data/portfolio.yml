@@ -1981,6 +1981,112 @@ projects:
       standards. Adopted by 12+ projects, reducing setup time and enforcing
       consistent architecture across Deloitte FastAPI services.
 
+    # =================================================================
+    # Modal case study (read-more popup on /). Lawsuit-safe by design.
+    # =================================================================
+    case_study:
+      status: shipped
+      headline: |
+        A production-grade FastAPI foundation that auto-exposes every REST
+        endpoint as an MCP tool — adopted by 12+ teams to skip 2-week project
+        setups.
+      problem: |
+        Across the platform, new FastAPI services were repeatedly bootstrapped
+        by copying starter code from previous projects. Quality drifted between
+        teams, test infrastructure was inconsistent, observability and auth
+        were rebuilt every time, and onboarding new engineers meant relearning
+        a different layout each project.
+      approach: |
+        Designed an opinionated, async-first foundation that bakes in the
+        layered architecture (API → service → repository → domain), a generic
+        async CRUD base, JWT auth, structured logging, Prometheus metrics,
+        Alembic migrations, and a strict pre-commit + 100%-coverage CI gate.
+        The signature feature is the MCP integration: <code>FastMCP.from_fastapi(app)</code>
+        introspects the OpenAPI schema at startup and auto-generates one MCP
+        tool per REST route — eliminating roughly a thousand lines of
+        hand-written wrapper code per adopting project.
+      key_features:
+        - JWT auth + login / register / profile endpoints out of the box
+        - Async-first stack — AsyncSession, asyncpg, aio Azure SDKs throughout
+        - Generic CRUD repository with safe-commit transaction helpers
+        - Request-ID + structured-logging middleware (log correlation per request)
+        - "/health and /metrics endpoints with custom Prometheus instrumentator"
+        - MCP server auto-mounted at /mcp with one tool per REST endpoint
+        - 100% test-coverage gate enforced in CI (--cov-fail-under=100)
+        - Pre-commit hooks for ruff / mypy / vulture / codespell / zizmor
+      architecture:
+        nodes:
+          - { id: client, label: 'HTTP / MCP Client', layer: edge }
+          - { id: mw, label: 'Middleware (RequestID · Logging · CORS)', layer: orchestrator }
+          - { id: router, label: 'API v1 Routers (auth · users)', layer: orchestrator }
+          - { id: mcp, label: 'FastMCP Server (/mcp)', layer: orchestrator }
+          - { id: deps, label: 'Dependencies (current_user · db_session)', layer: orchestrator }
+          - { id: sec, label: 'Security (JWT · bcrypt)', layer: ai }
+          - { id: crud, label: 'Async CRUD / Repositories', layer: ai }
+          - { id: model, label: SQLAlchemy Models, layer: storage }
+          - { id: db, label: 'Postgres (asyncpg)', layer: storage }
+          - { id: obs, label: 'Prometheus + structlog', layer: storage }
+        edges:
+          - { from: client, to: mw, label: HTTP }
+          - { from: client, to: mcp, label: MCP / SSE }
+          - { from: mw, to: router, label: '' }
+          - { from: router, to: deps, label: Depends() }
+          - { from: deps, to: sec, label: verify JWT }
+          - { from: router, to: crud, label: '' }
+          - { from: crud, to: model, label: '' }
+          - { from: crud, to: db, label: AsyncSession }
+          - { from: mcp, to: router, label: from_fastapi(OpenAPI) }
+          - { from: mw, to: obs, label: metrics + logs }
+      my_contributions:
+        - Identified the organizational engineering gap across teams
+        - Designed the layered architecture and abstraction contracts
+        - Built the generic CRUDBase[Model, Create, Update, Response] pattern
+        - Wired the MCP integration so REST endpoints become AI-callable for free
+        - Authored the 100%-coverage testing harness and pre-commit gate
+        - Wrote the developer documentation (MkDocs + Backstage TechDocs)
+        - Supported adoption across the platform with office hours and reviews
+      stack:
+        runtime:
+          - Python 3.12+
+          - FastAPI 0.118+
+          - Uvicorn
+          - Pydantic v2 + pydantic-settings
+        data:
+          - SQLAlchemy 2.0 (async)
+          - asyncpg + psycopg2-binary
+          - Alembic
+        auth:
+          - PyJWT [crypto]
+          - bcrypt
+        mcp:
+          - FastMCP 3.3+
+          - mcp 1.27+
+        observability:
+          - structlog
+          - prometheus-client
+          - prometheus-fastapi-instrumentator
+          - Grafana dashboards
+        tooling:
+          - uv (package manager + lock)
+          - ruff (lint + format)
+          - mypy strict + pyrefly (advisory)
+          - pytest 8 + pytest-asyncio + pytest-cov
+          - pre-commit + Commitizen
+          - Docker + Podman parity
+      patterns:
+        - Layered architecture (API → service → repository → domain) with strict boundaries
+        - Generic async CRUD repository with type-parameterised contracts
+        - MCP as a first-class second protocol — auto-derived from OpenAPI
+        - App-factory + lifespan composition (REST + MCP + observability)
+        - Conventional-Commits + Commitizen enforced at commit-msg hook
+        - 100%-coverage gate makes "untested code" impossible to merge
+      outcomes:
+        - 12+ internal projects adopted as their starting point
+        - Faster onboarding for new engineers (one mental model, not five)
+        - Consistent observability and auth across the platform
+        - Contributed to an Outstanding Award (March 2025)
+        - Foundation for white-labeling client engagements (see Voice Assistant case study)
+
   - id: sop-csc
     title: CSC (Content Supply Chain)
     parent: sop-program
@@ -2868,7 +2974,7 @@ projects:
       - id: white-labeled-platform
         title: White-Labeled Platform (Reusable Deloitte Asset)
         status: in-progress                  # mid-migration from POC to generalized shell
-        repo: SOP/ls-genai-realtime-contactcenter
+        repo: SOP/ls-genai-virtual-multi-agent
         builds_on: [sop-fastapi-starter]     # outer shell uses Om's own Starter Kit foundation
 
         situation: >
@@ -2963,6 +3069,106 @@ projects:
         # (b) those features didn't carry into the white-label, or
         # (c) they live in sibling repos (ls-genai-agents, ls-genai-assets).
         # Pending user confirmation.
+
+    # =================================================================
+    # Modal case study (read-more popup on /). Lawsuit-safe by design —
+    # no client / brand names are referenced here.
+    # =================================================================
+    case_study:
+      status: production
+      headline: |
+        Customers dial a 1-800 line, talk to an AI in real time, and get
+        medication and order help — shipped to a healthcare diagnostics
+        provider in 8 weeks, then white-labeled as a reusable platform.
+      problem: |
+        A US healthcare diagnostics provider handled large call volumes for
+        medication questions, order status, and patient support, and wanted
+        to deflect tier-1 calls through natural conversation rather than
+        menu trees. Latency had to feel human, identity verification had to
+        be tight enough for sensitive data, and answers had to ground in
+        product / medical knowledge — not hallucinate.
+      approach: |
+        Built a bidirectional voice pipeline. Caller audio streams from
+        Azure Communication Services through a FastAPI orchestrator into
+        Azure OpenAI's Realtime API (gpt-4o-realtime), which returns
+        streaming PCM16 audio plus tool-call events. A multi-agent registry
+        routes turns between a triage agent, an identity-verification gate,
+        and specialist agents. Knowledge questions ground through Azure AI
+        Search hybrid (semantic + vector) RAG before the LLM speaks.
+      key_features:
+        - Sub-second turn-taking with server-side VAD and barge-in support
+        - Multi-agent orchestration with prompts hot-swappable mid-call
+        - Identity-verification gate before any sensitive data is disclosed
+        - Hybrid semantic + vector RAG over product / support knowledge
+        - Live-agent escalation and mid-call transfer via ACS call control
+        - Bilingual EN / ES transcription and response
+        - Post-call artifacts (recording · summary · transcript · token usage)
+      architecture:
+        nodes:
+          - { id: caller, label: 'PSTN Caller (1-800)', layer: edge }
+          - { id: acs, label: Azure Communication Services, layer: edge }
+          - { id: api, label: FastAPI App, layer: orchestrator }
+          - { id: handler, label: Media Handler / Session Mgr, layer: orchestrator }
+          - { id: agents, label: 'Agent Manager (triage + specialists)', layer: orchestrator }
+          - { id: realtime, label: 'Azure OpenAI Realtime (STT · LLM · TTS)', layer: ai }
+          - { id: search, label: 'Azure AI Search (Hybrid RAG)', layer: storage }
+          - { id: crm, label: Member / CRM API, layer: storage }
+          - { id: db, label: 'Postgres + Blob', layer: storage }
+        edges:
+          - { from: caller, to: acs, label: PSTN audio }
+          - { from: acs, to: api, label: Event Grid webhook }
+          - { from: acs, to: handler, label: 'Bidirectional WS (PCM16)' }
+          - { from: handler, to: realtime, label: 'Upstream audio + events' }
+          - { from: handler, to: agents, label: Route turn }
+          - { from: realtime, to: handler, label: 'Transcripts · tool calls · TTS' }
+          - { from: agents, to: search, label: Knowledge grounding }
+          - { from: agents, to: crm, label: Identity + lookup }
+          - { from: handler, to: db, label: Transcripts + summaries }
+      my_contributions:
+        - Owned backend architecture and realtime workflow end-to-end
+        - Designed the multi-agent registry pattern (triage + specialists)
+        - Built the dual-WebSocket bridge (caller ↔ server ↔ Realtime API)
+        - Implemented the identity-verification gate and tool-call routing
+        - Wired hybrid Azure AI Search RAG into the agent loop
+        - Primary Azure deployment owner across all environments
+        - Extended platform into SMS channel with persistent context store
+      stack:
+        backend:
+          - FastAPI
+          - Python 3.12
+          - Uvicorn
+          - Pydantic v2
+          - SQLAlchemy 2.0 async + asyncpg
+          - Alembic
+        ai_voice:
+          - Azure OpenAI Realtime (gpt-4o-realtime)
+          - Azure OpenAI Whisper (STT)
+          - text-embedding-3-large
+          - Azure AI Search (semantic + vector)
+        telephony:
+          - Azure Communication Services
+          - azure-communication-callautomation
+          - azure-eventgrid
+          - websockets
+        storage:
+          - PostgreSQL
+          - Azure Blob Storage
+        infra:
+          - Docker
+          - DefaultAzureCredential / managed identity
+          - GitHub Actions CI
+      patterns:
+        - Dual-WebSocket bridge with async fan-out of audio + control events
+        - Agent registry (triage routes to specialists; all swap prompts mid-call)
+        - Function-call tool registry injected into the Realtime session config
+        - Conversation optimizer trims context mid-call while preserving verification state
+        - Config-driven prompts; persona / branding extractable to config
+        - End-to-end async stack (asyncpg, aio Azure SDKs, AsyncAzureOpenAI)
+      outcomes:
+        - Production deployment for the client
+        - Validated voice-AI strategy with stakeholder demos
+        - White-labeled as a reusable platform asset for future engagements
+        - Foundation for follow-on conversational AI work
 
   - id: healthcare-policy-platform
     title: RCM (Revenue Cycle Management) Platform
@@ -3965,6 +4171,109 @@ hackathons:
       detection → TensorFlow gesture classification → GPT Realtime sentence
       generation → text + voice output. End-to-end accessibility solution
       shipped in a weekend.
+
+    # =================================================================
+    # Modal case study (read-more popup on /). Hackathon project — no
+    # client confidentiality involved, but kept generic anyway.
+    # =================================================================
+    case_study:
+      status: shipped
+      headline: |
+        Live ASL hand gestures → grammar-corrected natural speech in real
+        time. Built end-to-end in 3 days as the most ambitious accessibility
+        hack of the event.
+      problem: |
+        Sign-language users still depend on human interpreters for spoken
+        communication in most settings. Existing tools either translate to
+        text (no voice), require expensive specialised hardware, or break
+        the tone and rhythm of the signer's intent. We wanted a webcam-only,
+        browser-native pipeline that preserves emotion and ships under a
+        weekend's compute budget.
+      approach: |
+        Three-stage real-time pipeline. A React + Web Audio frontend captures
+        webcam frames at 5 fps and streams them over WebSocket. The backend
+        runs MediaPipe Hands per frame to extract a 195-dim landmark vector,
+        feeds it through a tiny custom TensorFlow classifier (31 classes,
+        ~1.2 MB H5), and accumulates glosses. After a 3-second pause heuristic,
+        the gloss sequence is sent to Azure GPT-4o Realtime for minimal
+        grammar polish — preserving tone and word order — and streamed back
+        as PCM16 24 kHz audio.
+      key_features:
+        - Webcam-only — no specialised hardware, runs in a browser
+        - 31-class gesture vocabulary trained on 12 000+ hand-captured images
+        - Landmark-features-over-pixels — tiny model, position / scale invariant
+        - N-consecutive-frame confirmation suppresses false positives
+        - 3-second pause heuristic as natural sentence boundary
+        - Single-call LLM-as-grammar-AND-TTS through GPT-4o Realtime
+        - End-to-end latency ~4–5 s from sign-start to spoken output
+      architecture:
+        nodes:
+          - { id: webcam, label: 'Webcam (getUserMedia)', layer: edge }
+          - { id: capture, label: 'Frame Capture (5 fps · base64 JPEG)', layer: edge }
+          - { id: mediapipe, label: 'MediaPipe Hands (21 × 2 landmarks)', layer: orchestrator }
+          - { id: features, label: 'Feature Extractor (195-dim)', layer: orchestrator }
+          - { id: classifier, label: 'TF Classifier (31 classes · 1.2 MB)', layer: ai }
+          - { id: buffer, label: 'Gesture Buffer (debounce + pause timer)', layer: ai }
+          - { id: llm, label: 'GPT-4o Realtime (grammar + TTS)', layer: ai }
+          - { id: display, label: 'Dual Display (raw gloss + sentence)', layer: ui }
+          - { id: audio, label: 'Audio Player (Web Audio API)', layer: ui }
+        edges:
+          - { from: webcam, to: capture, label: video stream }
+          - { from: capture, to: mediapipe, label: 'WS · base64 JPEG' }
+          - { from: mediapipe, to: features, label: landmarks }
+          - { from: features, to: classifier, label: vector }
+          - { from: classifier, to: buffer, label: 'top-3 + confidence' }
+          - { from: buffer, to: llm, label: 'gloss seq (on 3 s pause)' }
+          - { from: buffer, to: display, label: live predictions }
+          - { from: llm, to: audio, label: 'PCM16 chunks (WS)' }
+          - { from: llm, to: display, label: polished sentence }
+      my_contributions:
+        - Team Lead — owned end-to-end architecture and integration
+        - 26 commits — most of the team — across CV, ML, LLM, and infra
+        - Built the working backend + frontend skeleton on day 1
+        - Wired the TensorFlow H5 model into the streaming prediction loop
+        - Authored the model-training notebook and the 195-dim feature pipeline
+        - Integrated the GPT-4o Realtime grammar agent (single-call streaming)
+        - Migrated tooling to uv + devcontainer for fast onboarding
+      stack:
+        computer_vision:
+          - MediaPipe Hands 0.10
+          - OpenCV 4.10
+        machine_learning:
+          - TensorFlow 2.18
+          - scikit-learn (label encoder)
+          - Custom 31-class dense network (H5 format, 1.2 MB)
+        llm_voice:
+          - Azure OpenAI gpt-realtime
+          - OpenAI Agents SDK 0.3.3
+          - PCM16 / 24 kHz / 16-bit mono streaming
+        transport:
+          - WebSockets (websockets 15)
+          - FastAPI WS routes
+        frontend:
+          - React 18 + TypeScript
+          - Vite 6
+          - Tailwind
+          - Web Audio API (PCM16 → Float32)
+          - WebRTC getUserMedia
+        backend:
+          - FastAPI 0.115
+          - Uvicorn (async)
+          - Python 3.10
+          - Pydantic v2
+          - uv (package manager)
+      patterns:
+        - Landmark-features-over-pixels — tiny TF model on MediaPipe vectors instead of CNN on raw frames
+        - N-consecutive-frame debouncing + duplicate-word suppression for stream cleanup
+        - Pause-detection state machine as natural sentence boundary (3 s silence)
+        - Single-call LLM-as-grammar-AND-TTS — Realtime API collapses two hops into one
+        - Streaming PCM16 audio across two WebSocket hops (Azure → backend → browser)
+        - Prompt-engineered tone preservation — model adds grammar without paraphrasing intent
+      outcomes:
+        - End-to-end working demo shipped in 3 days
+        - Showcased beyond the hackathon (GAAD — Global Accessibility Awareness Day)
+        - Team Lead role with 26 of total team commits — most of any contributor
+        - Proof that accessibility AI ships on commodity hardware + standard browser APIs
 
   - id: deep-research-agent
     name:                                 # TODO: which hackathon / event was this at?

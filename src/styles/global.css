@@ -12,6 +12,28 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Constrain content width — all sections + components use this wrapper or
+   inherit through inline-padding on .section/.hero/.footer/.topbar. */
+:root {
+  --content-max: 1200px;
+  --content-px: clamp(20px, 4vw, 60px);
+}
+
+body > *,
+main > * {
+  max-width: var(--content-max);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Full-bleed exceptions (sections that intentionally span edge-to-edge) */
+.footer { max-width: none !important; }
+.footer > * {
+  max-width: var(--content-max);
+  margin-left: auto;
+  margin-right: auto;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }

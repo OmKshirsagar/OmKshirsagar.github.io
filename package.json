@@ -17,7 +17,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "whitelabel": "python3 scripts/whitelabel.py"
+    "whitelabel": "python3 scripts/whitelabel.py",
+    "og": "python3 scripts/generate-og.py"
   },
   "keywords": [],
   "author": "",

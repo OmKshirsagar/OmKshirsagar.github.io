@@ -103,9 +103,9 @@ personal:
       - Gujarati (basic)
 
   contact:
-    email:                             # TODO: leave blank to hide on public site
+    email: om.s.j.kshirsagar@deloitte.com
     github: OmKshirsagar
-    linkedin:                          # TODO: full URL or handle
+    linkedin: https://www.linkedin.com/in/omsk/
     twitter:                           # TODO: optional
     website:                           # this site itself — leave blank
 

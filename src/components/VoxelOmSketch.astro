@@ -143,7 +143,25 @@
   .hero-avatar svg {
     width: 100%;
     max-width: 320px;
+    max-height: 360px;
     height: auto;
+  }
+
+  /* Mobile: cap character height so it doesn't dominate the hero */
+  @media (max-width: 900px) {
+    .hero-avatar {
+      padding: 10px 0;
+    }
+    .hero-avatar svg {
+      max-width: 240px;
+      max-height: 280px;
+    }
+  }
+  @media (max-width: 600px) {
+    .hero-avatar svg {
+      max-width: 200px;
+      max-height: 240px;
+    }
   }
   .placeholder-label {
     position: absolute;

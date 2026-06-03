@@ -48,9 +48,10 @@ export default function BottomNav(): ReactElement {
           justify-content: center;
           position: sticky;
           bottom: 20px;
-          padding: 28px 0;
+          padding: 28px 16px;
           z-index: 50;
           pointer-events: none;
+          max-width: 100vw;
         }
         .bnav {
           padding: 8px 12px;
@@ -63,6 +64,7 @@ export default function BottomNav(): ReactElement {
           gap: 4px;
           box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
           pointer-events: auto;
+          max-width: 100%;
         }
         .bnav .item {
           padding: 8px 14px;
@@ -72,11 +74,22 @@ export default function BottomNav(): ReactElement {
           text-decoration: none;
           cursor: pointer;
           transition: color 0.2s, background 0.2s;
+          white-space: nowrap;
         }
         .bnav .item:hover { color: #c4b598; }
         .bnav .item.active {
           background: rgba(255, 210, 154, 0.15);
           color: #ffd29a;
+        }
+
+        /* Mobile: tighter padding + smaller font + drop Home/More labels */
+        @media (max-width: 640px) {
+          .bnav { padding: 6px 8px; gap: 2px; }
+          .bnav .item { padding: 7px 10px; font-size: 10px; letter-spacing: -0.01em; }
+        }
+        @media (max-width: 420px) {
+          /* On very narrow screens, hide Home + More (least essential) */
+          .bnav .item[href="#home"], .bnav .item[href="#more"] { display: none; }
         }
       `}</style>
     </div>

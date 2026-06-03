@@ -1,0 +1,27 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { heroData } from '@/data/select';
+
+const hero = heroData();
+---
+<BaseLayout title={`${hero.name} — ${hero.role} @ ${hero.company}`}>
+  <main style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 40px;">
+    <p style="font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-orange); margin-bottom: 16px;">
+      {hero.kicker}
+    </p>
+    <h1 style="font-size: 72px; font-weight: 800; letter-spacing: -0.04em; line-height: 0.9; margin-bottom: 16px;">
+      {hero.preferredName} <span style="font-family: var(--font-italic); font-style: italic; font-weight: 400; color: var(--accent-warm);">Kshirsagar</span>
+    </h1>
+    <p style="font-size: 18px; color: var(--text-sec);">
+      <strong style="color: var(--text-pri);">{hero.role}</strong> @ {hero.company}
+      {hero.promotedBadge && (
+        <span style="margin-left: 8px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; padding: 3px 7px; background: rgba(255, 210, 154, 0.18); color: var(--accent-warm); border-radius: 2px; vertical-align: 2px;">
+          {hero.promotedBadge}
+        </span>
+      )}
+    </p>
+    <p style="margin-top: 40px; font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);">
+      ★ scaffold v0 — full page in Plan 2 · <a href="/journey" style="color: var(--accent-warm);">/journey →</a>
+    </p>
+  </main>
+</BaseLayout>

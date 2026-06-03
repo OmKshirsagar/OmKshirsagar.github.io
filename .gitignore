@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.astro/
+
+# Brainstorming artifacts (visual companion sessions)
+.superpowers/
+
+# Local agent skill installations (not portfolio content)
+.agents/
+
+# OneDrive sync artifacts
+.DS_Store
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Sensitive YAML — master with real client names, NEVER commit
+data/portfolio.local.yml
+data/private.yml
+
+# Test artifacts
+test-results/
+playwright-report/
+playwright/.cache/
+coverage/
+
+# Env
+.env
+.env.local
+.env.*.local

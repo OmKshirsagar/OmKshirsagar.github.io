@@ -1,0 +1,35 @@
+:root {
+  /* ---- Color tokens ---- */
+  --bg:           #08080d;
+  --bg-raised:    #11111a;
+  --bg-surface:   #14141c;
+  --border:       #1f1f2c;
+
+  --text-pri:     #f4f1ea;
+  --text-sec:     #c4b598;
+  --text-muted:   #888094;
+  --text-dim:     #5a5566;
+
+  --accent-warm:    #ffd29a;
+  --accent-orange:  #ff9460;
+  --accent-dusk:    #5a4870;
+  --accent-cyan:    #5af3d0;
+  --accent-red:     #c8311f;
+
+  --status-active:  #88e07d;
+
+  /* ---- Fonts ---- */
+  --font-display: 'Inter', system-ui, sans-serif;
+  --font-italic:  'Fraunces', Georgia, serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  /* ---- Spacing ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+}

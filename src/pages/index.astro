@@ -1,27 +1,81 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import TopBar from '@/components/TopBar.astro';
+import Hero from '@/components/Hero.astro';
+import FeaturedBand from '@/components/FeaturedBand.astro';
+import RtvaIllustration from '@/components/illustrations/RtvaIllustration.astro';
+import StarterKitIllustration from '@/components/illustrations/StarterKitIllustration.astro';
+import SignLanguageIllustration from '@/components/illustrations/SignLanguageIllustration.astro';
+import CareerArc from '@/components/CareerArc.astro';
+import Recognized from '@/components/Recognized.astro';
+import WorkTimeline from '@/components/WorkTimeline.astro';
+import BottomNav from '@/components/BottomNav';
+import Footer from '@/components/Footer.astro';
 import { heroData } from '@/data/select';
 
 const hero = heroData();
+const pageTitle = `${hero.name} — ${hero.role} @ ${hero.company}`;
 ---
-<BaseLayout title={`${hero.name} — ${hero.role} @ ${hero.company}`}>
-  <main style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 40px;">
-    <p style="font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-orange); margin-bottom: 16px;">
-      {hero.kicker}
-    </p>
-    <h1 style="font-size: 72px; font-weight: 800; letter-spacing: -0.04em; line-height: 0.9; margin-bottom: 16px;">
-      {hero.preferredName} <span style="font-family: var(--font-italic); font-style: italic; font-weight: 400; color: var(--accent-warm);">Kshirsagar</span>
-    </h1>
-    <p style="font-size: 18px; color: var(--text-sec);">
-      <strong style="color: var(--text-pri);">{hero.role}</strong> @ {hero.company}
-      {hero.promotedBadge && (
-        <span style="margin-left: 8px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; padding: 3px 7px; background: rgba(255, 210, 154, 0.18); color: var(--accent-warm); border-radius: 2px; vertical-align: 2px;">
-          {hero.promotedBadge}
-        </span>
-      )}
-    </p>
-    <p style="margin-top: 40px; font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);">
-      ★ scaffold v0 — full page in Plan 2 · <a href="/journey" style="color: var(--accent-warm);">/journey →</a>
-    </p>
-  </main>
+<BaseLayout title={pageTitle}>
+  <TopBar />
+  <Hero />
+
+  <section class="section" id="work">
+    <div class="sec-num">// 01</div>
+    <h2 class="sec-title">Selected <em>work</em></h2>
+    <p class="sec-eyebrow">Three flagships — voice AI, platform foundation, accessibility innovation.</p>
+
+    <FeaturedBand
+      num="01"
+      badge="Featured · Production AI"
+      title="Real-Time Voice Assistant"
+      titleEm="Assistant"
+      meta="Healthcare client · Full Stack AI Engineer · Aug–Oct 2025"
+      desc="Customers dial a 1-800 number, talk to an AI in real time, get medication and order help. <strong>Shipped to production, then white-labeled as a reusable Deloitte asset.</strong>"
+      chips={['GPT Realtime', 'Azure ACS', 'Azure AI Search', 'RAG', 'FastAPI']}
+      variant="left"
+    >
+      <RtvaIllustration slot="illustration" />
+    </FeaturedBand>
+
+    <FeaturedBand
+      num="02"
+      badge="Featured · Foundation"
+      title="FastAPI Starter Kit"
+      titleEm="Kit"
+      meta="Deloitte SOP · Platform Engineer · since Jan 2025"
+      desc="A reusable framework with standardized architecture, full test infra, and MCP baked in. <strong>Adopted by 12+ projects.</strong>"
+      chips={['FastAPI', 'FastMCP', 'SQLAlchemy 2.0', '100% coverage']}
+      variant="right"
+    >
+      <StarterKitIllustration slot="illustration" />
+    </FeaturedBand>
+
+    <FeaturedBand
+      num="03"
+      badge="Featured · Hackathon · Accessibility"
+      title="Sign Language → Speech"
+      titleEm="Speech"
+      meta="AgentX · Team Lead · 3-day weekend · Team of 5"
+      desc="A multimodal AI that turns live hand gestures into natural speech in real time. <strong>Built end-to-end in 3 days as the most ambitious accessibility hack of the event.</strong>"
+      chips={['MediaPipe', 'TensorFlow', 'GPT Realtime', 'WebSockets']}
+      variant="left"
+    >
+      <SignLanguageIllustration slot="illustration" />
+    </FeaturedBand>
+  </section>
+
+  <CareerArc />
+  <Recognized />
+  <WorkTimeline />
+  <BottomNav client:load />
+  <Footer />
 </BaseLayout>
+
+<style>
+  .section { padding: 70px 40px; }
+  .sec-num { font: 700 10px/1 var(--font-mono); letter-spacing: 0.22em; color: var(--accent-orange); }
+  .sec-title { font: 700 36px/1 var(--font-display); letter-spacing: -0.03em; color: #fff; margin: 12px 0 0; }
+  .sec-title em { color: var(--accent-warm); font-style: normal; font-family: var(--font-italic); font-weight: 400; }
+  .sec-eyebrow { font: 400 13px/1.4 var(--font-display); color: var(--text-muted); margin: 10px 0 0; }
+</style>

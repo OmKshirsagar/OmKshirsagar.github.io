@@ -1,0 +1,99 @@
+---
+// Featured 02 — FastAPI Starter Kit illustration
+// 12 voxel project towers rising from labeled foundation block
+---
+<div class="illu">
+  <svg viewBox="0 0 300 300" fill="none">
+    <defs>
+      <linearGradient id="kit-base" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffd29a"/>
+        <stop offset="100%" stop-color="#b35a3a"/>
+      </linearGradient>
+    </defs>
+
+    <!-- ambient glow -->
+    <ellipse cx="150" cy="240" rx="130" ry="20" fill="#ff9460" opacity="0.18"/>
+
+    <!-- 12 small project towers rising from the foundation, varying heights -->
+    <g>
+      <!-- back row -->
+      <rect x="40" y="155" width="20" height="50" fill="#3a3450" opacity="0.6"/>
+      <rect x="65" y="135" width="20" height="70" fill="#5a4870" opacity="0.65"/>
+      <rect x="90" y="120" width="20" height="85" fill="#3a3450" opacity="0.55"/>
+      <rect x="115" y="140" width="20" height="65" fill="#5a4870" opacity="0.6"/>
+      <rect x="190" y="125" width="20" height="80" fill="#3a3450" opacity="0.55"/>
+      <rect x="215" y="145" width="20" height="60" fill="#5a4870" opacity="0.65"/>
+      <rect x="240" y="160" width="20" height="45" fill="#3a3450" opacity="0.55"/>
+
+      <!-- front row -->
+      <rect x="52" y="110" width="22" height="95" fill="#8a6da0"/>
+      <rect x="80" y="80" width="22" height="125" fill="#ffaa78"/>
+      <rect x="108" y="95" width="22" height="110" fill="#5a4870"/>
+      <rect x="136" y="65" width="22" height="140" fill="#ffd29a"/>
+      <rect x="164" y="100" width="22" height="105" fill="#8a6da0"/>
+      <rect x="192" y="78" width="22" height="127" fill="#ffaa78"/>
+      <rect x="220" y="115" width="22" height="90" fill="#5a4870"/>
+
+      <!-- tower windows -->
+      <g fill="#fff5e8" opacity="0.6">
+        <rect x="57" y="125" width="3" height="3"/>
+        <rect x="65" y="135" width="3" height="3"/>
+        <rect x="86" y="100" width="3" height="3"/>
+        <rect x="93" y="115" width="3" height="3"/>
+        <rect x="142" y="80" width="3" height="3"/>
+        <rect x="148" y="100" width="3" height="3"/>
+        <rect x="197" y="92" width="3" height="3"/>
+        <rect x="203" y="110" width="3" height="3"/>
+      </g>
+
+      <!-- adoption indicator dots -->
+      <g fill="#ffd29a">
+        <circle cx="63" cy="100" r="2"/>
+        <circle cx="91" cy="70" r="2"/>
+        <circle cx="119" cy="85" r="2"/>
+        <circle cx="147" cy="55" r="2"/>
+        <circle cx="175" cy="90" r="2"/>
+        <circle cx="203" cy="68" r="2"/>
+        <circle cx="231" cy="105" r="2"/>
+      </g>
+    </g>
+
+    <!-- The foundation -->
+    <g>
+      <rect x="30" y="205" width="240" height="38" fill="url(#kit-base)" stroke="#1a0f08" stroke-width="1.5"/>
+      <rect x="30" y="205" width="240" height="6" fill="#fff5e8" opacity="0.4"/>
+      <g stroke="#1a0f08" stroke-width="0.5" opacity="0.3">
+        <line x1="70" y1="205" x2="70" y2="243"/>
+        <line x1="110" y1="205" x2="110" y2="243"/>
+        <line x1="150" y1="205" x2="150" y2="243"/>
+        <line x1="190" y1="205" x2="190" y2="243"/>
+        <line x1="230" y1="205" x2="230" y2="243"/>
+      </g>
+      <text x="150" y="228" font-family="JetBrains Mono" font-size="9" font-weight="700" letter-spacing="3" fill="#1a0f08" text-anchor="middle">FASTAPI STARTER KIT</text>
+    </g>
+
+    <!-- ground plane shadow -->
+    <ellipse cx="150" cy="252" rx="135" ry="6" fill="#000" opacity="0.4"/>
+
+    <!-- 12+ counter -->
+    <g transform="translate(248, 50)">
+      <circle r="22" fill="#14141c" stroke="#ffd29a" stroke-width="1"/>
+      <text font-family="Inter" font-size="13" font-weight="800" fill="#ffd29a" text-anchor="middle" y="0">12+</text>
+      <text font-family="JetBrains Mono" font-size="6" letter-spacing="1" fill="#888094" text-anchor="middle" y="11">PROJECTS</text>
+    </g>
+  </svg>
+</div>
+
+<style>
+  .illu {
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(ellipse at center, rgba(255, 210, 154, 0.06) 0%, transparent 70%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 320px;
+  }
+  .illu svg { width: 300px; height: 300px; display: block; }
+</style>

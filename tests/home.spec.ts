@@ -18,3 +18,41 @@ test('cross-link from home to journey works', async ({ page }) => {
   await page.click('a[href="/journey"]');
   await expect(page).toHaveURL(/\/journey/);
 });
+
+test('hero shows stats row with 6 tiles', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.stat')).toHaveCount(6);
+});
+
+test('featured section has 3 bands', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.feat-band')).toHaveCount(3);
+});
+
+test('career arc shows 5 cells', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.strip .cell')).toHaveCount(5);
+});
+
+test('recognized section renders cards', async ({ page }) => {
+  await page.goto('/');
+  const cards = page.locator('section#recognized .card');
+  await expect(cards.first()).toBeVisible();
+  const count = await cards.count();
+  expect(count).toBeGreaterThanOrEqual(5);
+});
+
+test('work timeline has 5 engagement groups', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.engagement')).toHaveCount(5);
+});
+
+test('bottom nav pill renders', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.bnav')).toBeVisible();
+});
+
+test('footer has get-in-touch heading', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('footer.footer')).toContainText(/in touch/i);
+});

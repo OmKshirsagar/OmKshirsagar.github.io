@@ -1,0 +1,116 @@
+---
+import { recognizedItems } from '@/data/select';
+const items = recognizedItems();
+
+const icons: Record<string, string> = {
+  trophy: '<path d="M24 4 L33 12 L33 22 Q33 32 24 36 Q15 32 15 22 L15 12 Z" stroke="#ffd29a" stroke-width="1.5" fill="rgba(255,210,154,0.1)"/><circle cx="24" cy="20" r="5" fill="#ffd29a"/><path d="M19 36 L29 36 L27 44 L21 44 Z" fill="#ff9460"/>',
+  'arrow-up': '<polygon points="24,6 14,18 20,18 20,32 28,32 28,18 34,18" stroke="#ffd29a" stroke-width="1.5" fill="rgba(255,210,154,0.15)"/><rect x="14" y="34" width="20" height="8" rx="1" stroke="#ffd29a" stroke-width="1.2" fill="#14141c"/><text x="24" y="40" font-family="JetBrains Mono, monospace" font-size="5" font-weight="700" letter-spacing="1" fill="#ffd29a" text-anchor="middle">ANALYST</text>',
+  book: '<rect x="10" y="8" width="28" height="34" rx="1" stroke="#ffd29a" stroke-width="1.5" fill="#14141c"/><line x1="10" y1="8" x2="10" y2="42" stroke="#ffd29a" stroke-width="2"/><line x1="15" y1="14" x2="33" y2="14" stroke="#ffd29a" stroke-width="0.8"/><line x1="15" y1="18" x2="29" y2="18" stroke="#ffd29a" stroke-width="0.6" opacity="0.6"/><g transform="translate(15, 24)"><circle cx="3" cy="5" r="2.5" fill="#ffd29a"/><rect x="0.5" y="7" width="5" height="6" fill="#ffd29a"/><rect x="0" y="13" width="6" height="2" fill="#ffd29a"/></g><g transform="translate(28, 24)"><circle cx="3" cy="5" r="2.5" stroke="#ff9460" stroke-width="1.2" fill="none"/><rect x="0.5" y="7" width="5" height="6" stroke="#ff9460" stroke-width="1" fill="none"/><rect x="0" y="13" width="6" height="2" stroke="#ff9460" stroke-width="1" fill="none"/></g><text x="24" y="34" font-family="JetBrains Mono, monospace" font-size="4" font-weight="700" fill="#ffd29a" text-anchor="middle">vs</text>',
+  badge: '<rect x="8" y="10" width="32" height="22" rx="2" stroke="#888094" stroke-width="1.2" fill="none" stroke-dasharray="3 2"/><line x1="14" y1="18" x2="34" y2="18" stroke="#888094" stroke-width="0.8" stroke-dasharray="2 2"/><line x1="14" y1="22" x2="28" y2="22" stroke="#888094" stroke-width="0.8" stroke-dasharray="2 2"/><circle cx="34" cy="38" r="6" stroke="#888094" stroke-width="1.2" fill="none" stroke-dasharray="2 2"/><text x="34" y="40" font-family="JetBrains Mono, monospace" font-size="6" fill="#888094" text-anchor="middle">★</text>',
+};
+
+const trophyVariant = (n: string) => icons.trophy + `<text x="24" y="22" font-family="Inter" font-size="6" font-weight="800" fill="#1a0f08" text-anchor="middle">${n}</text>`;
+
+const applauseIcon = '<circle cx="24" cy="22" r="14" stroke="#ffaa78" stroke-width="1.5" fill="rgba(255,170,120,0.1)"/><g stroke="#ffaa78" stroke-width="1.5" fill="none"><path d="M16 22 Q19 14 24 14 Q29 14 32 22"/><path d="M14 24 Q18 12 24 12 Q30 12 34 24"/></g><circle cx="24" cy="24" r="3" fill="#ffaa78"/>';
+
+let awardIdx = 0;
+---
+<section class="section" id="recognized">
+  <div class="sec-num">// 03</div>
+  <h2 class="sec-title"><em>Recognized</em></h2>
+  <p class="sec-eyebrow">Awards, publications, and verifiable proof. Download anything.</p>
+
+  <div class="recog-grid">
+    {items.map((item) => {
+      const isPub = item.kind === 'publication';
+      const isCert = item.kind === 'certification';
+      const typeLabel = item.kind === 'award' ? 'Award'
+                      : item.kind === 'promotion' ? 'Promotion'
+                      : item.kind === 'publication' ? 'Publication · Peer reviewed'
+                      : 'Certification';
+      let html: string;
+      if (item.kind === 'award') {
+        html = item.title.toLowerCase().includes('applause') ? applauseIcon : trophyVariant(awardIdx === 0 ? '1ST' : '2ND');
+        awardIdx++;
+      } else if (item.kind === 'promotion') html = icons['arrow-up'];
+      else if (item.kind === 'publication') html = icons.book;
+      else html = icons.badge;
+
+      return (
+        <div class:list={['card', isPub && 'publication', isCert && 'cert']}>
+          <div class="type">{typeLabel}</div>
+          <svg class="icon" viewBox="0 0 48 48" fill="none" set:html={html} />
+          <div class="t">{item.title}</div>
+          <div class="m" set:html={item.meta.replace(' · ', '<br/>')} />
+          <a
+            class:list={['dl', !item.downloadUrl && 'disabled']}
+            href={item.downloadUrl ?? undefined}
+            aria-disabled={!item.downloadUrl}
+          >⬇ {item.downloadUrl ? (isPub ? 'Paper (PDF)' : 'Letter (PDF)') : 'TODO'}</a>
+        </div>
+      );
+    })}
+  </div>
+</section>
+
+<style>
+  .section { padding: 70px 40px; }
+  .sec-num { font: 700 10px/1 var(--font-mono); letter-spacing: 0.22em; color: var(--accent-orange); }
+  .sec-title { font: 700 36px/1 var(--font-display); letter-spacing: -0.03em; color: #fff; margin: 12px 0 0; }
+  .sec-title em { color: var(--accent-warm); font-style: normal; font-family: var(--font-italic); font-weight: 400; }
+  .sec-eyebrow { font: 400 13px/1.4 var(--font-display); color: var(--text-muted); margin: 10px 0 0; }
+
+  .recog-grid {
+    margin-top: 36px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .card {
+    background: var(--bg-surface);
+    border: 1px solid #2a2638;
+    border-radius: 8px;
+    padding: 22px 18px;
+    position: relative;
+    overflow: hidden;
+    min-height: 180px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .card .type {
+    font: 700 8px/1 var(--font-mono); letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--text-dim);
+  }
+  .card .icon { width: 48px; height: 48px; margin: 4px 0 6px; }
+  .card .t { font: 700 13px/1.2 var(--font-display); color: #fff; margin: 0; }
+  .card .m { font: 500 10px/1.3 var(--font-mono); color: var(--text-sec); margin-top: 2px; }
+  .card .dl {
+    margin-top: auto;
+    display: inline-flex; align-items: center; gap: 6px;
+    font: 600 10px/1 var(--font-display); color: var(--accent-warm);
+    text-decoration: none;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 210, 154, 0.1);
+  }
+  .card .dl.disabled { color: var(--text-dim); cursor: default; }
+  .card.publication {
+    grid-column: span 2;
+    background: linear-gradient(135deg, #1a1822 0%, var(--bg-surface) 60%);
+    border-color: rgba(255, 210, 154, 0.25);
+  }
+  .card.publication .t { font-size: 16px; }
+  .card.publication .icon { width: 56px; height: 56px; }
+  .card.cert {
+    background: var(--bg-raised);
+    border-style: dashed;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 900px) {
+    .recog-grid { grid-template-columns: repeat(2, 1fr); }
+    .card.publication { grid-column: span 2; }
+  }
+  @media (max-width: 500px) {
+    .recog-grid { grid-template-columns: 1fr; }
+    .card.publication { grid-column: span 1; }
+  }
+</style>

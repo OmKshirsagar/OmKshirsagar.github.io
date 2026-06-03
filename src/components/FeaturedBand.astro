@@ -1,0 +1,75 @@
+---
+interface Props {
+  num: string;
+  badge: string;
+  title: string;
+  titleEm?: string;
+  meta: string;
+  desc: string;
+  chips: string[];
+  variant: 'left' | 'right';
+}
+
+const { num, badge, title, titleEm, meta, desc, chips, variant } = Astro.props;
+
+const titleHtml = titleEm
+  ? title.split(titleEm).join(`<em>${titleEm}</em>`)
+  : title;
+---
+<div class:list={['feat-band', variant === 'right' && 'reverse']}>
+  <div class="illu-col">
+    <slot name="illustration" />
+  </div>
+  <div class="text-col">
+    <div class="num">{num}</div>
+    <div class="badge">{badge}</div>
+    <h3 class="title"><Fragment set:html={titleHtml} /></h3>
+    <p class="meta">{meta}</p>
+    <p class="desc"><Fragment set:html={desc} /></p>
+    <div class="stack">
+      {chips.map((c) => <span class="chip">{c}</span>)}
+    </div>
+    <a class="more" href="#" aria-disabled="true">Read the case study →</a>
+  </div>
+</div>
+
+<style>
+  .feat-band {
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 48px;
+    align-items: center;
+    padding: 36px 0;
+    border-top: 1px solid var(--border);
+  }
+  .feat-band.reverse { grid-template-columns: 1fr 320px; }
+  .feat-band.reverse .illu-col { order: 2; }
+  .feat-band.reverse .text-col { order: 1; }
+
+  .illu-col { display: flex; justify-content: center; }
+
+  .num { font: 800 56px/1 var(--font-display); letter-spacing: -0.05em; color: #2a2638; font-variant-numeric: tabular-nums; }
+  .badge { display: inline-block; margin-bottom: 6px; font: 700 9px/1 var(--font-mono); letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-orange); }
+  .title { font: 700 36px/1.05 var(--font-display); letter-spacing: -0.03em; color: #fff; margin: 6px 0 8px; }
+  .title em { color: var(--accent-warm); font-style: normal; font-family: var(--font-italic); font-weight: 400; }
+  .meta { font: 500 11px/1.3 var(--font-mono); color: var(--text-muted); margin: 0 0 16px; }
+  .desc { font: 400 15px/1.55 var(--font-display); color: var(--text-sec); margin: 0 0 22px; max-width: 540px; }
+  .desc strong { color: var(--text-pri); font-weight: 500; }
+  .stack { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 18px; }
+  .chip { font: 600 10px/1 var(--font-mono); letter-spacing: 0.06em; padding: 5px 9px; background: rgba(255, 210, 154, 0.08); color: var(--text-sec); border-radius: 2px; }
+  .more {
+    display: inline-flex; align-items: center; gap: 6px;
+    font: 600 12px/1 var(--font-display); color: var(--accent-warm);
+    text-decoration: none;
+  }
+  .more[aria-disabled="true"] { opacity: 0.7; cursor: default; }
+
+  @media (max-width: 900px) {
+    .feat-band, .feat-band.reverse {
+      grid-template-columns: 1fr;
+    }
+    .feat-band.reverse .illu-col,
+    .feat-band.reverse .text-col { order: unset; }
+  }
+</style>

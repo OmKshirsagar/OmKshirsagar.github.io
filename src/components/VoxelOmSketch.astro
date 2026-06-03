@@ -1,0 +1,163 @@
+---
+// Voxel-Om SVG placeholder. Driven by personal.avatar tokens in YAML.
+// Future: can be replaced with a GPT-generated portrait or refined art.
+---
+<div class="hero-avatar">
+  <!-- Voxel-Om placeholder character (we can swap for AI-generated portrait or refined voxel art later) -->
+  <svg viewBox="0 0 280 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="char-glow" cx="50%" cy="40%" r="55%">
+        <stop offset="0%" stop-color="#ffd29a" stop-opacity="0.18" />
+        <stop offset="100%" stop-color="#ffd29a" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+
+    <!-- Soft glow halo behind character -->
+    <ellipse cx="140" cy="160" rx="110" ry="140" fill="url(#char-glow)" />
+
+    <!-- Floor shadow ellipse -->
+    <ellipse cx="140" cy="338" rx="68" ry="8" fill="#000" opacity="0.55" />
+
+    <!-- ===== LEGS ===== -->
+    <!-- Left leg -->
+    <g>
+      <polygon points="98,290 116,283 116,323 98,330" fill="#2a3a6a" />
+      <polygon points="116,283 134,290 134,330 116,323" fill="#1f2c52" />
+      <polygon points="98,290 116,283 134,290 116,297" fill="#3d4d80" />
+      <!-- Shoe -->
+      <polygon points="92,328 116,322 116,338 92,344" fill="#1a1410" />
+      <polygon points="116,322 140,328 140,344 116,338" fill="#0a0806" />
+    </g>
+    <!-- Right leg -->
+    <g>
+      <polygon points="142,290 160,283 160,323 142,330" fill="#2a3a6a" />
+      <polygon points="160,283 178,290 178,330 160,323" fill="#1f2c52" />
+      <polygon points="142,290 160,283 178,290 160,297" fill="#3d4d80" />
+      <!-- Shoe -->
+      <polygon points="138,328 160,322 160,338 138,344" fill="#1a1410" />
+      <polygon points="160,322 184,328 184,344 160,338" fill="#0a0806" />
+    </g>
+
+    <!-- ===== TORSO (shirt) ===== -->
+    <g>
+      <!-- top face (light) -->
+      <polygon points="86,210 140,196 194,210 140,224" fill="#fffaf0" />
+      <!-- front-left -->
+      <polygon points="86,210 140,224 140,290 86,276" fill="#f4f1ea" />
+      <!-- front-right -->
+      <polygon points="140,224 194,210 194,276 140,290" fill="#d8d3c5" />
+      <!-- shirt logo (accent color) -->
+      <rect x="124" y="246" width="14" height="14" fill="#c8311f" transform="skewY(-7)" />
+      <!-- shirt neckline detail -->
+      <polygon points="120,210 140,212 160,210 140,222" fill="#bdb6a4" />
+    </g>
+
+    <!-- ===== LEFT ARM ===== -->
+    <g>
+      <polygon points="70,218 88,212 88,284 70,278" fill="#dba577" />
+      <polygon points="86,210 88,212 88,284 86,276" fill="#f4f1ea" />
+      <polygon points="70,218 86,210 88,212" fill="#e6c4a0" />
+      <!-- Hand -->
+      <polygon points="66,278 88,284 88,296 66,290" fill="#b8855a" />
+    </g>
+
+    <!-- ===== RIGHT ARM ===== -->
+    <g>
+      <polygon points="192,212 210,218 210,278 192,284" fill="#b8855a" />
+      <polygon points="194,210 210,218 210,278 194,276" fill="#9a6f47" />
+      <polygon points="194,210 192,212 210,218" fill="#c89971" />
+      <!-- Hand -->
+      <polygon points="192,284 214,278 214,290 192,296" fill="#9a6f47" />
+    </g>
+
+    <!-- ===== NECK ===== -->
+    <g>
+      <polygon points="124,184 140,180 156,184 140,188" fill="#dba577" />
+      <polygon points="124,184 140,188 140,210 124,206" fill="#b8855a" />
+      <polygon points="140,188 156,184 156,206 140,210" fill="#9a6f47" />
+    </g>
+
+    <!-- ===== HEAD ===== -->
+    <g>
+      <!-- top face (lit) -->
+      <polygon points="94,108 140,94 186,108 140,122" fill="#e8c4a0" />
+      <!-- front-left (mid) -->
+      <polygon points="94,108 140,122 140,184 94,170" fill="#dba577" />
+      <!-- front-right (dark) -->
+      <polygon points="140,122 186,108 186,170 140,184" fill="#b8855a" />
+
+      <!-- ===== HAIR ===== -->
+      <!-- main hair block (top face dark) -->
+      <polygon points="94,108 140,94 186,108 140,122" fill="#1a1410" opacity="0" />
+      <polygon points="94,98 140,82 186,98 140,114" fill="#1a1410" />
+      <polygon points="94,98 140,114 140,118 94,114" fill="#0a0806" />
+      <polygon points="140,114 186,98 186,114 140,118" fill="#000" />
+      <!-- hair side detail (forehead) -->
+      <polygon points="100,114 124,108 124,124 100,124" fill="#1a1410" />
+      <polygon points="156,108 180,114 180,124 156,124" fill="#1a1410" />
+
+      <!-- ===== GLASSES ===== -->
+      <!-- left lens -->
+      <rect x="106" y="138" width="22" height="14" rx="1" fill="none" stroke="#1a1410" stroke-width="2.5" />
+      <!-- right lens -->
+      <rect x="152" y="138" width="22" height="14" rx="1" fill="none" stroke="#1a1410" stroke-width="2.5" />
+      <!-- bridge -->
+      <line x1="128" y1="144" x2="152" y2="144" stroke="#1a1410" stroke-width="2.5" />
+      <!-- glass tint -->
+      <rect x="108" y="140" width="18" height="10" fill="#a4d4f4" opacity="0.2" />
+      <rect x="154" y="140" width="18" height="10" fill="#a4d4f4" opacity="0.2" />
+
+      <!-- ===== EYES (behind glasses) ===== -->
+      <rect x="114" y="143" width="3" height="3" fill="#1a1410" />
+      <rect x="160" y="143" width="3" height="3" fill="#1a1410" />
+
+      <!-- ===== MOUTH ===== -->
+      <rect x="130" y="166" width="20" height="2" fill="#7a4a32" />
+    </g>
+
+    <!-- Subtle floating particles around character (ambient atmosphere) -->
+    <g fill="#ffd29a" opacity="0.7">
+      <rect x="40" y="80" width="2" height="2" />
+      <rect x="240" y="120" width="2" height="2" />
+      <rect x="30" y="180" width="2" height="2" />
+      <rect x="250" y="200" width="2" height="2" />
+      <rect x="50" y="260" width="2" height="2" />
+      <rect x="230" y="280" width="2" height="2" />
+    </g>
+
+    <!-- Floor grid line (subtle, just a hint of the scene plane) -->
+    <line x1="60" y1="344" x2="220" y2="344" stroke="#ffd29a" stroke-width="0.5" opacity="0.2" />
+  </svg>
+
+  <div class="placeholder-label">★ placeholder — voxel-Om OR gpt portrait, decide later</div>
+</div>
+
+<style>
+  .hero-avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 20px 0;
+  }
+  .hero-avatar svg {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+  }
+  .placeholder-label {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font: 600 8px/1 var(--font-mono);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent-warm);
+    background: rgba(255, 210, 154, 0.06);
+    border: 1px dashed rgba(255, 210, 154, 0.3);
+    padding: 4px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+</style>

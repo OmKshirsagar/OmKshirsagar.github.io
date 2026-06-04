@@ -50,13 +50,35 @@ describe('statsData', () => {
 });
 
 describe('workTimeline', () => {
-  it('returns engagements with grouped sub-projects', () => {
+  it('splits work into engagements + side sections, recent → past', () => {
     const tl = workTimeline();
-    expect(tl.length).toBeGreaterThanOrEqual(4);
-    const names = tl.map((g) => g.name);
-    expect(names.some((n) => /pharma|client/i.test(n))).toBe(true);
-    expect(names.some((n) => /sop/i.test(n))).toBe(true);
-    expect(tl[0].children.length).toBeGreaterThanOrEqual(1);
+    // Section A: engagements (client + internal program work)
+    expect(tl.engagements.length).toBeGreaterThanOrEqual(3);
+    const engNames = tl.engagements.map((g) => g.name);
+    expect(engNames.some((n) => /pharma|client/i.test(n))).toBe(true);
+    expect(engNames.some((n) => /sop/i.test(n))).toBe(true);
+    // First engagement is the most recent (Healthcare client at the top)
+    expect(tl.engagements[0]!.toneKey).toBe('exact');
+    expect(tl.engagements[0]!.children.length).toBeGreaterThanOrEqual(1);
+
+    // Section B: side projects (hackathons + personal)
+    expect(tl.side.length).toBeGreaterThanOrEqual(1);
+    const sideNames = tl.side.map((g) => g.name.toLowerCase());
+    expect(sideNames.some((n) => /hackathon|personal/.test(n))).toBe(true);
+  });
+
+  it('engagement children are sorted current → past by start_date', () => {
+    const tl = workTimeline();
+    const sop = tl.engagements.find((g) => g.id === 'sop-program');
+    expect(sop).toBeDefined();
+    if (!sop) return;
+    // sop-mcp-enablement (2025-08) must appear before sop-csc (2025-01) when sorted DESC
+    const ids = sop.children.map((c) => c.id);
+    const mcpIdx = ids.indexOf('sop-mcp-enablement');
+    const csIdx = ids.indexOf('sop-csc');
+    expect(mcpIdx).toBeGreaterThanOrEqual(0);
+    expect(csIdx).toBeGreaterThanOrEqual(0);
+    expect(mcpIdx).toBeLessThan(csIdx);
   });
 });
 

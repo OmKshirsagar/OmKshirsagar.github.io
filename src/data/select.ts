@@ -136,7 +136,38 @@ export interface WorkTimelineGroup {
   children: WorkTimelineChild[];
 }
 
-export function workTimeline(): WorkTimelineGroup[] {
+export interface WorkTimelineSections {
+  /** Client + internal-program engagements, sorted current → past.
+      Each engagement's children are also sorted current → past. */
+  engagements: WorkTimelineGroup[];
+  /** Hackathons + personal side projects, sorted current → past. */
+  side: WorkTimelineGroup[];
+}
+
+/** Parse a flexible date value ("2024-10", "2025-08-22", Date, "present", null)
+ *  into a millisecond timestamp suitable for sorting. Missing / unparseable
+ *  values become -Infinity so they sink to the bottom of any DESC sort. */
+function dateToMs(v: unknown): number {
+  if (v instanceof Date) return v.getTime();
+  if (typeof v === 'number') return new Date(`${v}-01-01`).getTime();
+  if (typeof v === 'string') {
+    if (!v) return -Infinity;
+    if (/^present$/i.test(v)) return Number.POSITIVE_INFINITY;
+    // YAML may give "2024-10" (no day) — normalize to first of month
+    const s = /^\d{4}-\d{2}$/.test(v) ? `${v}-01` : v;
+    const ms = new Date(s).getTime();
+    return Number.isNaN(ms) ? -Infinity : ms;
+  }
+  return -Infinity;
+}
+
+/** Sort an array of records DESC by start_date (most recent first).
+ *  Undated entries sink to the bottom. */
+function sortByStartDesc<T extends Record<string, unknown>>(arr: T[]): T[] {
+  return [...arr].sort((a, b) => dateToMs(b.start_date) - dateToMs(a.start_date));
+}
+
+export function workTimeline(): WorkTimelineSections {
   const projects = portfolio.projects as Array<Record<string, unknown>>;
   const hackathons = portfolio.hackathons as Array<Record<string, unknown>>;
 
@@ -155,69 +186,81 @@ export function workTimeline(): WorkTimelineGroup[] {
     return { id: p.id as string, title: p.title as string, meta, badge, featured };
   };
 
-  const groups: WorkTimelineGroup[] = [];
+  const pharmaClient = portfolio.engagements[0]?.name as string;
+  const healthcareClient = portfolio.engagements[2]?.name as string;
 
-  groups.push({
-    id: 'pharma-client',
-    name: (portfolio.engagements[0]?.name as string) ?? 'Pharma Client',
-    type: 'client',
-    dateRange: 'Apr – Nov 2024',
-    toneKey: 'redacted-client-a',
-    children: projects
-      .filter((p) => p.client === (portfolio.engagements[0]?.name as string))
-      .map(childFromProject),
-  });
+  // === Section A: Engagements (client + internal program), recent → past ===
+  const engagements: WorkTimelineGroup[] = [
+    {
+      id: 'healthcare-client',
+      name: healthcareClient ?? 'Healthcare Client',
+      type: 'client',
+      dateRange: 'Aug 2025 – present',
+      toneKey: 'exact',
+      children: sortByStartDesc(projects.filter((p) => p.client === healthcareClient)).map(
+        childFromProject
+      ),
+    },
+    {
+      id: 'sop-program',
+      name: 'SOP Program',
+      type: 'internal-program',
+      dateRange: 'Oct 2024 – Aug 2025',
+      toneKey: 'sop',
+      children: sortByStartDesc(projects.filter((p) => p.parent === 'sop-program')).map(
+        childFromProject
+      ),
+    },
+    {
+      id: 'pharma-client',
+      name: pharmaClient ?? 'Pharma Client',
+      type: 'client',
+      dateRange: 'Apr – Nov 2024',
+      toneKey: 'redacted-client-a',
+      children: sortByStartDesc(projects.filter((p) => p.client === pharmaClient)).map(
+        childFromProject
+      ),
+    },
+  ];
 
-  groups.push({
-    id: 'sop-program',
-    name: 'SOP Program',
-    type: 'internal-program',
-    dateRange: 'Oct 2024 – Aug 2025',
-    toneKey: 'sop',
-    children: projects.filter((p) => p.parent === 'sop-program').map(childFromProject),
-  });
+  // === Section B: Side projects + hackathons, recent → past ===
+  const personalChildren = sortByStartDesc(
+    projects.filter((p) => p.type === 'personal')
+  ).map(childFromProject);
 
-  groups.push({
-    id: 'healthcare-client',
-    name: (portfolio.engagements[2]?.name as string) ?? 'Healthcare Client',
-    type: 'client',
-    dateRange: 'Aug 2025 – present',
-    toneKey: 'exact',
-    children: projects
-      .filter((p) => p.client === (portfolio.engagements[2]?.name as string))
-      .map(childFromProject),
-  });
+  const hackathonChildren = sortByStartDesc(hackathons).map((h) => ({
+    id: h.id as string,
+    title: (h.project_built ?? h.name) as string,
+    meta:
+      ((h.name as string | undefined) ?? '') +
+      ((h.duration as string | undefined) ? ' · ' + (h.duration as string) : ''),
+    badge: h.featured === true ? { label: 'Featured', tone: 'featured' as const } : undefined,
+    featured: h.featured === true,
+  }));
 
-  groups.push({
-    id: 'hackathons',
-    name: 'Hackathons',
-    type: 'parallel',
-    dateRange: 'Ongoing',
-    toneKey: 'hackathon',
-    children: hackathons.map((h) => ({
-      id: h.id as string,
-      title: (h.project_built ?? h.name) as string,
-      meta:
-        ((h.name as string | undefined) ?? '') +
-        ((h.duration as string | undefined) ? ' · ' + (h.duration as string) : ''),
-      badge: h.featured === true ? { label: 'Featured', tone: 'featured' as const } : undefined,
-      featured: h.featured === true,
-    })),
-  });
+  const side: WorkTimelineGroup[] = [];
+  if (personalChildren.length > 0) {
+    side.push({
+      id: 'personal',
+      name: 'Personal',
+      type: 'side',
+      dateRange: '2026',
+      toneKey: 'personal',
+      children: personalChildren,
+    });
+  }
+  if (hackathonChildren.length > 0) {
+    side.push({
+      id: 'hackathons',
+      name: 'Hackathons',
+      type: 'parallel',
+      dateRange: 'Jan 2025 – Oct 2025',
+      toneKey: 'hackathon',
+      children: hackathonChildren,
+    });
+  }
 
-  groups.push({
-    id: 'personal',
-    name: 'Personal',
-    type: 'side',
-    dateRange: '2026',
-    toneKey: 'personal',
-    children: projects.filter((p) => p.type === 'personal').map(childFromProject),
-  });
-
-  // Reverse so the timeline reads top-to-bottom from most-recent to oldest.
-  // Push order above is chronological forward (pharma 2024 → sop → healthcare
-  // → hackathons → personal 2026); reversing puts present at the top.
-  return groups.reverse();
+  return { engagements, side };
 }
 
 export type RecognizedKind = 'award' | 'promotion' | 'publication' | 'certification';

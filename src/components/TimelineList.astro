@@ -1,0 +1,160 @@
+---
+import type { WorkTimelineGroup } from '@/data/select';
+
+interface Props {
+  groups: WorkTimelineGroup[];
+}
+
+const { groups } = Astro.props;
+---
+<div class="timeline">
+  {groups.map((g) => (
+    <div class="engagement">
+      <span class:list={['dot', `tone-${g.toneKey}`]}></span>
+      <div class="eng-header">
+        <span class="eng-name">{g.name}</span>
+        <span class="eng-type">{g.type.replace('-', ' ')}</span>
+        <span class="eng-date">{g.dateRange}</span>
+      </div>
+      <div class="children">
+        {g.children.map((c) => (
+          <div class="sub">
+            <span class="sub-title">
+              {c.title}
+              {c.featured && <span class="star"> ★</span>}
+            </span>
+            {c.meta && <span class="sub-meta">{c.meta}</span>}
+            {c.badge && (
+              <span class:list={['sub-badge', c.badge.tone]}>{c.badge.label}</span>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .timeline {
+    margin-top: 24px;
+    position: relative;
+    padding-left: 38px;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 11px;
+    top: 14px;
+    bottom: 14px;
+    width: 2px;
+    background: linear-gradient(180deg, #ffaa78 0%, #b35a3a 50%, #8a6da0 100%);
+    opacity: 0.55;
+  }
+
+  .engagement {
+    margin-bottom: 30px;
+    position: relative;
+  }
+  .engagement:last-child { margin-bottom: 0; }
+
+  .dot {
+    position: absolute;
+    left: -32px;
+    top: 4px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 3px solid var(--bg);
+    z-index: 2;
+  }
+  .tone-redacted-client-a    { background: #8a6da0; box-shadow: 0 0 0 2px #8a6da0, 0 0 18px rgba(138, 109, 160, 0.5); }
+  .tone-sop       { background: #b35a3a; box-shadow: 0 0 0 2px #b35a3a, 0 0 18px rgba(179, 90, 58, 0.5); }
+  .tone-exact     { background: #ffaa78; box-shadow: 0 0 0 2px #ffaa78, 0 0 18px rgba(255, 170, 120, 0.55); }
+  .tone-hackathon { background: #5af3d0; box-shadow: 0 0 0 2px #5af3d0, 0 0 16px rgba(90, 243, 208, 0.5); }
+  .tone-personal  { background: #c4b598; box-shadow: 0 0 0 2px #c4b598, 0 0 14px rgba(196, 181, 152, 0.4); }
+
+  .eng-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .eng-name { font: 700 17px/1.2 var(--font-display); letter-spacing: -0.02em; color: #fff; }
+  .eng-date { font: 500 10px/1 var(--font-mono); letter-spacing: 0.14em; color: var(--text-muted); text-transform: uppercase; }
+  .eng-type {
+    font: 600 9px/1 var(--font-mono);
+    letter-spacing: 0.18em;
+    color: var(--accent-orange);
+    text-transform: uppercase;
+    padding: 4px 8px;
+    background: rgba(255, 148, 96, 0.08);
+    border-radius: 2px;
+  }
+
+  .children {
+    margin-top: 14px;
+    padding-left: 28px;
+    display: grid;
+    gap: 6px;
+    position: relative;
+  }
+
+  .sub {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 11px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .sub:hover {
+    border-color: rgba(255, 210, 154, 0.3);
+    background: var(--bg-surface);
+  }
+  .sub::before {
+    content: "";
+    position: absolute;
+    left: -22px;
+    top: 50%;
+    width: 18px;
+    height: 1px;
+    background: rgba(255, 210, 154, 0.25);
+  }
+
+  .sub-title {
+    font: 600 13px/1.2 var(--font-display);
+    letter-spacing: -0.01em;
+    color: var(--text-pri);
+    flex: 0 0 auto;
+    min-width: 200px;
+  }
+  .star { color: var(--accent-warm); }
+  .sub-meta {
+    font: 500 10px/1.4 var(--font-mono);
+    color: var(--text-muted);
+    flex: 1;
+  }
+  .sub-badge {
+    font: 600 9px/1 var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 2px;
+  }
+  .sub-badge.featured {
+    background: rgba(255, 210, 154, 0.15);
+    color: var(--accent-warm);
+  }
+  .sub-badge.award {
+    background: rgba(255, 170, 120, 0.12);
+    color: #ffaa78;
+  }
+
+  @media (max-width: 700px) {
+    .sub { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .sub-title { min-width: 0; }
+  }
+</style>

@@ -43,9 +43,15 @@ test('recognized section renders cards', async ({ page }) => {
   expect(count).toBeGreaterThanOrEqual(4);
 });
 
-test('work timeline has 5 engagement groups', async ({ page }) => {
+test('work timeline splits into two sub-sections (engagements + side)', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('.engagement')).toHaveCount(5);
+  // Section A heading + Section B heading
+  const subHeads = page.locator('section#more .sub-section-title');
+  await expect(subHeads).toHaveCount(2);
+  await expect(subHeads.first()).toContainText(/Work/i);
+  await expect(subHeads.last()).toContainText(/hackathons/i);
+  // Total .engagement entries across both sub-sections (3 engagements + 2 side groups)
+  await expect(page.locator('section#more .engagement')).toHaveCount(5);
 });
 
 test('bottom nav pill renders', async ({ page }) => {

@@ -1624,6 +1624,8 @@ projects:
     type: sub-project
     company: deloitte
     ownership:                            # TODO: lead | co-lead | contributor
+    start_date: 2024-10                   # Started at the beginning of SOP Program
+    end_date: 2024-12                     # Transitioned to DAM Service in Dec 2024
 
     project_type:
       - Internal Platform
@@ -1685,7 +1687,7 @@ projects:
     type: sub-project
     company: deloitte
     role: Lead Backend Engineer            # first leadership-flavored title
-    start_date: 2025-01                    # "Early 2025"
+    start_date: 2024-12                    # Continued directly from Agent Platform (Dec 2024)
     end_date:                              # TODO confirm
     ownership: lead
 
@@ -3968,8 +3970,10 @@ hackathons:
   - id: sign-language-ai
     name: AgentX Hackathon
     project_built: Sign Language AI System
-    date:                                 # TODO: when did this happen?
-    duration: 3 days
+    date: 2025-01-31                      # Dev kickoff (Friday)
+    start_date: 2025-01-31                # Dev: Fri 31 Jan → Sun 2 Feb 2025
+    end_date: 2025-02-06                  # Presentation day (Thursday 6 Feb 2025)
+    duration: 3 days dev + presentation
     period_type: Weekend Hackathon
     your_role: team-lead
     team_size: 5
@@ -4278,7 +4282,9 @@ hackathons:
   - id: deep-research-agent
     name:                                 # TODO: which hackathon / event was this at?
     project_built: Deep Research Agent
-    date:                                 # TODO
+    date: 2025-10-13                      # Inferred from peak file-mtime burst in ls-genai-fastapi-openai-starterkit
+    start_date: 2025-10-13                # Mon 13 Oct 2025
+    end_date: 2025-10-14                  # Tue 14 Oct 2025
     duration: 2 days
     your_role: AI Engineer
     team_size:                            # TODO

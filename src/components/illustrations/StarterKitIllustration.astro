@@ -26,7 +26,7 @@ interface PieceConfig {
   left?: Feature[];
 }
 
-const R = 8; // tab/slot radius
+const R = 7; // tab/slot radius
 
 // piecePath returns an SVG `d` string for one puzzle piece. Each edge can
 // have any number of tab/slot features in left→right / top→bottom order;
@@ -60,45 +60,46 @@ function piecePath(p: PieceConfig): string {
   return d;
 }
 
-// === Puzzle layout (180×180 square centered horizontally) ===
-// Three rows of 60px each, spanning x=60→240, y=60→240.
+// === Puzzle layout (150×150 square centered horizontally) ===
+// Three rows of 50px each, spanning x=75→225, y=80→230.
+// Module cell midpoints: x={100, 150, 200}, middle-row y=155.
 const fastapiPath = piecePath({
-  x: 60, y: 180, w: 180, h: 60,
+  x: 75, y: 180, w: 150, h: 50,
   top: [
-    { at: 90, type: 'slot' },
+    { at: 100, type: 'slot' },
     { at: 150, type: 'slot' },
-    { at: 210, type: 'slot' },
+    { at: 200, type: 'slot' },
   ],
 });
 
 const mcpPath = piecePath({
-  x: 60, y: 120, w: 60, h: 60,
-  top: [{ at: 90, type: 'slot' }],
-  right: [{ at: 150, type: 'tab' }],
-  bottom: [{ at: 90, type: 'tab' }],
+  x: 75, y: 130, w: 50, h: 50,
+  top: [{ at: 100, type: 'slot' }],
+  right: [{ at: 155, type: 'tab' }],
+  bottom: [{ at: 100, type: 'tab' }],
 });
 
 const authPath = piecePath({
-  x: 120, y: 120, w: 60, h: 60,
+  x: 125, y: 130, w: 50, h: 50,
   top: [{ at: 150, type: 'slot' }],
-  right: [{ at: 150, type: 'tab' }],
+  right: [{ at: 155, type: 'tab' }],
   bottom: [{ at: 150, type: 'tab' }],
-  left: [{ at: 150, type: 'slot' }],
+  left: [{ at: 155, type: 'slot' }],
 });
 
 const dbPath = piecePath({
-  x: 180, y: 120, w: 60, h: 60,
-  top: [{ at: 210, type: 'slot' }],
-  bottom: [{ at: 210, type: 'tab' }],
-  left: [{ at: 150, type: 'slot' }],
+  x: 175, y: 130, w: 50, h: 50,
+  top: [{ at: 200, type: 'slot' }],
+  bottom: [{ at: 200, type: 'tab' }],
+  left: [{ at: 155, type: 'slot' }],
 });
 
 const obsPath = piecePath({
-  x: 60, y: 60, w: 180, h: 60,
+  x: 75, y: 80, w: 150, h: 50,
   bottom: [
-    { at: 90, type: 'tab' },
+    { at: 100, type: 'tab' },
     { at: 150, type: 'tab' },
-    { at: 210, type: 'tab' },
+    { at: 200, type: 'tab' },
   ],
 });
 ---
@@ -115,8 +116,8 @@ const obsPath = piecePath({
       </radialGradient>
     </defs>
 
-    <!-- ambient halo -->
-    <ellipse cx="150" cy="160" rx="130" ry="110" fill="url(#kit-halo)"/>
+    <!-- ambient halo (sized to the smaller puzzle) -->
+    <ellipse cx="150" cy="155" rx="110" ry="95" fill="url(#kit-halo)"/>
 
     <!-- ============================================================== -->
     <!--  SERVICES BUILT ON TOP — 3 small cards hovering above puzzle   -->
@@ -149,9 +150,9 @@ const obsPath = piecePath({
 
     <!-- thin dashed connectors from each service down to the OBS layer -->
     <g stroke="#ffd29a" stroke-width="1" stroke-dasharray="3 2" fill="none" opacity="0.42">
-      <path d="M 56 56 L 90 60"/>
-      <path d="M 150 52 L 150 60"/>
-      <path d="M 244 56 L 210 60"/>
+      <path d="M 56 56 L 100 80"/>
+      <path d="M 150 52 L 150 80"/>
+      <path d="M 244 56 L 200 80"/>
     </g>
 
     <!-- ============================================================== -->
@@ -160,28 +161,28 @@ const obsPath = piecePath({
     <!-- ============================================================== -->
 
     <!-- BASE: FastAPI -->
-    <path d={fastapiPath} fill="url(#kit-core)" stroke="#1a0f08" stroke-width="1.3"/>
-    <text x="150" y="208" font-family="Inter" font-size="14" font-weight="800" letter-spacing="-0.4" fill="#1a0f08" text-anchor="middle">FastAPI</text>
-    <text x="150" y="224" font-family="JetBrains Mono" font-size="8" font-weight="700" letter-spacing="2.5" fill="#1a0f08" text-anchor="middle">BASE FRAMEWORK</text>
+    <path d={fastapiPath} fill="url(#kit-core)" stroke="#1a0f08" stroke-width="1.2"/>
+    <text x="150" y="204" font-family="Inter" font-size="12" font-weight="800" letter-spacing="-0.3" fill="#1a0f08" text-anchor="middle">FastAPI</text>
+    <text x="150" y="218" font-family="JetBrains Mono" font-size="7" font-weight="700" letter-spacing="2.2" fill="#1a0f08" text-anchor="middle">BASE FRAMEWORK</text>
 
     <!-- MIDDLE row: MCP · AUTH · DB -->
-    <path d={mcpPath} fill="#5af3d0" stroke="#1a0f08" stroke-width="1.3"/>
-    <text x="90" y="155" font-family="JetBrains Mono" font-size="12" font-weight="800" letter-spacing="2" fill="#1a0f08" text-anchor="middle">MCP</text>
+    <path d={mcpPath} fill="#5af3d0" stroke="#1a0f08" stroke-width="1.2"/>
+    <text x="100" y="160" font-family="JetBrains Mono" font-size="11" font-weight="800" letter-spacing="1.8" fill="#1a0f08" text-anchor="middle">MCP</text>
 
-    <path d={authPath} fill="#ffaa78" stroke="#1a0f08" stroke-width="1.3"/>
-    <text x="150" y="155" font-family="JetBrains Mono" font-size="12" font-weight="800" letter-spacing="2" fill="#1a0f08" text-anchor="middle">AUTH</text>
+    <path d={authPath} fill="#ffaa78" stroke="#1a0f08" stroke-width="1.2"/>
+    <text x="150" y="160" font-family="JetBrains Mono" font-size="11" font-weight="800" letter-spacing="1.8" fill="#1a0f08" text-anchor="middle">AUTH</text>
 
-    <path d={dbPath} fill="#8a6da0" stroke="#1a0f08" stroke-width="1.3"/>
-    <text x="210" y="155" font-family="JetBrains Mono" font-size="12" font-weight="800" letter-spacing="2" fill="#fff5e8" text-anchor="middle">DB</text>
+    <path d={dbPath} fill="#8a6da0" stroke="#1a0f08" stroke-width="1.2"/>
+    <text x="200" y="160" font-family="JetBrains Mono" font-size="11" font-weight="800" letter-spacing="1.8" fill="#fff5e8" text-anchor="middle">DB</text>
 
     <!-- TOP: OBSERVABILITY layer -->
-    <path d={obsPath} fill="#ffd29a" stroke="#1a0f08" stroke-width="1.3"/>
-    <text x="150" y="94" font-family="JetBrains Mono" font-size="11" font-weight="800" letter-spacing="2" fill="#1a0f08" text-anchor="middle">OBSERVABILITY</text>
+    <path d={obsPath} fill="#ffd29a" stroke="#1a0f08" stroke-width="1.2"/>
+    <text x="150" y="110" font-family="JetBrains Mono" font-size="10" font-weight="800" letter-spacing="1.5" fill="#1a0f08" text-anchor="middle">OBSERVABILITY</text>
 
     <!-- ============================================================== -->
     <!--  Caption                                                       -->
     <!-- ============================================================== -->
-    <text x="150" y="265" font-family="JetBrains Mono" font-size="9" font-weight="700" letter-spacing="3" fill="#a09387" text-anchor="middle">
+    <text x="150" y="260" font-family="JetBrains Mono" font-size="9" font-weight="700" letter-spacing="3" fill="#a09387" text-anchor="middle">
       ONE FOUNDATION · <tspan fill="#ffd29a" font-weight="800">12+</tspan> SERVICES BUILT
     </text>
   </svg>

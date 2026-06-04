@@ -308,15 +308,17 @@ export function recognizedItems(): RecognizedItem[] {
     });
   }
 
-  // Real certifications only — no placeholder card when the list is empty.
-  // The grid auto-wraps; with 2 awards + 1 promotion + 1 publication this
-  // fills a 4-column row exactly.
+  // Real certifications only — drop empty array entries AND placeholder
+  // entries where the name is null/empty (the YAML may contain a single
+  // skeleton row with all-null fields).
   const certs = portfolio.certifications as Array<Record<string, unknown>>;
   for (const c of certs) {
+    const name = typeof c.name === 'string' ? c.name.trim() : '';
+    if (!name) continue; // skip placeholder rows
     items.push({
       kind: 'certification',
-      title: c.name as string,
-      meta: `${c.issuer as string} · ${c.year as string | number}`,
+      title: name,
+      meta: `${(c.issuer as string | undefined) ?? ''} · ${(c.year as string | number | undefined) ?? ''}`,
       downloadUrl: c.credential_url as string | undefined,
       iconKey: 'badge',
     });

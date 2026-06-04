@@ -28,25 +28,37 @@ const SIDE_PAD = 14;
 // can route through a "highway" without crashing into row content.
 const HIGHWAY_PAD = 22;
 
+type LabelAnchor = 'start' | 'middle' | 'end';
+
 interface EdgeRoute {
   d: string;
   labelX: number;
   labelY: number;
-  /** SVG transform rotation for the label, in degrees. Empty string for none. */
-  labelTransform: string;
+  labelAnchor: LabelAnchor;
 }
 
 /**
  * Build an orthogonal (right-angle) path for one edge.
  *
- *  - Same column (vertical sibling): a smooth C-curve that arcs out to the
- *    right of the column, like the previous version.
- *  - Adjacent columns: 3-segment step — exit horizontally → traverse vertically
- *    in the inter-column lane → enter horizontally.
- *  - Non-adjacent columns (jumping over intermediate columns): 5-segment
- *    route via a "highway" above (or below) the row grid, so the line never
- *    passes through a box that sits between source and target. Highway side
- *    is chosen by whichever endpoint is closer to the top/bottom edge.
+ *  - Same column (vertical sibling): a U-shape that exits the box, traverses
+ *    vertically in the lane just outside the column, and re-enters the
+ *    sibling. Arcs to the right by default; arcs to the LEFT when the
+ *    column is the rightmost one (otherwise the lane would fall outside
+ *    the diagram).
+ *  - Adjacent columns:
+ *      • same row → straight horizontal segment, label sits above.
+ *      • different row → 3-segment step (exit → vertical traversal in
+ *        the inter-column lane → entry).
+ *  - Non-adjacent columns (≥1 column gap): 5-segment route via a
+ *    'highway' above or below the row grid, so the line never crosses
+ *    an intermediate box. Highway side is chosen by whichever endpoint
+ *    is closer to the top/bottom edge of the grid.
+ *
+ *  Label positions are chosen so that two edges sharing a source can't
+ *  end up with overlapping labels: each label sits on its OWN path's
+ *  distinctive segment (vertical midpoint, horizontal midpoint, or
+ *  highway midpoint), and the labels naturally land at different
+ *  y-values for different targets.
  */
 function buildEdge(
   from: { x: number; y: number },
@@ -55,19 +67,29 @@ function buildEdge(
   toCol: number,
   gridTop: number,
   gridBottom: number,
+  totalCols: number,
 ): EdgeRoute {
   const sameCol = fromCol === toCol;
   const fromYMid = from.y + BOX_H / 2;
   const toYMid = to.y + BOX_H / 2;
 
   if (sameCol) {
-    const x1 = from.x + BOX_W;
-    const arcOut = 50;
+    // U-shape orthogonal route. Arc right unless this is the rightmost
+    // column (then arc left so the lane stays inside the diagram).
+    const isRightmost = fromCol === totalCols - 1;
+    const exitX = isRightmost ? from.x : from.x + BOX_W;
+    const laneX = isRightmost
+      ? from.x - COL_GAP / 2
+      : from.x + BOX_W + COL_GAP / 2;
     return {
-      d: `M ${x1} ${fromYMid} C ${x1 + arcOut} ${fromYMid}, ${x1 + arcOut} ${toYMid}, ${x1} ${toYMid}`,
-      labelX: x1 + arcOut + 4,
+      d:
+        `M ${exitX} ${fromYMid} ` +
+        `L ${laneX} ${fromYMid} ` +
+        `L ${laneX} ${toYMid} ` +
+        `L ${exitX} ${toYMid}`,
+      labelX: laneX + (isRightmost ? -6 : 6),
       labelY: (fromYMid + toYMid) / 2,
-      labelTransform: '',
+      labelAnchor: isRightmost ? 'end' : 'start',
     };
   }
 
@@ -75,15 +97,29 @@ function buildEdge(
   const colDiff = Math.abs(toCol - fromCol);
   const exitX = goingRight ? from.x + BOX_W : from.x;
   const entryX = goingRight ? to.x : to.x + BOX_W;
+  const sameRow = Math.abs(fromYMid - toYMid) < 1;
 
   if (colDiff === 1) {
-    // Adjacent columns: simple step through the inter-column lane.
     const midX = (exitX + entryX) / 2;
+
+    if (sameRow) {
+      // Pure horizontal segment, label hovers ABOVE it.
+      return {
+        d: `M ${exitX} ${fromYMid} L ${entryX} ${toYMid}`,
+        labelX: midX,
+        labelY: fromYMid - 6,
+        labelAnchor: 'middle',
+      };
+    }
+
+    // 3-segment step. Place label on the vertical-traversal segment so two
+    // edges from the same source row, going to different target rows,
+    // pick up distinct label y's automatically.
     return {
       d: `M ${exitX} ${fromYMid} L ${midX} ${fromYMid} L ${midX} ${toYMid} L ${entryX} ${toYMid}`,
-      labelX: midX,
-      labelY: Math.min(fromYMid, toYMid) - 6,
-      labelTransform: '',
+      labelX: midX + 6,
+      labelY: (fromYMid + toYMid) / 2,
+      labelAnchor: 'start',
     };
   }
 
@@ -91,7 +127,6 @@ function buildEdge(
   // never cross an intermediate box.
   const goesAbove = (fromYMid + toYMid) / 2 < (gridTop + gridBottom) / 2;
   const highwayY = goesAbove ? gridTop - HIGHWAY_PAD : gridBottom + HIGHWAY_PAD;
-  // Vertical-traversal lanes sit just outside source / target columns.
   const laneOut = goingRight ? exitX + COL_GAP / 2 : exitX - COL_GAP / 2;
   const laneIn = goingRight ? entryX - COL_GAP / 2 : entryX + COL_GAP / 2;
 
@@ -105,7 +140,7 @@ function buildEdge(
       `L ${entryX} ${toYMid}`,
     labelX: (laneOut + laneIn) / 2,
     labelY: highwayY + (goesAbove ? -6 : 14),
-    labelTransform: '',
+    labelAnchor: 'middle',
   };
 }
 
@@ -121,8 +156,6 @@ export default function ArchDiagram({ nodes, edges }: Props): ReactElement | nul
 
   // Column order: only layers that are populated
   const cols = LAYER_ORDER.filter((l) => byLayer.has(l));
-  const colIndex = new Map<ArchLayer, number>();
-  cols.forEach((c, i) => colIndex.set(c, i));
 
   // Coordinates per node (top-left corner of its box)
   const coords = new Map<string, { x: number; y: number; col: number }>();
@@ -191,7 +224,15 @@ export default function ArchDiagram({ nodes, edges }: Props): ReactElement | nul
           const to = coords.get(e.to);
           if (!from || !to) return null;
 
-          const route = buildEdge(from, to, from.col, to.col, gridTop, gridBottom);
+          const route = buildEdge(
+            from,
+            to,
+            from.col,
+            to.col,
+            gridTop,
+            gridBottom,
+            cols.length,
+          );
 
           return (
             <g key={`edge-${i}`}>
@@ -212,9 +253,7 @@ export default function ArchDiagram({ nodes, edges }: Props): ReactElement | nul
                   fontSize="8.5"
                   fontFamily="JetBrains Mono, monospace"
                   fontWeight="500"
-                  textAnchor="middle"
-                  // Small black halo so labels stay readable when they sit
-                  // near another edge segment
+                  textAnchor={route.labelAnchor}
                   paintOrder="stroke"
                   stroke="#0d0d14"
                   strokeWidth="2.5"

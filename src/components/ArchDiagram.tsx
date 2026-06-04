@@ -6,7 +6,10 @@ interface Props {
   edges: ArchEdge[];
 }
 
-const LAYER_ORDER: ArchLayer[] = ['edge', 'ui', 'orchestrator', 'ai', 'storage'];
+// Column order, left → right. UI is placed AT THE END (after storage) so the
+// natural flow edge → orchestrator → ai → storage → ui matches data flow in
+// most case studies and reduces the number of cross-column jumps.
+const LAYER_ORDER: ArchLayer[] = ['edge', 'orchestrator', 'ai', 'storage', 'ui'];
 const LAYER_LABEL: Record<ArchLayer, string> = {
   edge: 'EDGE',
   ui: 'UI',
@@ -21,6 +24,90 @@ const COL_GAP = 64;
 const ROW_GAP = 22;
 const TOP_PAD = 32;
 const SIDE_PAD = 14;
+// Vertical padding reserved above + below the row grid so non-adjacent edges
+// can route through a "highway" without crashing into row content.
+const HIGHWAY_PAD = 22;
+
+interface EdgeRoute {
+  d: string;
+  labelX: number;
+  labelY: number;
+  /** SVG transform rotation for the label, in degrees. Empty string for none. */
+  labelTransform: string;
+}
+
+/**
+ * Build an orthogonal (right-angle) path for one edge.
+ *
+ *  - Same column (vertical sibling): a smooth C-curve that arcs out to the
+ *    right of the column, like the previous version.
+ *  - Adjacent columns: 3-segment step — exit horizontally → traverse vertically
+ *    in the inter-column lane → enter horizontally.
+ *  - Non-adjacent columns (jumping over intermediate columns): 5-segment
+ *    route via a "highway" above (or below) the row grid, so the line never
+ *    passes through a box that sits between source and target. Highway side
+ *    is chosen by whichever endpoint is closer to the top/bottom edge.
+ */
+function buildEdge(
+  from: { x: number; y: number },
+  to: { x: number; y: number },
+  fromCol: number,
+  toCol: number,
+  gridTop: number,
+  gridBottom: number,
+): EdgeRoute {
+  const sameCol = fromCol === toCol;
+  const fromYMid = from.y + BOX_H / 2;
+  const toYMid = to.y + BOX_H / 2;
+
+  if (sameCol) {
+    const x1 = from.x + BOX_W;
+    const arcOut = 50;
+    return {
+      d: `M ${x1} ${fromYMid} C ${x1 + arcOut} ${fromYMid}, ${x1 + arcOut} ${toYMid}, ${x1} ${toYMid}`,
+      labelX: x1 + arcOut + 4,
+      labelY: (fromYMid + toYMid) / 2,
+      labelTransform: '',
+    };
+  }
+
+  const goingRight = toCol > fromCol;
+  const colDiff = Math.abs(toCol - fromCol);
+  const exitX = goingRight ? from.x + BOX_W : from.x;
+  const entryX = goingRight ? to.x : to.x + BOX_W;
+
+  if (colDiff === 1) {
+    // Adjacent columns: simple step through the inter-column lane.
+    const midX = (exitX + entryX) / 2;
+    return {
+      d: `M ${exitX} ${fromYMid} L ${midX} ${fromYMid} L ${midX} ${toYMid} L ${entryX} ${toYMid}`,
+      labelX: midX,
+      labelY: Math.min(fromYMid, toYMid) - 6,
+      labelTransform: '',
+    };
+  }
+
+  // Non-adjacent: route via a highway above or below the row grid so we
+  // never cross an intermediate box.
+  const goesAbove = (fromYMid + toYMid) / 2 < (gridTop + gridBottom) / 2;
+  const highwayY = goesAbove ? gridTop - HIGHWAY_PAD : gridBottom + HIGHWAY_PAD;
+  // Vertical-traversal lanes sit just outside source / target columns.
+  const laneOut = goingRight ? exitX + COL_GAP / 2 : exitX - COL_GAP / 2;
+  const laneIn = goingRight ? entryX - COL_GAP / 2 : entryX + COL_GAP / 2;
+
+  return {
+    d:
+      `M ${exitX} ${fromYMid} ` +
+      `L ${laneOut} ${fromYMid} ` +
+      `L ${laneOut} ${highwayY} ` +
+      `L ${laneIn} ${highwayY} ` +
+      `L ${laneIn} ${toYMid} ` +
+      `L ${entryX} ${toYMid}`,
+    labelX: (laneOut + laneIn) / 2,
+    labelY: highwayY + (goesAbove ? -6 : 14),
+    labelTransform: '',
+  };
+}
 
 export default function ArchDiagram({ nodes, edges }: Props): ReactElement | null {
   if (nodes.length === 0) return null;
@@ -34,22 +121,27 @@ export default function ArchDiagram({ nodes, edges }: Props): ReactElement | nul
 
   // Column order: only layers that are populated
   const cols = LAYER_ORDER.filter((l) => byLayer.has(l));
+  const colIndex = new Map<ArchLayer, number>();
+  cols.forEach((c, i) => colIndex.set(c, i));
 
-  // Compute coordinates per node
-  const coords = new Map<string, { x: number; y: number }>();
+  // Coordinates per node (top-left corner of its box)
+  const coords = new Map<string, { x: number; y: number; col: number }>();
   cols.forEach((layer, colIdx) => {
     const ns = byLayer.get(layer)!;
     ns.forEach((node, rowIdx) => {
       coords.set(node.id, {
         x: SIDE_PAD + colIdx * (BOX_W + COL_GAP),
-        y: TOP_PAD + rowIdx * (BOX_H + ROW_GAP),
+        y: TOP_PAD + HIGHWAY_PAD + rowIdx * (BOX_H + ROW_GAP),
+        col: colIdx,
       });
     });
   });
 
   const maxRows = Math.max(...cols.map((l) => byLayer.get(l)!.length));
+  const gridTop = TOP_PAD + HIGHWAY_PAD;
+  const gridBottom = gridTop + maxRows * BOX_H + (maxRows - 1) * ROW_GAP;
   const width = SIDE_PAD * 2 + cols.length * BOX_W + (cols.length - 1) * COL_GAP;
-  const height = TOP_PAD + maxRows * BOX_H + (maxRows - 1) * ROW_GAP + 16;
+  const height = gridBottom + HIGHWAY_PAD + 16;
 
   return (
     <div className="arch-wrap">
@@ -72,15 +164,8 @@ export default function ArchDiagram({ nodes, edges }: Props): ReactElement | nul
             markerHeight="8"
             orient="auto"
           >
-            <path d="M0,0 L10,5 L0,10 z" fill="rgba(255,210,154,0.7)" />
+            <path d="M0,0 L10,5 L0,10 z" fill="rgba(255,210,154,0.75)" />
           </marker>
-          <filter id="arch-glow">
-            <feGaussianBlur stdDeviation="1.2" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
         </defs>
 
         {/* Layer headings */}
@@ -100,47 +185,39 @@ export default function ArchDiagram({ nodes, edges }: Props): ReactElement | nul
           </text>
         ))}
 
-        {/* Edges (drawn first, below boxes) */}
+        {/* Edges (drawn before nodes so boxes paint over any tiny stroke overshoot) */}
         {edges.map((e, i) => {
           const from = coords.get(e.from);
           const to = coords.get(e.to);
           if (!from || !to) return null;
 
-          const sameCol = Math.abs(from.x - to.x) < 1;
-          const x1 = sameCol ? from.x + BOX_W : from.x + BOX_W;
-          const y1 = from.y + BOX_H / 2;
-          const x2 = to.x;
-          const y2 = to.y + BOX_H / 2;
-
-          // Bezier control points: bow outward by 40% of horizontal distance
-          const dx = Math.max(20, (x2 - x1) * 0.5);
-          const cp1x = x1 + dx;
-          const cp1y = y1;
-          const cp2x = x2 - dx;
-          const cp2y = y2;
-
-          const d = sameCol
-            ? // Same column: arc outward to the right then back
-              `M ${x1} ${y1} C ${x1 + 60} ${y1}, ${x1 + 60} ${y2}, ${x1} ${y2}`
-            : `M ${x1} ${y1} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${x2} ${y2}`;
+          const route = buildEdge(from, to, from.col, to.col, gridTop, gridBottom);
 
           return (
             <g key={`edge-${i}`}>
               <path
-                d={d}
-                stroke="rgba(255,210,154,0.4)"
-                strokeWidth="1.2"
+                d={route.d}
+                stroke="rgba(255,210,154,0.45)"
+                strokeWidth="1.3"
+                strokeLinejoin="round"
+                strokeLinecap="round"
                 fill="none"
                 markerEnd="url(#arch-arrow)"
               />
-              {e.label && !sameCol && (
+              {e.label && (
                 <text
-                  x={(x1 + x2) / 2}
-                  y={(y1 + y2) / 2 - 6}
+                  x={route.labelX}
+                  y={route.labelY}
                   fill="#a09387"
                   fontSize="8.5"
                   fontFamily="JetBrains Mono, monospace"
+                  fontWeight="500"
                   textAnchor="middle"
+                  // Small black halo so labels stay readable when they sit
+                  // near another edge segment
+                  paintOrder="stroke"
+                  stroke="#0d0d14"
+                  strokeWidth="2.5"
                 >
                   {e.label}
                 </text>
@@ -149,7 +226,7 @@ export default function ArchDiagram({ nodes, edges }: Props): ReactElement | nul
           );
         })}
 
-        {/* Nodes (drawn last, on top) */}
+        {/* Nodes (drawn last, on top of all edge paths) */}
         {nodes.map((n) => {
           const c = coords.get(n.id);
           if (!c) return null;
@@ -159,7 +236,7 @@ export default function ArchDiagram({ nodes, edges }: Props): ReactElement | nul
                 width={BOX_W}
                 height={BOX_H}
                 rx={4}
-                fill="rgba(20,20,28,0.92)"
+                fill="rgba(20,20,28,0.96)"
                 stroke="rgba(255,210,154,0.32)"
                 strokeWidth="1"
               />

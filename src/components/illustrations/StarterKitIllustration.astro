@@ -84,8 +84,11 @@
           fill="#8a6da0" stroke="#1a0f08" stroke-width="1.2"/>
     <text x="196" y="153" font-family="JetBrains Mono" font-size="10" font-weight="800" letter-spacing="1.8" fill="#fff5e8" text-anchor="middle">DB</text>
 
-    <!-- BOTTOM piece: MCP (tab bumps UP into kit core's bottom edge) -->
-    <path d="M 120 180 L 142 180 A 8 8 0 0 0 158 180 L 180 180 L 180 210 L 120 210 Z"
+    <!-- BOTTOM piece: MCP (tab bumps UP into kit core's bottom edge).
+         sweep=1 here (not 0) — going RIGHT from (142,180) to (158,180), the
+         increasing-angle SVG direction passes through angle 270° (= UP in
+         y-down coords), which is the bulge into the centre we want. -->
+    <path d="M 120 180 L 142 180 A 8 8 0 0 1 158 180 L 180 180 L 180 210 L 120 210 Z"
           fill="#5af3d0" stroke="#1a0f08" stroke-width="1.2"/>
     <text x="150" y="199" font-family="JetBrains Mono" font-size="10" font-weight="800" letter-spacing="1.8" fill="#1a0f08" text-anchor="middle">MCP</text>
 

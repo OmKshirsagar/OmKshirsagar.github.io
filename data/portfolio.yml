@@ -415,7 +415,7 @@ career_milestones:
     details: Joined Global pharmaceutical manufacturer as backend engineer after Deloitte training.
     refs: [pharma-workflow-platform, pharma-supply-chain-modeling]
 
-  - date: 2024-11
+  - date: 2024-10
     milestone: First Outstanding Award
     details: Received Outstanding Award within first year of career.
     refs: [pharma-supply-chain-modeling]
@@ -1382,6 +1382,9 @@ projects:
     start_date: 2024-07-22                # picked up immediately after Insight Center ended (2024-07-19)
     end_date: 2024-11-01
 
+    recognition:
+      contributed_to_award: Outstanding Award (October 2024)
+
     project_type:
       - Enterprise Modernization
       - Legacy Migration
@@ -1563,7 +1566,7 @@ projects:
           aggressive timelines.
         recognition:
           award: Outstanding Award
-          date: 2024-11
+          date: 2024-10
           reason: >
             Contributions to NMT delivery, backend ownership, and project
             stabilization efforts.
@@ -1778,9 +1781,6 @@ projects:
       First project where Om acted primarily as a platform engineer rather
       than a feature developer. The solution focused on long-term reuse,
       extensibility, and architectural consistency across multiple projects.
-
-    recognition:
-      contributed_to_award: Outstanding Award (March 2025)
 
     skills_demonstrated:
       - Platform Engineering
@@ -4437,7 +4437,7 @@ awards:
   - title: Outstanding Award
     issuer: Deloitte
     year: 2024
-    date: 2024-11
+    date: 2024-10
     context: >
       Recognized for backend engineering contributions, ownership during
       project delivery, support during release and hypercare phases, and
@@ -4450,10 +4450,9 @@ awards:
     date: 2025-03
     context: >
       Recognized for platform engineering contributions, creation of
-      reusable engineering foundations, developer productivity improvements,
-      and delivery of enterprise asset management capabilities.
+      reusable engineering foundations, and developer productivity
+      improvements (FastAPI Starter Kit adoption across the program).
     related_projects:
-      - sop-dam-service
       - sop-fastapi-starter
 
   - title: Applause Award

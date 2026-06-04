@@ -81,22 +81,21 @@
       <text x="42" y="113" font-family="JetBrains Mono" font-size="9" font-weight="600" letter-spacing="0.5" fill="#a09387" text-anchor="middle">31 GESTURES</text>
     </g>
 
-    <!-- flow arrow #2 -->
-    <g transform="translate(243, 122)" fill="none">
-      <path d="M0 0 L20 0 M16 -3 L20 0 L16 3" stroke="url(#sl-flow)" stroke-width="1.5"/>
+    <!-- flow arrow #2 (shorter, stops well before the GPT crystal) -->
+    <g transform="translate(228, 122)" fill="none">
+      <path d="M0 0 L10 0 M6 -3 L10 0 L6 3" stroke="url(#sl-flow)" stroke-width="1.5"/>
     </g>
 
-    <!-- right: GPT Realtime crystal -->
-    <g transform="translate(252, 80)">
+    <!-- right: GPT Realtime crystal (shifted left so it no longer hugs the right edge) -->
+    <g transform="translate(240, 85)">
       <polygon points="20,18 36,30 36,50 20,62 4,50 4,30" fill="url(#sl-flow)" opacity="0.85" stroke="#ff9460" stroke-width="0.8"/>
-      <text x="20" y="100" font-family="JetBrains Mono" font-size="11" font-weight="700" letter-spacing="1.5" fill="#ff9460" text-anchor="middle">GPT</text>
-      <text x="20" y="113" font-family="JetBrains Mono" font-size="9" font-weight="600" letter-spacing="0.5" fill="#a09387" text-anchor="middle">REALTIME</text>
+      <text x="20" y="95" font-family="JetBrains Mono" font-size="11" font-weight="700" letter-spacing="1.5" fill="#ff9460" text-anchor="middle">GPT</text>
+      <text x="20" y="108" font-family="JetBrains Mono" font-size="8.5" font-weight="600" letter-spacing="0.3" fill="#a09387" text-anchor="middle">REALTIME</text>
     </g>
 
-    <!-- bottom: speech bubble with waveform -->
+    <!-- bottom: speech bubble with waveform (no pointer; text sits below with breathing room) -->
     <g transform="translate(50, 200)">
       <rect x="0" y="0" width="200" height="60" rx="6" fill="#14141c" stroke="#ffd29a" stroke-width="1"/>
-      <polygon points="100,60 110,72 90,60" fill="#14141c" stroke="#ffd29a" stroke-width="1"/>
 
       <g stroke="#ffd29a" stroke-width="1.5" stroke-linecap="round" fill="none">
         <line x1="20" y1="30" x2="20" y2="30"/>
@@ -122,7 +121,7 @@
         <line x1="180" y1="30" x2="180" y2="30"/>
       </g>
 
-      <text x="100" y="78" font-family="JetBrains Mono" font-size="10" font-weight="700" letter-spacing="1" fill="#a09387" text-anchor="middle">VOICE OUTPUT · &lt;50ms</text>
+      <text x="100" y="86" font-family="JetBrains Mono" font-size="10" font-weight="700" letter-spacing="1" fill="#a09387" text-anchor="middle">VOICE OUTPUT · &lt;50ms</text>
     </g>
 
   </svg>

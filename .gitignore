@@ -31,11 +31,9 @@ data/private.yml
 # Bootstrap from scripts/whitelabel.secrets.example.json (template only).
 scripts/whitelabel.secrets.local.json
 
-# Private dev artifacts (brainstorming notes, plan files, handoff docs).
-# These referenced real client / product / persona names during development
-# and should never enter the public repo.
-NEXT.md
-docs/superpowers/
+# (NEXT.md and docs/superpowers/ ARE committed — but only in anonymized
+#  form. Run scripts whitelabel logic over any dev notes that mention real
+#  client/product/persona names before committing them.)
 
 # Test artifacts
 test-results/

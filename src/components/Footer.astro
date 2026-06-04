@@ -3,22 +3,61 @@ import { footerData } from '@/data/select';
 const data = footerData();
 const headingParts = data.heading.split('in touch');
 const subhead = data.subhead.replace(/,?\s*or scan the QR\.?/i, '.');
+
+// Inline SVG icons keyed by chipLabel — color via currentColor so hover restyles
+const ICONS: Record<string, string> = {
+  github: `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.4.5 0 5.9 0 12.5c0 5.3 3.4 9.8 8.2 11.4.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2.9-.3 2-.4 3-.4s2.1.1 3 .4c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6C20.6 22.3 24 17.8 24 12.5 24 5.9 18.6.5 12 .5z"/></svg>`,
+  linkedin: `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg>`,
+  email: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M3 7l9 6.5L21 7"/></svg>`,
+  journey: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="8,5 19,12 8,19" fill="currentColor"/><path d="M3.5 6l1 1.6m-1 3.4l1.5.4m13.5 8l-1-1.6"/></svg>`,
+};
+
+const HANDLE_FROM_LABEL: Record<string, string> = {
+  github: 'GitHub',
+  linkedin: 'LinkedIn',
+  email: 'Email',
+  journey: 'The Journey',
+};
 ---
 <footer class="footer" id="contact">
   <div class="footer-inner">
-  <h2 class="ttl">
-    {headingParts.map((part, i) => (
-      i === 0 ? <Fragment>{part}</Fragment> : <Fragment><em>in touch</em>{part}</Fragment>
-    ))}
-  </h2>
-  <p class="sub">{subhead}</p>
+  <div class="contact-head">
+    <div class="head-text">
+      <div class="eyebrow">// Contact · Always open</div>
+      <h2 class="ttl">
+        {headingParts.map((part, i) => (
+          i === 0 ? <Fragment>{part}</Fragment> : <Fragment><em>in touch</em>{part}</Fragment>
+        ))}
+      </h2>
+      <p class="sub">{subhead}</p>
+    </div>
+    <a class="primary-cta" href={`mailto:${data.links.find((l) => l.chipLabel === 'email')?.label ?? ''}`}>
+      <span class="primary-cta-icon" set:html={ICONS.email} />
+      <span>Send me an email</span>
+      <span class="primary-cta-arr" aria-hidden="true">→</span>
+    </a>
+  </div>
 
   <div class="links">
-    {data.links.map((l) => (
-      <a class="flink" href={l.href}>
-        <b>{l.chipLabel}</b> {l.label}
-      </a>
-    ))}
+    {data.links.map((l) => {
+      const isExternal = /^https?:/.test(l.href);
+      const headline = HANDLE_FROM_LABEL[l.chipLabel] ?? l.chipLabel;
+      return (
+        <a
+          class:list={['flink', `flink-${l.chipLabel}`]}
+          href={l.href}
+          target={isExternal ? '_blank' : undefined}
+          rel={isExternal ? 'noopener noreferrer' : undefined}
+        >
+          <span class="ic" set:html={ICONS[l.chipLabel] ?? ''} />
+          <span class="ftext">
+            <span class="flbl">{headline}</span>
+            <span class="fval">{l.label}</span>
+          </span>
+          <span class="farr" aria-hidden="true">↗</span>
+        </a>
+      );
+    })}
   </div>
 
   <div class="meta-bar">
@@ -49,10 +88,25 @@ const subhead = data.subhead.replace(/,?\s*or scan the QR\.?/i, '.');
     margin: 0 auto;
     padding: 60px clamp(20px, 4vw, 60px) 80px;
   }
+  /* === Section heading + primary CTA layout === */
+  .contact-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: end;
+    margin-bottom: 32px;
+  }
+  .eyebrow {
+    font: 700 10px/1 var(--font-mono);
+    letter-spacing: 0.22em;
+    color: var(--accent-orange);
+    margin-bottom: 10px;
+  }
   .ttl {
-    font: 700 26px/1 var(--font-display);
+    font: 700 36px/1 var(--font-display);
+    letter-spacing: -0.03em;
     color: #fff;
-    margin: 0 0 6px;
+    margin: 0 0 8px;
   }
   .ttl em {
     color: var(--accent-warm);
@@ -61,51 +115,146 @@ const subhead = data.subhead.replace(/,?\s*or scan the QR\.?/i, '.');
     font-weight: 400;
   }
   .sub {
-    font: 400 13px/1.4 var(--font-display);
+    font: 400 14px/1.4 var(--font-display);
     color: var(--text-muted);
-    margin: 0 0 22px;
+    margin: 0;
+    max-width: 520px;
   }
-  /* 4 link chips, equal width, fill full row */
+
+  /* Primary CTA — visually anchors the contact section like a hero button */
+  .primary-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 22px;
+    background: linear-gradient(135deg, var(--accent-warm) 0%, var(--accent-orange) 100%);
+    color: #1a0f08;
+    border: none;
+    border-radius: 6px;
+    font: 700 13px/1 var(--font-display);
+    text-decoration: none;
+    box-shadow: 0 8px 28px rgba(255, 148, 96, 0.25);
+    transition: transform 0.2s, box-shadow 0.2s;
+    white-space: nowrap;
+  }
+  .primary-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 36px rgba(255, 148, 96, 0.4);
+  }
+  .primary-cta-icon {
+    display: inline-flex;
+    width: 18px;
+    height: 18px;
+  }
+  .primary-cta-icon :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .primary-cta-arr {
+    font-size: 14px;
+    transition: transform 0.2s;
+  }
+  .primary-cta:hover .primary-cta-arr {
+    transform: translateX(4px);
+  }
+
+  /* === 4 contact cards with icons === */
   .links {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    gap: 14px;
   }
   .flink {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 14px 18px;
+    gap: 14px;
+    padding: 18px 18px;
     background: var(--bg-surface);
     border: 1px solid #2a2638;
-    border-radius: 6px;
-    color: var(--text-pri);
-    font: 500 13px/1 var(--font-display);
+    border-radius: 8px;
     text-decoration: none;
-    transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    color: var(--text-pri);
+    transition: border-color 0.25s, background 0.25s, transform 0.25s, box-shadow 0.25s;
     min-width: 0;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  }
+  .flink::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 0% 0%, rgba(255, 210, 154, 0.08), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.25s;
+    pointer-events: none;
   }
   .flink:hover {
     border-color: rgba(255, 210, 154, 0.5);
-    background: rgba(255, 210, 154, 0.04);
-    transform: translateY(-1px);
+    background: var(--bg-raised);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.35);
   }
-  .flink b {
-    color: var(--accent-warm);
-    font-weight: 700;
-    text-transform: lowercase;
-    letter-spacing: 0.02em;
+  .flink:hover::before { opacity: 1; }
+
+  .ic {
     flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    color: var(--accent-warm);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.25s, transform 0.25s;
+  }
+  .ic :global(svg) { width: 100%; height: 100%; display: block; }
+  .flink:hover .ic { color: var(--accent-orange); transform: scale(1.08); }
+  /* Per-platform brand tint on hover (subtle, stays on-palette) */
+  .flink-linkedin:hover .ic { color: #79b8ff; }
+  .flink-github:hover .ic { color: #fff; }
+  .flink-journey:hover .ic { color: #5af3d0; }
+
+  .ftext {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+    flex: 1;
+  }
+  .flbl {
+    font: 700 9px/1 var(--font-mono);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent-orange);
+  }
+  .fval {
+    font: 600 13px/1.2 var(--font-display);
+    color: var(--text-pri);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .farr {
+    flex-shrink: 0;
+    font-size: 14px;
+    color: var(--text-muted);
+    opacity: 0.5;
+    transition: opacity 0.25s, transform 0.25s, color 0.25s;
+  }
+  .flink:hover .farr {
+    opacity: 1;
+    transform: translate(2px, -2px);
+    color: var(--accent-warm);
   }
 
   @media (max-width: 900px) {
+    .contact-head { grid-template-columns: 1fr; gap: 22px; align-items: stretch; }
+    .primary-cta { justify-content: center; }
     .links { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 480px) {
     .links { grid-template-columns: 1fr; }
+    .ttl { font-size: 28px; }
   }
 
   .meta-bar {

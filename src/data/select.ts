@@ -354,7 +354,14 @@ export function footerData(): FooterData {
   const links: FooterData['links'] = [];
   if (c.github)
     links.push({ label: c.github, chipLabel: 'github', href: `https://github.com/${c.github}` });
-  if (c.linkedin) links.push({ label: c.linkedin, chipLabel: 'linkedin', href: c.linkedin });
+  if (c.linkedin) {
+    // Show 'in/handle' instead of the full https://linkedin.com/in/handle/ URL
+    const handle =
+      c.linkedin
+        .replace(/^https?:\/\/(www\.)?linkedin\.com\/in\//, '')
+        .replace(/\/$/, '') || c.linkedin;
+    links.push({ label: `in/${handle}`, chipLabel: 'linkedin', href: c.linkedin });
+  }
   if (c.email) links.push({ label: c.email, chipLabel: 'email', href: `mailto:${c.email}` });
   links.push({ label: 'watch the movie ★', chipLabel: 'journey', href: '/journey' });
 

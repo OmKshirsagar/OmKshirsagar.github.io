@@ -3970,9 +3970,9 @@ hackathons:
   - id: sign-language-ai
     name: AgentX Hackathon
     project_built: Sign Language AI System
-    date: 2025-01-31                      # Dev kickoff (Friday)
-    start_date: 2025-01-31                # Dev: Fri 31 Jan → Sun 2 Feb 2025
-    end_date: 2025-02-06                  # Presentation day (Thursday 6 Feb 2025)
+    date: 2026-01-31                      # Dev kickoff (Saturday)
+    start_date: 2026-01-31                # Dev: Sat 31 Jan → Mon 2 Feb 2026
+    end_date: 2026-02-06                  # Presentation day (Friday 6 Feb 2026)
     duration: 3 days dev + presentation
     period_type: Weekend Hackathon
     your_role: team-lead

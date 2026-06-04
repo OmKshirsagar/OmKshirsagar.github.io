@@ -1,86 +1,120 @@
 ---
 // Featured 02 — FastAPI Starter Kit illustration
-// 12 voxel project towers rising from labeled foundation block
+// Central "kit" core with 4 modular puzzle pieces (AUTH · DB · MCP · OBS)
+// snapping into each side, and 3 service cards floating above ("VOICE AI",
+// "AGENT", "DATA API") showing what teams build ON TOP of the kit.
+// A 12+ adoption counter sits in the upper-right corner.
 ---
 <div class="illu">
   <svg viewBox="0 0 300 300" fill="none">
     <defs>
-      <linearGradient id="kit-base" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#ffd29a"/>
-        <stop offset="100%" stop-color="#b35a3a"/>
+      <linearGradient id="kit-core" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#ffe6b8"/>
+        <stop offset="100%" stop-color="#ff9460"/>
       </linearGradient>
+      <radialGradient id="kit-halo" cx="50%" cy="55%" r="55%">
+        <stop offset="0%" stop-color="#ffaa78" stop-opacity="0.18"/>
+        <stop offset="100%" stop-color="#ffaa78" stop-opacity="0"/>
+      </radialGradient>
     </defs>
 
-    <!-- ambient glow -->
-    <ellipse cx="150" cy="240" rx="130" ry="20" fill="#ff9460" opacity="0.18"/>
+    <!-- ambient halo -->
+    <ellipse cx="150" cy="155" rx="125" ry="105" fill="url(#kit-halo)"/>
 
-    <!-- 12 small project towers rising from the foundation, varying heights -->
+    <!-- =================================================== -->
+    <!--  SERVICES BUILT ON TOP (3 small cards at the top)   -->
+    <!-- =================================================== -->
     <g>
-      <!-- back row -->
-      <rect x="40" y="155" width="20" height="50" fill="#3a3450" opacity="0.6"/>
-      <rect x="65" y="135" width="20" height="70" fill="#5a4870" opacity="0.65"/>
-      <rect x="90" y="120" width="20" height="85" fill="#3a3450" opacity="0.55"/>
-      <rect x="115" y="140" width="20" height="65" fill="#5a4870" opacity="0.6"/>
-      <rect x="190" y="125" width="20" height="80" fill="#3a3450" opacity="0.55"/>
-      <rect x="215" y="145" width="20" height="60" fill="#5a4870" opacity="0.65"/>
-      <rect x="240" y="160" width="20" height="45" fill="#3a3450" opacity="0.55"/>
-
-      <!-- front row -->
-      <rect x="52" y="110" width="22" height="95" fill="#8a6da0"/>
-      <rect x="80" y="80" width="22" height="125" fill="#ffaa78"/>
-      <rect x="108" y="95" width="22" height="110" fill="#5a4870"/>
-      <rect x="136" y="65" width="22" height="140" fill="#ffd29a"/>
-      <rect x="164" y="100" width="22" height="105" fill="#8a6da0"/>
-      <rect x="192" y="78" width="22" height="127" fill="#ffaa78"/>
-      <rect x="220" y="115" width="22" height="90" fill="#5a4870"/>
-
-      <!-- tower windows -->
-      <g fill="#fff5e8" opacity="0.6">
-        <rect x="57" y="125" width="3" height="3"/>
-        <rect x="65" y="135" width="3" height="3"/>
-        <rect x="86" y="100" width="3" height="3"/>
-        <rect x="93" y="115" width="3" height="3"/>
-        <rect x="142" y="80" width="3" height="3"/>
-        <rect x="148" y="100" width="3" height="3"/>
-        <rect x="197" y="92" width="3" height="3"/>
-        <rect x="203" y="110" width="3" height="3"/>
+      <!-- service 1: VOICE AI (left) -->
+      <g transform="translate(20, 22)">
+        <rect width="72" height="34" rx="3" fill="#14141c" stroke="#ffaa78" stroke-width="1.2"/>
+        <rect x="6" y="6" width="6" height="6" fill="#ffaa78"/>
+        <rect x="14" y="6" width="6" height="6" fill="#ffaa78" opacity="0.55"/>
+        <rect x="22" y="6" width="6" height="6" fill="#ffaa78" opacity="0.3"/>
+        <text font-family="JetBrains Mono" font-size="10" font-weight="700" letter-spacing="1.5" fill="#ffaa78" x="36" y="25" text-anchor="middle">VOICE AI</text>
       </g>
 
-      <!-- adoption indicator dots -->
-      <g fill="#ffd29a">
-        <circle cx="63" cy="100" r="2"/>
-        <circle cx="91" cy="70" r="2"/>
-        <circle cx="119" cy="85" r="2"/>
-        <circle cx="147" cy="55" r="2"/>
-        <circle cx="175" cy="90" r="2"/>
-        <circle cx="203" cy="68" r="2"/>
-        <circle cx="231" cy="105" r="2"/>
+      <!-- service 2: AGENT (center) -->
+      <g transform="translate(114, 16)">
+        <rect width="72" height="34" rx="3" fill="#14141c" stroke="#8a6da0" stroke-width="1.2"/>
+        <rect x="6" y="6" width="6" height="6" fill="#8a6da0"/>
+        <rect x="14" y="6" width="6" height="6" fill="#8a6da0" opacity="0.55"/>
+        <rect x="22" y="6" width="6" height="6" fill="#8a6da0" opacity="0.3"/>
+        <text font-family="JetBrains Mono" font-size="10" font-weight="700" letter-spacing="1.5" fill="#8a6da0" x="36" y="25" text-anchor="middle">AGENT</text>
+      </g>
+
+      <!-- service 3: DATA API (right) -->
+      <g transform="translate(208, 22)">
+        <rect width="72" height="34" rx="3" fill="#14141c" stroke="#5af3d0" stroke-width="1.2"/>
+        <rect x="6" y="6" width="6" height="6" fill="#5af3d0"/>
+        <rect x="14" y="6" width="6" height="6" fill="#5af3d0" opacity="0.55"/>
+        <rect x="22" y="6" width="6" height="6" fill="#5af3d0" opacity="0.3"/>
+        <text font-family="JetBrains Mono" font-size="10" font-weight="700" letter-spacing="1.5" fill="#5af3d0" x="36" y="25" text-anchor="middle">DATA API</text>
       </g>
     </g>
 
-    <!-- The foundation -->
-    <g>
-      <rect x="30" y="205" width="240" height="38" fill="url(#kit-base)" stroke="#1a0f08" stroke-width="1.5"/>
-      <rect x="30" y="205" width="240" height="6" fill="#fff5e8" opacity="0.4"/>
-      <g stroke="#1a0f08" stroke-width="0.5" opacity="0.3">
-        <line x1="70" y1="205" x2="70" y2="243"/>
-        <line x1="110" y1="205" x2="110" y2="243"/>
-        <line x1="150" y1="205" x2="150" y2="243"/>
-        <line x1="190" y1="205" x2="190" y2="243"/>
-        <line x1="230" y1="205" x2="230" y2="243"/>
-      </g>
-      <text x="150" y="229" font-family="JetBrains Mono" font-size="12" font-weight="800" letter-spacing="3" fill="#1a0f08" text-anchor="middle">FASTAPI STARTER KIT</text>
+    <!-- =================================================== -->
+    <!--  CONNECTOR LINES (services → kit core)              -->
+    <!-- =================================================== -->
+    <g stroke="#ffd29a" stroke-width="1" stroke-dasharray="3 2" fill="none" opacity="0.45">
+      <path d="M 56 56 L 124 100"/>
+      <path d="M 150 50 L 150 100"/>
+      <path d="M 244 56 L 176 100"/>
     </g>
 
-    <!-- ground plane shadow -->
-    <ellipse cx="150" cy="252" rx="135" ry="6" fill="#000" opacity="0.4"/>
+    <!-- =================================================== -->
+    <!--  PUZZLE FOUNDATION                                   -->
+    <!--  Center = kit core. 4 modular pieces snap in via    -->
+    <!--  semicircular tabs that fit into the core.          -->
+    <!-- =================================================== -->
 
-    <!-- 12+ counter -->
-    <g transform="translate(248, 50)">
+    <!-- CENTER piece drawn FIRST so the 4 surrounding tabs visually overlap it -->
+    <rect x="120" y="120" width="60" height="60" rx="3" fill="url(#kit-core)" stroke="#1a0f08" stroke-width="1.3"/>
+    <text x="150" y="148" font-family="Inter" font-size="11" font-weight="800" letter-spacing="-0.5" fill="#1a0f08" text-anchor="middle">FastAPI</text>
+    <text x="150" y="160" font-family="JetBrains Mono" font-size="7" font-weight="700" letter-spacing="2" fill="#1a0f08" text-anchor="middle">STARTER</text>
+    <text x="150" y="170" font-family="JetBrains Mono" font-size="7" font-weight="700" letter-spacing="2" fill="#1a0f08" text-anchor="middle">KIT</text>
+
+    <!-- TOP piece: AUTH (tab bumps DOWN into kit core's top edge) -->
+    <path d="M 120 90 L 180 90 L 180 120 L 158 120 A 8 8 0 0 1 142 120 L 120 120 Z"
+          fill="#ffaa78" stroke="#1a0f08" stroke-width="1.2"/>
+    <text x="150" y="108" font-family="JetBrains Mono" font-size="10" font-weight="800" letter-spacing="1.8" fill="#1a0f08" text-anchor="middle">AUTH</text>
+
+    <!-- RIGHT piece: DB (tab bumps LEFT into kit core's right edge) -->
+    <path d="M 180 122 L 212 122 L 212 178 L 180 178 L 180 158 A 8 8 0 0 1 180 142 Z"
+          fill="#8a6da0" stroke="#1a0f08" stroke-width="1.2"/>
+    <text x="196" y="153" font-family="JetBrains Mono" font-size="10" font-weight="800" letter-spacing="1.8" fill="#fff5e8" text-anchor="middle">DB</text>
+
+    <!-- BOTTOM piece: MCP (tab bumps UP into kit core's bottom edge) -->
+    <path d="M 120 180 L 142 180 A 8 8 0 0 0 158 180 L 180 180 L 180 210 L 120 210 Z"
+          fill="#5af3d0" stroke="#1a0f08" stroke-width="1.2"/>
+    <text x="150" y="199" font-family="JetBrains Mono" font-size="10" font-weight="800" letter-spacing="1.8" fill="#1a0f08" text-anchor="middle">MCP</text>
+
+    <!-- LEFT piece: OBS (tab bumps RIGHT into kit core's left edge) -->
+    <path d="M 88 122 L 120 122 L 120 142 A 8 8 0 0 1 120 158 L 120 178 L 88 178 Z"
+          fill="#ffd29a" stroke="#1a0f08" stroke-width="1.2"/>
+    <text x="104" y="153" font-family="JetBrains Mono" font-size="10" font-weight="800" letter-spacing="1.8" fill="#1a0f08" text-anchor="middle">OBS</text>
+
+    <!-- Small connector dots in the seams (decorative — emphasize puzzle joins) -->
+    <g fill="#1a0f08" opacity="0.4">
+      <circle cx="150" cy="90" r="0.8"/>
+      <circle cx="212" cy="150" r="0.8"/>
+      <circle cx="150" cy="210" r="0.8"/>
+      <circle cx="88" cy="150" r="0.8"/>
+    </g>
+
+    <!-- =================================================== -->
+    <!--  12+ adoption counter (top-right corner)            -->
+    <!-- =================================================== -->
+    <g transform="translate(252, 50)">
       <circle r="28" fill="#14141c" stroke="#ffd29a" stroke-width="1.3"/>
       <text font-family="Inter" font-size="17" font-weight="800" fill="#ffd29a" text-anchor="middle" y="2">12+</text>
       <text font-family="JetBrains Mono" font-size="8" font-weight="700" letter-spacing="1.5" fill="#a09387" text-anchor="middle" y="14">PROJECTS</text>
     </g>
+
+    <!-- =================================================== -->
+    <!--  "ADOPTED BY" caption beneath puzzle                -->
+    <!-- =================================================== -->
+    <text x="150" y="240" font-family="JetBrains Mono" font-size="9" font-weight="700" letter-spacing="3" fill="#a09387" text-anchor="middle">ONE FOUNDATION · MANY SERVICES</text>
   </svg>
 </div>
 

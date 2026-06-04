@@ -214,7 +214,10 @@ export function workTimeline(): WorkTimelineGroup[] {
     children: projects.filter((p) => p.type === 'personal').map(childFromProject),
   });
 
-  return groups;
+  // Reverse so the timeline reads top-to-bottom from most-recent to oldest.
+  // Push order above is chronological forward (pharma 2024 → sop → healthcare
+  // → hackathons → personal 2026); reversing puts present at the top.
+  return groups.reverse();
 }
 
 export type RecognizedKind = 'award' | 'promotion' | 'publication' | 'certification';
@@ -262,25 +265,18 @@ export function recognizedItems(): RecognizedItem[] {
     });
   }
 
-  const certs = portfolio.certifications as Array<unknown>;
-  if (certs.length === 0) {
+  // Real certifications only — no placeholder card when the list is empty.
+  // The grid auto-wraps; with 2 awards + 1 promotion + 1 publication this
+  // fills a 4-column row exactly.
+  const certs = portfolio.certifications as Array<Record<string, unknown>>;
+  for (const c of certs) {
     items.push({
       kind: 'certification',
-      title: '[Add certification]',
-      meta: 'e.g. AWS, Azure, CKA',
-      downloadUrl: undefined,
+      title: c.name as string,
+      meta: `${c.issuer as string} · ${c.year as string | number}`,
+      downloadUrl: c.credential_url as string | undefined,
       iconKey: 'badge',
     });
-  } else {
-    for (const c of certs as Array<Record<string, unknown>>) {
-      items.push({
-        kind: 'certification',
-        title: c.name as string,
-        meta: `${c.issuer as string} · ${c.year as string | number}`,
-        downloadUrl: c.credential_url as string | undefined,
-        iconKey: 'badge',
-      });
-    }
   }
 
   return items;

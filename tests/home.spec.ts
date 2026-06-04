@@ -39,7 +39,8 @@ test('recognized section renders cards', async ({ page }) => {
   const cards = page.locator('section#recognized .card');
   await expect(cards.first()).toBeVisible();
   const count = await cards.count();
-  expect(count).toBeGreaterThanOrEqual(5);
+  // 2 awards + 1 promotion + 1 publication = 4 cards (cert placeholder removed)
+  expect(count).toBeGreaterThanOrEqual(4);
 });
 
 test('work timeline has 5 engagement groups', async ({ page }) => {

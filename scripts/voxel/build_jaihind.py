@@ -59,25 +59,32 @@ def build():
     m.fill_box(0, 0, 0, W - 1, D - 1, 11, C("tower_shadow"))
     m.fill_box(PILL + 2, 0, 1, W - 3, 0, 10, C("window_dark"))  # entrance glazing
     m.fill_box(PILL // 2 - 5, 0, 1, PILL // 2 + 5, 0, 9, C("window_dark"))  # pillar-base doors
+    # entrance canopy (thin tan overhang above the doors)
+    m.fill_box(PILL // 2 - 7, 0, 11, W - 3, 1, 11, C("tower_warm"))
 
     # ---- LEFT SIGNAGE PILLAR (lighter tan, full height) ----
     m.fill_box(0, 0, 0, PILL - 1, D - 1, H - 1, C("tower_warm"))
     cx = PILL // 2
 
-    # blue eagle crest (shield: rounded top, pointed bottom)
-    cz0, cz1 = H - 26, H - 9
+    # blue eagle crest — heraldic shield (rounded top, pointed bottom) with a
+    # white spread-winged eagle.
+    cz0, cz1 = H - 27, H - 9
     for z in range(cz0, cz1):
         t = (z - cz0) / (cz1 - cz0)
         if t < 0.22:
-            half = 1 + int((t / 0.22) * 5)   # pointed bottom
-        elif t > 0.85:
+            half = 1 + int((t / 0.22) * 6)    # pointed bottom
+        elif t > 0.88:
             half = 5                          # rounded top
         else:
             half = 7
         m.fill_box(cx - half, 0, z, cx + half, 0, z, C("crest_blue"))
-    # cream eagle suggestion inside the shield
-    m.fill_box(cx - 4, 0, cz0 + 7, cx + 4, 0, cz0 + 8, C("cloud_white"))  # wings
-    m.fill_box(cx - 1, 0, cz0 + 8, cx + 1, 0, cz0 + 11, C("cloud_white"))  # body
+    wz = cz0 + 10
+    m.fill_box(cx - 5, 0, wz, cx - 2, 0, wz, C("cloud_white"))      # left wing
+    m.fill_box(cx + 2, 0, wz, cx + 5, 0, wz, C("cloud_white"))      # right wing
+    m.fill_box(cx - 6, 0, wz + 1, cx - 4, 0, wz + 1, C("cloud_white"))  # left tip up
+    m.fill_box(cx + 4, 0, wz + 1, cx + 6, 0, wz + 1, C("cloud_white"))  # right tip up
+    m.fill_box(cx - 1, 0, wz - 3, cx + 1, 0, wz + 2, C("cloud_white"))  # body
+    m.set_voxel(cx, 0, wz + 3, C("cloud_white"))                   # head
 
     # "JAI HIND COLLEGE" stacked on three rows below the crest
     _text_centered(m, "JAI", cz0 - 9, C("crest_blue"))
@@ -88,14 +95,16 @@ def build():
         w = (8, 8, 9, 9)[i]
         m.fill_box(cx - w // 2, 0, z, cx + w // 2, 0, z, C("crest_blue"))
 
-    # ---- RIGHT GLASS-CURTAIN WING: horizontal dark window bands + mullions ----
-    for z in range(15, H - 6, 7):
-        m.fill_box(PILL + 1, 0, z, W - 2, 0, z + 4, C("window_dark"))   # glass band
-        for mx in range(PILL + 1, W - 1, 8):                            # vertical mullions
-            m.fill_box(mx, 0, z, mx, 0, z + 4, C("tower_cream"))
-    # a few warm-lit windows
-    for mx in (PILL + 6, PILL + 22, W - 8):
-        m.fill_box(mx, 0, 29, mx + 3, 0, 32, C("window_glow"))
+    # ---- RIGHT GLASS-CURTAIN WING: continuous glass, vertical piers + floor grid ----
+    gx0, gx1 = PILL + 1, W - 2
+    m.fill_box(gx0, 0, 13, gx1, 0, H - 5, C("glass_tint"))          # glass field
+    for mx in range(gx0, gx1 + 1, 7):                              # vertical tan piers
+        m.fill_box(mx, 0, 13, mx, 0, H - 5, C("tower_cream"))
+    for z in range(13, H - 4, 7):                                  # horizontal floor lines
+        m.fill_box(gx0, 0, z, gx1, 0, z, C("tower_cream"))
+    # a few warm-lit panes
+    for mx in (gx0 + 3, gx0 + 17, gx1 - 4):
+        m.fill_box(mx, 0, 30, mx + 2, 0, 33, C("window_glow"))
 
     # ---- parapet cap ----
     m.fill_box(0, 0, H - 2, W - 1, D - 1, H - 1, C("tower_shadow"))

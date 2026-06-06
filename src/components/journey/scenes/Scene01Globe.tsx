@@ -74,17 +74,21 @@ export default function Scene01Globe({ stateRef }: Props) {
   return (
     <Suspense fallback={null}>
       <Globe stateRef={stateRef} />
-      {/* Star field — full sky of distant background stars */}
-      <Stars
-        radius={80}
-        depth={30}
-        count={4000}
-        factor={3}
-        saturation={0}
-        fade
-        speed={0.4}
-      />
+      {/* Star field — gated by globeVisible so it doesn't bleed over the dusk sky */}
+      <GatedStars stateRef={stateRef} />
     </Suspense>
+  );
+}
+
+function GatedStars({ stateRef }: Props) {
+  const ref = useRef<Group>(null);
+  useFrame(() => {
+    if (ref.current) ref.current.visible = stateRef.current.globeVisible > 0.001;
+  });
+  return (
+    <group ref={ref}>
+      <Stars radius={80} depth={30} count={4000} factor={3} saturation={0} fade speed={0.4} />
+    </group>
   );
 }
 

@@ -35,6 +35,11 @@ export interface SceneState {
                             // where the globe hadn't landed by the time scroll
                             // reached the "Mumbai locked" keyframe.
 
+  /** ===== Sky / atmosphere (Earth space → golden dusk) ===== */
+  skyWarmth: number;        // 0 = dark space, 1 = golden-hour dusk (lerps bg/fog/light)
+  cloudsVisible: number;    // 0..1 voxel cloud field presence
+  cityVisible: number;      // 0..1 voxel Mumbai skyline + mountains + ocean
+
   /** ===== Scene 02 · Jai Hind College, Churchgate ===== */
   collegeVisible: number;       // 0..1 — campus building + ground
   gradCapVisible: number;       // 0..1 — mortarboard on Om's head
@@ -90,6 +95,9 @@ export const initialSceneState: SceneState = {
   characterOpacity: 0, // hidden during globe scene
   globeVisible: 1,
   globeRotationY: 0,
+  skyWarmth: 0,
+  cloudsVisible: 0,
+  cityVisible: 0,
   collegeVisible: 0,
   gradCapVisible: 0,
   cgpaCardVisible: 0,

@@ -86,8 +86,6 @@ export default function JourneyMovie(): ReactElement {
           }}
           gl={{ antialias: true, alpha: false }}
         >
-          <color attach="background" args={['#d8a06a']} />
-          <fog attach="fog" args={['#d8a06a', 12, 60]} />
           <CameraRig stateRef={cameraRef} />
           <Stage stateRef={sceneRef} />
         </Canvas>

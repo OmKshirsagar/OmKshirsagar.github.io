@@ -53,6 +53,15 @@ PALETTE = {
     "npc_blue": (14, 78, 116, 176),
     "npc_green": (15, 96, 160, 96),
     "lamp_metal": (16, 70, 70, 80),
+    # --- Mumbai cityscape + sky (Plan 3.1) ---
+    "cloud_white": (17, 245, 244, 238),
+    "cloud_shadow": (18, 206, 210, 222),
+    "mountain_green": (19, 86, 128, 72),
+    "mountain_rock": (20, 128, 98, 140),
+    "ocean_blue": (21, 44, 102, 144),
+    "sand": (22, 214, 196, 150),
+    "tower_cream": (23, 226, 214, 188),
+    "tower_shadow": (24, 196, 182, 152),
 }
 
 

@@ -19,53 +19,30 @@ export interface SceneState {
   progress: number;
 
   /** ===== Character (voxel-Om) ===== */
-  /** XYZ position so the character can walk through scenes, not just float. */
+  /** XZ position + facing so the character can walk through scenes. */
   characterX: number;
-  characterY: number;
   characterZ: number;
-  characterScale: number;
   characterRotationY: number;
   /** 0 = character hidden (e.g. during the opening globe scene). */
   characterOpacity: number;
 
   /** ===== Scene 01 · Globe → Mumbai ===== */
-  globeVisible: number;     // 0..1 (fades out as we transition to Scene 02)
-  globeRotationY: number;   // direct Y-axis rotation, tweened by the timeline.
-                            // No more useFrame easing — eliminates the race
-                            // where the globe hadn't landed by the time scroll
-                            // reached the "Mumbai locked" keyframe.
+  globeVisible: number;     // 0..1 (fades out as we dive to the city)
+  globeRotationY: number;   // direct Y-axis rotation, tweened by the timeline
 
   /** ===== Sky / atmosphere (Earth space → golden dusk) ===== */
   skyWarmth: number;        // 0 = dark space, 1 = golden-hour dusk (lerps bg/fog/light)
   cloudsVisible: number;    // 0..1 voxel cloud field presence
   cityVisible: number;      // 0..1 voxel Mumbai skyline + mountains + ocean
 
-  /** ===== Scene 02 · Jai Hind College, Churchgate ===== */
-  collegeVisible: number;       // 0..1 — campus building + ground
-  gradCapVisible: number;       // 0..1 — mortarboard on Om's head
-  cgpaCardVisible: number;      // 0..1 — "CGPA 9.89 / 10" floating card
-  paperVisible: number;         // 0..1 — "Published · JETIR" research-paper artifact
+  /** ===== Jai Hind College, Churchgate ===== */
+  collegeVisible: number;   // 0..1 — campus building + ground + props
 
-  /** ===== Jai Hind voxel scene (Plan 3 slice) ===== */
+  /** ===== Jai Hind voxel scene ===== */
   omWalkPhase: number;   // stride cycles (GSAP increments this; rig reads it)
   omRimLight: number;    // 0..1 rim highlight strength on the hero
   signGlow: number;      // 0..1 "JAI HIND COLLEGE" sign emissive strength
   crowdVisible: number;  // 0..1 NPC crowd gate
-
-  /** ===== Per-prop visibility, reused across scenes (0..1) ===== */
-  trophyVisible: number;
-  starterKitVisible: number;
-  replicasVisible: number;
-  phoneVisible: number;
-  pipelineVisible: number;
-  whitelabelDim: number;
-  handsVisible: number;
-  desktopVisible: number;
-  recognitionVisible: number;
-  badgeVisible: number;
-
-  /** Ambient particle field strength. */
-  sparkleIntensity: number;
 
   /** HTML overlays (per-frame DOM mutation, never re-render). */
   hero02Opacity: number;
@@ -88,9 +65,7 @@ export const initialSceneState: SceneState = {
   beat: 0,
   progress: 0,
   characterX: 0,
-  characterY: 0,
   characterZ: 0,
-  characterScale: 1,
   characterRotationY: 0,
   characterOpacity: 0, // hidden during globe scene
   globeVisible: 1,
@@ -99,24 +74,10 @@ export const initialSceneState: SceneState = {
   cloudsVisible: 0,
   cityVisible: 0,
   collegeVisible: 0,
-  gradCapVisible: 0,
-  cgpaCardVisible: 0,
-  paperVisible: 0,
   omWalkPhase: 0,
   omRimLight: 1,
   signGlow: 1,
   crowdVisible: 1,
-  trophyVisible: 0,
-  starterKitVisible: 0,
-  replicasVisible: 0,
-  phoneVisible: 0,
-  pipelineVisible: 0,
-  whitelabelDim: 0,
-  handsVisible: 0,
-  desktopVisible: 0,
-  recognitionVisible: 0,
-  badgeVisible: 0,
-  sparkleIntensity: 0.4,
   hero02Opacity: 0,
   hero07Opacity: 0,
   hero12Opacity: 0,

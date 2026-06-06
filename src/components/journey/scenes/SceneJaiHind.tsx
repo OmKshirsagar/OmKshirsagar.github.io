@@ -60,10 +60,10 @@ export default function SceneJaiHind({ stateRef }: { stateRef: MutableRefObject<
         {/* Facade at far -Z; front face (windows/door) faces +Z toward Om.
             40 tall @0.1 = 4 units -> lift y=2 so base sits on ground. */}
         <VoxModel url={`${V}jaihind_facade.vox`} position={[0, 2, -9]} scale={0.1} />
-        {/* Trees flanking the path (12 tall @0.12 = 1.44 -> lift y=0.72) */}
-        <VoxModel url={`${V}tree.vox`} position={[-5, 0.72, 4]} scale={0.12} />
-        <VoxModel url={`${V}tree.vox`} position={[5, 0.72, 6]} scale={0.12} />
-        <VoxModel url={`${V}tree.vox`} position={[-6, 0.72, -2]} scale={0.12} />
+        {/* Trees flanking the path (16 tall @0.12 = 1.92 -> lift y=0.96) */}
+        <VoxModel url={`${V}tree.vox`} position={[-5, 0.96, 4]} scale={0.12} />
+        <VoxModel url={`${V}tree.vox`} position={[5, 0.96, 6]} scale={0.12} />
+        <VoxModel url={`${V}tree.vox`} position={[-6, 0.96, -2]} scale={0.12} />
         {/* Lamps along the path (10 tall @0.1 = 1.0 -> lift y=0.5) */}
         <VoxModel url={`${V}lamp.vox`} position={[-2, 0.5, 2]} scale={0.1} />
         <VoxModel url={`${V}lamp.vox`} position={[2, 0.5, -4]} scale={0.1} />

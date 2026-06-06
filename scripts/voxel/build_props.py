@@ -13,10 +13,15 @@ from _voxlib import new_model, save_and_preview, C  # noqa: E402
 
 
 def build_tree():
-    # x=7, y=7 deep, z=12 tall
-    m = new_model(7, 7, 12)
-    m.fill_box(3, 3, 0, 3, 3, 6, C("trunk"))         # trunk (vertical in z)
-    m.create_sphere(3, 3, 9, 3, C("leaf"))           # canopy (center high in z)
+    # x=11, y=11 deep, z=16 tall — fuller layered canopy on a sturdier trunk
+    m = new_model(11, 11, 16)
+    m.fill_box(5, 5, 0, 5, 5, 7, C("trunk"))          # trunk (vertical in z)
+    # layered canopy: overlapping spheres, darker core + lighter top for depth
+    m.create_sphere(5, 5, 9, 4, C("leaf_dark"))
+    m.create_sphere(3, 6, 10, 3, C("leaf"))
+    m.create_sphere(7, 4, 10, 3, C("leaf"))
+    m.create_sphere(5, 5, 12, 3, C("leaf_light"))
+    m.create_sphere(6, 7, 11, 2, C("leaf"))
     save_and_preview(m, "tree")
 
 

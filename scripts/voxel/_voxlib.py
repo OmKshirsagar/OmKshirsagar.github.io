@@ -66,6 +66,14 @@ PALETTE = {
     "car_red": (26, 176, 64, 58),
     "car_silver": (27, 198, 204, 212),
     "road_dark": (28, 52, 52, 60),
+    # --- realism pass ---
+    "leaf_dark": (29, 44, 92, 50),
+    "leaf_light": (30, 110, 168, 92),
+    "foam_white": (31, 234, 238, 236),
+    "water_shallow": (32, 104, 170, 182),
+    "wet_sand": (33, 188, 168, 124),
+    "tower_warm": (34, 214, 196, 162),
+    "car_blue": (35, 70, 104, 168),
 }
 
 

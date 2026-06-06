@@ -15,7 +15,7 @@ const DUSK_BG = new THREE.Color('#e7d6b4'); // light hazy gold (lets ocean read 
 const SPACE_AMB = new THREE.Color('#20243a');
 const DUSK_AMB = new THREE.Color('#3a3a44');
 const SPACE_KEY = new THREE.Color('#fff6ec');
-const DUSK_KEY = new THREE.Color('#ffe9cf'); // warm but not orange
+const DUSK_KEY = new THREE.Color('#ffdcab'); // warm golden light on surfaces
 
 export default function WorldEnvironment({
   stateRef,
@@ -50,11 +50,11 @@ export default function WorldEnvironment({
     }
     if (ambient.current) {
       ambient.current.color.copy(SPACE_AMB).lerp(DUSK_AMB, w);
-      ambient.current.intensity = THREE.MathUtils.lerp(0.35, 0.75, w);
+      ambient.current.intensity = THREE.MathUtils.lerp(0.35, 0.42, w);
     }
     if (key.current) {
       key.current.color.copy(SPACE_KEY).lerp(DUSK_KEY, w);
-      key.current.intensity = THREE.MathUtils.lerp(2.0, 2.2, w);
+      key.current.intensity = THREE.MathUtils.lerp(2.0, 2.7, w);
     }
     if (rim.current) {
       rim.current.intensity = THREE.MathUtils.lerp(0, 1.2, w);

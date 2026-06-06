@@ -7,11 +7,17 @@ import type { SceneState } from '../lib/state';
 const V = '/vox/';
 
 // vox heights for ground-sitting lift (models are centered): y = h*scale/2
-const TOWER_H = 46;
 const MOUNTAIN_H = 30;
-const PALM_H = 18;
+const PALM_H = 22;
 const LAMP_H = 16;
 const CAR_H = 5;
+
+// Tower variants: [url, height(vox)]. Mixed across the skyline for variety.
+const TOWER_VARIANTS: Array<[string, number]> = [
+  ['tower.vox', 54], // slim Art Deco spire
+  ['tower_block.vox', 30], // mid-rise block
+  ['tower_step.vox', 46], // stepped wedding-cake
+];
 
 /** Deterministic PRNG (mulberry32) so the city is identical every render. */
 function rng(seed: number): () => number {
@@ -35,10 +41,11 @@ function coastX(z: number): number {
   return 13 + 11 * Math.sin(t * Math.PI); // 13..24, bulging to 24 mid-bay
 }
 
-// Waterfront skyline: towers on the land side of the coast. [x, z, scale, rotY]
-const TOWERS: Array<[number, number, number, number]> = (() => {
+// Waterfront skyline: towers on the land side of the coast.
+// [x, z, scale, rotY, variantIndex]
+const TOWERS: Array<[number, number, number, number, number]> = (() => {
   const r = rng(1337);
-  const out: Array<[number, number, number, number]> = [];
+  const out: Array<[number, number, number, number, number]> = [];
   for (let i = 0; i < 64; i++) {
     const z = -6 - r() * 64; // -6..-70
     const cx = coastX(z);
@@ -46,15 +53,17 @@ const TOWERS: Array<[number, number, number, number]> = (() => {
     if (Math.abs(x) < 9 && z > -17) continue; // keep the college + path clear
     const nearCoast = (cx - 8 - x) / 44; // 0 near beach .. 1 inland
     const s = 0.3 + r() * 0.12 + (1 - nearCoast) * 0.12; // taller toward the water
-    out.push([x, z, s, Math.floor(r() * 4) * 0.4]);
+    const variant = Math.floor(r() * TOWER_VARIANTS.length);
+    out.push([x, z, s, Math.floor(r() * 4) * 0.4, variant]);
   }
   return out;
 })();
 
-// Curved sand beach — overlapping sand tiles tracking the coast line.
-const BEACH: Array<[number, number]> = (() => {
+// Curved sand beach — banded shore tiles (sand->foam->shallow) tracking the
+// coast. The shore tile's local +x is seaward; foam sits ~at the coast line.
+const SHORE: Array<[number, number]> = (() => {
   const out: Array<[number, number]> = [];
-  for (let z = Z_NEAR; z >= Z_FAR; z -= 4) out.push([coastX(z), z]);
+  for (let z = Z_NEAR; z >= Z_FAR; z -= 9) out.push([coastX(z) - 5, z]);
   return out;
 })();
 
@@ -110,9 +119,9 @@ export default function SceneMumbai({
         <VoxModel url={`${V}ocean.vox`} position={[78, -0.25, -28]} scale={0.62} />
         {/* Grass land on the -x side, ending around the coast. */}
         <VoxModel url={`${V}ground.vox`} position={[-26, 0, -32]} scale={0.4} />
-        {/* Curved sand beach tracking the coast. */}
-        {BEACH.map(([x, z], i) => (
-          <VoxModel key={`b${i}`} url={`${V}sandbar.vox`} position={[x, 0.02, z]} scale={0.6} />
+        {/* Banded shore (sand -> foam -> shallow) tracking the coast. */}
+        {SHORE.map(([x, z], i) => (
+          <VoxModel key={`b${i}`} url={`${V}shore.vox`} position={[x, 0.2, z]} scale={0.6} />
         ))}
         {MOUNTAINS.map(([x, z, sc], i) => (
           <VoxModel
@@ -122,15 +131,18 @@ export default function SceneMumbai({
             scale={sc}
           />
         ))}
-        {TOWERS.map(([x, z, sc, rot], i) => (
-          <VoxModel
-            key={`t${i}`}
-            url={`${V}tower.vox`}
-            position={[x, (TOWER_H * sc) / 2, z]}
-            scale={sc}
-            rotation={[0, rot, 0]}
-          />
-        ))}
+        {TOWERS.map(([x, z, sc, rot, vi], i) => {
+          const [url, h] = TOWER_VARIANTS[vi];
+          return (
+            <VoxModel
+              key={`t${i}`}
+              url={`${V}${url}`}
+              position={[x, (h * sc) / 2, z]}
+              scale={sc}
+              rotation={[0, rot, 0]}
+            />
+          );
+        })}
         {/* Promenade: a lamp at every slot, palms alternating, a car every few. */}
         {PROMENADE.map(([x, z, i]) => {
           const lampS = 0.13;

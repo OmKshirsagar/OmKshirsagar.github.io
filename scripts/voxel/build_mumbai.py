@@ -3,6 +3,7 @@
 COORDINATE CONVENTION (verified): (x=width, y=depth, z=HEIGHT/up).
 Vertical extent is the z coord. These get instanced/placed by SceneMumbai.
 """
+import random
 import sys
 from pathlib import Path
 
@@ -24,29 +25,73 @@ def build_cloud():
     save_and_preview(m, "cloud")
 
 
+def _windows(m, x0, y0, x1, y1, z0, z1, seed, step_z=4, step_u=3, lit=0.12):
+    """Punch a window grid into the 4 outer faces of a box, with a few lit ones."""
+    rnd = random.Random(seed)
+    glow, dark = C("window_glow"), C("window_dark")
+
+    def col():
+        return glow if rnd.random() < lit else dark
+
+    for z in range(z0, z1 - 1, step_z):
+        for x in range(x0 + 1, x1 - 1, step_u):
+            m.fill_box(x, y0, z, x, y0, z + 1, col())          # front (y0)
+            m.fill_box(x, y1, z, x, y1, z + 1, col())          # back (y1)
+        for yy in range(y0 + 1, y1 - 1, step_u):
+            m.fill_box(x0, yy, z, x0, yy, z + 1, col())         # left (x0)
+            m.fill_box(x1, yy, z, x1, yy, z + 1, col())         # right (x1)
+
+
+def _cornices(m, x0, y0, x1, y1, z0, z1, every):
+    """Horizontal floor/cornice shadow lines for structure + depth."""
+    for z in range(z0, z1, every):
+        m.fill_box(x0, y0, z, x1, y1, z, C("tower_shadow"))
+
+
 def build_tower():
-    """A cream Art Deco skyscraper with a window grid + stepped crown.
-    Instanced (varied scale/position) to form the Mumbai skyline."""
-    W, D, H = 10, 10, 46
+    """Slim Art Deco spire — the iconic skyscraper. (tower.vox)"""
+    W, D, H = 10, 10, 54
     m = new_model(W, D, H)
-    m.fill_box(0, 0, 0, W - 1, D - 1, H - 8, C("tower_cream"))
-    # vertical pilaster shadows (front + back faces)
-    for x in range(2, W - 1, 3):
-        m.fill_box(x, 0, 2, x, 0, H - 12, C("tower_shadow"))
-        m.fill_box(x, D - 1, 2, x, D - 1, H - 12, C("tower_shadow"))
-    # window grid on all 4 faces
-    for z in range(4, H - 12, 4):
-        for u in range(2, 8, 3):
-            m.fill_box(u, 0, z, u + 1, 0, z + 1, C("window_dark"))         # front
-            m.fill_box(u, D - 1, z, u + 1, D - 1, z + 1, C("window_dark"))  # back
-            m.fill_box(0, u, z, 0, u + 1, z + 1, C("window_dark"))         # left
-            m.fill_box(D - 1, u, z, D - 1, u + 1, z + 1, C("window_dark"))  # right
-    # stepped Art Deco crown
-    m.fill_box(1, 1, H - 8, W - 2, D - 2, H - 7, C("tower_shadow"))
-    m.fill_box(2, 2, H - 6, W - 3, D - 3, H - 5, C("tower_cream"))
-    m.fill_box(3, 3, H - 4, W - 4, D - 4, H - 3, C("tower_cream"))
-    m.fill_box(4, 4, H - 2, 5, 5, H - 1, C("tower_shadow"))  # spire
+    m.fill_box(0, 0, 0, W - 1, D - 1, H - 10, C("tower_cream"))
+    m.fill_box(0, 0, 0, W - 1, D - 1, 2, C("tower_shadow"))            # darker base
+    # corner pilasters (full height) for vertical Art Deco emphasis
+    for cx, cy in [(0, 0), (0, D - 1), (W - 1, 0), (W - 1, D - 1)]:
+        m.fill_box(cx, cy, 3, cx, cy, H - 11, C("tower_warm"))
+    _windows(m, 1, 1, W - 2, D - 2, 5, H - 12, seed=11, step_z=4, step_u=3)
+    # stepped crown -> spire
+    m.fill_box(1, 1, H - 10, W - 2, D - 2, H - 9, C("tower_shadow"))   # cornice cap
+    m.fill_box(2, 2, H - 8, W - 3, D - 3, H - 6, C("tower_cream"))
+    m.fill_box(3, 3, H - 5, W - 4, D - 4, H - 3, C("tower_warm"))
+    m.fill_box(4, 4, H - 2, 5, 5, H - 1, C("tower_shadow"))            # spire tip
     save_and_preview(m, "tower")
+
+
+def build_tower_block():
+    """Solid mid-rise apartment block with a flat cornice cap. (tower_block.vox)"""
+    W, D, H = 14, 12, 30
+    m = new_model(W, D, H)
+    m.fill_box(0, 0, 0, W - 1, D - 1, H - 2, C("tower_warm"))
+    m.fill_box(0, 0, 0, W - 1, D - 1, 3, C("tower_shadow"))            # ground floor
+    _cornices(m, 0, 0, W - 1, D - 1, 7, H - 3, every=5)               # floor lines
+    _windows(m, 1, 1, W - 2, D - 2, 5, H - 4, seed=22, step_z=5, step_u=3, lit=0.14)
+    # overhanging flat cornice cap
+    m.fill_box(0, 0, H - 2, W - 1, D - 1, H - 2, C("tower_cream"))
+    m.fill_box(1, 1, H - 1, W - 2, D - 2, H - 1, C("tower_shadow"))
+    save_and_preview(m, "tower_block")
+
+
+def build_tower_step():
+    """Stepped 'wedding-cake' Art Deco tower with three setbacks. (tower_step.vox)"""
+    W, D, H = 16, 16, 46
+    m = new_model(W, D, H)
+    tiers = [(0, 0, 15, 15, 0, 18), (2, 2, 13, 13, 18, 32), (4, 4, 11, 11, 32, 42)]
+    for ti, (x0, y0, x1, y1, z0, z1) in enumerate(tiers):
+        m.fill_box(x0, y0, z0, x1, y1, z1, C("tower_cream"))
+        m.fill_box(x0, y0, z1, x1, y1, z1, C("tower_shadow"))         # tier cornice
+        _windows(m, x0 + 1, y0 + 1, x1 - 1, y1 - 1, z0 + 3, z1 - 1, seed=33 + ti, step_z=4)
+    m.fill_box(0, 0, 0, W - 1, D - 1, 2, C("tower_shadow"))           # base
+    m.fill_box(7, 7, 42, 8, 8, 45, C("tower_warm"))                  # crown
+    save_and_preview(m, "tower_step")
 
 
 def build_mountain():
@@ -57,7 +102,12 @@ def build_mountain():
     for z in range(H):
         t = z / (H - 1)
         inset = int(t * (BASE // 2 - 2))
-        color = C("mountain_green") if z < H * 0.5 else C("mountain_rock")
+        if z < H * 0.55:
+            color = C("mountain_green")            # green lower slopes
+        elif z < H * 0.8:
+            color = C("leaf_dark")                 # darker forested mid
+        else:
+            color = C("mountain_rock")             # rocky/purple peaks
         m.fill_box(inset, inset, z, BASE - 1 - inset, BASE - 1 - inset, z, color)
     save_and_preview(m, "mountain", preview=False)
 
@@ -71,15 +121,18 @@ def build_ocean():
 
 
 def build_palm():
-    """A palm tree — thin trunk + a splayed frond crown. Lines the promenade."""
-    m = new_model(9, 9, 18)
-    m.fill_box(4, 4, 0, 4, 4, 12, C("trunk"))            # trunk (vertical)
-    # frond crown — a flat-ish star of green at the top
-    m.fill_box(2, 4, 13, 6, 4, 13, C("palm_green"))      # arms along x
-    m.fill_box(4, 2, 13, 4, 6, 13, C("palm_green"))      # arms along y
-    m.fill_box(1, 4, 14, 7, 4, 14, C("palm_green"))
-    m.fill_box(4, 1, 14, 4, 7, 14, C("palm_green"))
-    m.fill_box(3, 3, 15, 5, 5, 15, C("palm_green"))      # crown cap
+    """A palm tree — slightly curved trunk + drooping frond crown."""
+    m = new_model(11, 11, 22)
+    # curved trunk (leans a little as it rises)
+    for z in range(15):
+        x = 5 + int(z / 7)
+        m.fill_box(x, 5, z, x, 5, z, C("trunk"))
+    tx, ty, tz = 7, 5, 15
+    # 8 drooping fronds radiating from the crown
+    for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, 1), (1, -1), (-1, -1)]:
+        for r in range(1, 5):
+            m.fill_box(tx + dx * r, ty + dy * r, tz + 1 - (r // 3), tx + dx * r, ty + dy * r, tz + 1 - (r // 3), C("palm_green"))
+    m.fill_box(tx - 1, ty - 1, tz + 1, tx + 1, ty + 1, tz + 2, C("leaf_dark"))  # crown core
     save_and_preview(m, "palm", preview=False)
 
 
@@ -100,20 +153,28 @@ def build_car():
     save_and_preview(m, "car", preview=False)
 
 
-def build_sandbar():
-    """A flat sand slab — tiled along the coast curve to form the beach band."""
-    m = new_model(28, 28, 1)
-    m.fill_box(0, 0, 0, 27, 27, 0, C("sand"))
-    save_and_preview(m, "sandbar", preview=False)
+def build_shore():
+    """A cross-shore strip: dry sand -> wet sand -> foam -> shallow water.
+    Tiled along the coast (local x = seaward) so the beach reads as a real
+    waterline. The deep ocean plane sits beyond the shallow band."""
+    W, D, H = 44, 30, 2
+    m = new_model(W, D, H)
+    m.fill_box(0, 0, 0, 19, D - 1, 1, C("sand"))             # dry sand (raised)
+    m.fill_box(20, 0, 0, 25, D - 1, 0, C("wet_sand"))        # wet sand
+    m.fill_box(26, 0, 0, 28, D - 1, 0, C("foam_white"))      # foam waterline
+    m.fill_box(29, 0, 0, W - 1, D - 1, 0, C("water_shallow"))  # shallow water
+    save_and_preview(m, "shore", preview=False)
 
 
 if __name__ == "__main__":
     build_cloud()
     build_tower()
+    build_tower_block()
+    build_tower_step()
     build_mountain()
     build_ocean()
     build_palm()
     build_streetlamp()
     build_car()
-    build_sandbar()
+    build_shore()
     print("MUMBAI BUILD OK")

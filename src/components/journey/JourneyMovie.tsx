@@ -2,6 +2,7 @@ import { Canvas } from '@react-three/fiber';
 import { useEffect, useRef, useState, type ReactElement } from 'react';
 import CameraRig from './CameraRig';
 import Stage from './Stage';
+import PostFX from './PostFX';
 import HeroTitle from './HeroTitle';
 import {
   BEAT_CAPTIONS,
@@ -88,6 +89,7 @@ export default function JourneyMovie(): ReactElement {
         >
           <CameraRig stateRef={cameraRef} />
           <Stage stateRef={sceneRef} />
+          <PostFX />
         </Canvas>
 
         {/* ===== Hero title overlays (3 of them, opacity-driven) ===== */}

@@ -1,16 +1,30 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import JourneyMovie from '@/components/journey/JourneyMovie';
 ---
 <BaseLayout title="Journey · Om Kshirsagar">
-  <main style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; text-align: center;">
-    <p style="font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-orange); margin-bottom: 16px;">
-      // journey
-    </p>
-    <h1 style="font-size: 48px; font-weight: 800; letter-spacing: -0.03em;">
-      The cinematic <span style="font-family: var(--font-italic); font-style: italic; font-weight: 400; color: var(--accent-warm);">movie</span> ships in Plan 3.
-    </h1>
-    <p style="margin-top: 40px;">
-      <a href="/" style="color: var(--accent-warm); font-family: var(--font-mono); font-size: 12px;">← back to /</a>
-    </p>
-  </main>
+  <!--
+    Three.js + WebGL cannot SSR — mount as a client-only React island.
+    The component creates its own scroll runway via ScrollTrigger's pin.
+  -->
+  <JourneyMovie client:only="react" />
+
+  <!--
+    Tiny fallback that shows during the brief moment before the React
+    island hydrates (or if JS is disabled). Will be hidden by the
+    mounted island.
+  -->
+  <noscript>
+    <main style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:40px;text-align:center;">
+      <p style="font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-orange); margin-bottom: 16px;">
+        // journey
+      </p>
+      <h1 style="font-size: 32px; font-weight: 800; letter-spacing: -0.03em;">
+        This is a JavaScript-powered cinematic — please enable JS.
+      </h1>
+      <p style="margin-top: 24px;">
+        <a href="/" style="color: var(--accent-warm); font-family: var(--font-mono); font-size: 12px;">← back to /</a>
+      </p>
+    </main>
+  </noscript>
 </BaseLayout>

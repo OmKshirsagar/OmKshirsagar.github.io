@@ -60,10 +60,11 @@ const TOWERS: Array<[number, number, number, number, number]> = (() => {
 })();
 
 // Curved sand beach — banded shore tiles (sand->foam->shallow) tracking the
-// coast. The shore tile's local +x is seaward; foam sits ~at the coast line.
+// coast. Edge-to-edge spacing (tile is ~18 deep at scale 0.6) so they don't
+// overlap-and-z-fight; the shore's local +x is seaward.
 const SHORE: Array<[number, number]> = (() => {
   const out: Array<[number, number]> = [];
-  for (let z = Z_NEAR; z >= Z_FAR; z -= 9) out.push([coastX(z) - 5, z]);
+  for (let z = Z_NEAR; z >= Z_FAR; z -= 16) out.push([coastX(z) - 5, z]);
   return out;
 })();
 
@@ -115,13 +116,20 @@ export default function SceneMumbai({
   return (
     <group>
       <group ref={city}>
-        {/* Big ocean plane on the +x sea side (top sits at y~0). */}
-        <VoxModel url={`${V}ocean.vox`} position={[78, -0.25, -28]} scale={0.62} />
+        {/* Big ocean plane on the +x sea side — sits well below the land so
+            it never co-planar z-fights the grass/beach (was flickering). */}
+        <VoxModel url={`${V}ocean.vox`} position={[78, -0.8, -28]} scale={0.62} />
         {/* Grass land on the -x side, ending around the coast. */}
         <VoxModel url={`${V}ground.vox`} position={[-26, 0, -32]} scale={0.4} />
-        {/* Banded shore (sand -> foam -> shallow) tracking the coast. */}
+        {/* Banded shore (sand -> foam -> shallow) tracking the coast; tiny
+            per-tile y stagger avoids coplanar flicker between neighbours. */}
         {SHORE.map(([x, z], i) => (
-          <VoxModel key={`b${i}`} url={`${V}shore.vox`} position={[x, 0.2, z]} scale={0.6} />
+          <VoxModel
+            key={`b${i}`}
+            url={`${V}shore.vox`}
+            position={[x, 0.12 + (i % 2) * 0.04, z]}
+            scale={0.6}
+          />
         ))}
         {MOUNTAINS.map(([x, z, sc], i) => (
           <VoxModel

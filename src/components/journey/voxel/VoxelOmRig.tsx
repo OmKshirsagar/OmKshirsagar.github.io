@@ -45,30 +45,30 @@ export const VoxelOmRig = forwardRef<OmRigHandle, { scale?: number }>(
     });
 
     // Each part mesh is CENTERED at its own origin by buildMesh. Part sizes
-    // (from build_om.py): torso 6x8(z) , head 6x7(z), arm 2x6(z), thigh 2x7(z).
-    // We place parts so FEET sit at y=0 and limbs pivot from shoulder/hip:
-    //   hips  at y=7  (legs 7 tall hang down to y=0)
-    //   torso spans y 7..15  -> center y=11
-    //   head  sits on y=15   -> center y=18.5
-    //   shoulders at y=14
+    // (from build_om.py): torso 6x8(z), head 6x7(z), arm 2x6(z), thigh 2x10(z).
+    // Longer legs for a proper stance: FEET at y=0, hips at y=10.
+    //   thighs 10 tall hang from hips (y=10) -> feet at 0
+    //   torso  spans y 10..18  -> center y=14
+    //   head   sits on y=18    -> center y=21.5
+    //   shoulders at y=17
     // A pivot <group> sits AT the joint; the centered child mesh is offset so
     // its TOP edge meets the group origin, so group.rotation.x swings the limb
-    // from the joint (not the limb's middle).
+    // from the joint.
     return (
       <group ref={root} scale={scale}>
-        <Part url={`${V}om_torso.vox`} position={[0, 11, 0]} />
-        <Part url={`${V}om_head.vox`} position={[0, 18.5, 0]} />
-        <group ref={armL} position={[-4, 14, 0]}>
+        <Part url={`${V}om_torso.vox`} position={[0, 14, 0]} />
+        <Part url={`${V}om_head.vox`} position={[0, 21.5, 0]} />
+        <group ref={armL} position={[-4, 17, 0]}>
           <Part url={`${V}om_upperarm_L.vox`} position={[0, -3, 0]} />
         </group>
-        <group ref={armR} position={[4, 14, 0]}>
+        <group ref={armR} position={[4, 17, 0]}>
           <Part url={`${V}om_upperarm_R.vox`} position={[0, -3, 0]} />
         </group>
-        <group ref={thighL} position={[-1.5, 7, 0]}>
-          <Part url={`${V}om_thigh_L.vox`} position={[0, -3.5, 0]} />
+        <group ref={thighL} position={[-1.5, 10, 0]}>
+          <Part url={`${V}om_thigh_L.vox`} position={[0, -5, 0]} />
         </group>
-        <group ref={thighR} position={[1.5, 7, 0]}>
-          <Part url={`${V}om_thigh_R.vox`} position={[0, -3.5, 0]} />
+        <group ref={thighR} position={[1.5, 10, 0]}>
+          <Part url={`${V}om_thigh_R.vox`} position={[0, -5, 0]} />
         </group>
       </group>
     );

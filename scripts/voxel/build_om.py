@@ -47,9 +47,11 @@ def build_arm(suffix: str):
 
 
 def build_thigh(suffix: str):
-    # x=2, y=2 deep, z=7 tall — charcoal pants
-    m = new_model(2, 2, 7)
-    m.fill_box(0, 0, 0, 1, 1, 6, C("pants_charcoal"))
+    # x=2, y=3 deep, z=10 tall — longer charcoal leg (better proportion),
+    # with a small skin "shoe" at the foot so the stride reads clearly.
+    m = new_model(2, 3, 10)
+    m.fill_box(0, 0, 1, 1, 2, 9, C("pants_charcoal"))  # leg
+    m.fill_box(0, 0, 0, 1, 2, 0, C("hair_black"))      # shoe
     save_and_preview(m, f"om_thigh_{suffix}")
 
 

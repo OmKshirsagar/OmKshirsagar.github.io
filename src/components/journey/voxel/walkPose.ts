@@ -6,7 +6,7 @@ export type Pose = {
   bob: number;
 };
 
-const SWING = 0.6; // radians peak leg swing
+const SWING = 0.45; // radians peak leg swing (eased so the stride isn't splayed)
 
 /** t in [0,1) = one full stride cycle. */
 export function walkPose(t: number): Pose {

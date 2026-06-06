@@ -57,9 +57,9 @@ export default function SceneJaiHind({ stateRef }: { stateRef: MutableRefObject<
         {/* Single baked ground mesh (1 draw call), centered at origin.
             200x256x1 vox @0.1 -> X[-10,10], Z[-12.8,12.8], ~flat at y=0. */}
         <VoxModel url={`${V}ground.vox`} position={[0, 0, 0]} scale={0.1} />
-        {/* Facade at far -Z; front face (windows/door) faces +Z toward Om.
-            40 tall @0.1 = 4 units -> lift y=2 so base sits on ground. */}
-        <VoxModel url={`${V}jaihind_facade.vox`} position={[0, 2, -9]} scale={0.1} />
+        {/* Jai Hind College (Sheila Gopal Raheja Building) — tall tower, front
+            face (+Z) toward Om. 104 tall @0.1 = 10.4 units -> lift y=5.2. */}
+        <VoxModel url={`${V}jaihind_facade.vox`} position={[-1, 5.2, -10]} scale={0.1} />
         {/* Trees flanking the path (16 tall @0.12 = 1.92 -> lift y=0.96) */}
         <VoxModel url={`${V}tree.vox`} position={[-5, 0.96, 4]} scale={0.12} />
         <VoxModel url={`${V}tree.vox`} position={[5, 0.96, 6]} scale={0.12} />

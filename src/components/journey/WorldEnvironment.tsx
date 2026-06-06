@@ -11,11 +11,11 @@ import type { SceneState } from './lib/state';
  * and the warm voxel ground scene share one continuous canvas.
  */
 const SPACE_BG = new THREE.Color('#060810');
-const DUSK_BG = new THREE.Color('#d8a06a');
+const DUSK_BG = new THREE.Color('#e7d6b4'); // light hazy gold (lets ocean read blue + towers white)
 const SPACE_AMB = new THREE.Color('#20243a');
-const DUSK_AMB = new THREE.Color('#2a2418');
+const DUSK_AMB = new THREE.Color('#3a3a44');
 const SPACE_KEY = new THREE.Color('#fff6ec');
-const DUSK_KEY = new THREE.Color('#ffd29a');
+const DUSK_KEY = new THREE.Color('#ffe9cf'); // warm but not orange
 
 export default function WorldEnvironment({
   stateRef,
@@ -44,19 +44,20 @@ export default function WorldEnvironment({
     }
     if (scene.fog instanceof THREE.Fog) {
       scene.fog.color.copy(SPACE_BG).lerp(DUSK_BG, w);
-      scene.fog.near = THREE.MathUtils.lerp(40, 12, w);
-      scene.fog.far = THREE.MathUtils.lerp(220, 70, w);
+      // Light haze only — keep the city + ocean clear (was a thick orange soup).
+      scene.fog.near = THREE.MathUtils.lerp(45, 55, w);
+      scene.fog.far = THREE.MathUtils.lerp(240, 230, w);
     }
     if (ambient.current) {
       ambient.current.color.copy(SPACE_AMB).lerp(DUSK_AMB, w);
-      ambient.current.intensity = THREE.MathUtils.lerp(0.35, 0.5, w);
+      ambient.current.intensity = THREE.MathUtils.lerp(0.35, 0.75, w);
     }
     if (key.current) {
       key.current.color.copy(SPACE_KEY).lerp(DUSK_KEY, w);
-      key.current.intensity = THREE.MathUtils.lerp(2.0, 2.4, w);
+      key.current.intensity = THREE.MathUtils.lerp(2.0, 2.2, w);
     }
     if (rim.current) {
-      rim.current.intensity = THREE.MathUtils.lerp(0, 1.4, w);
+      rim.current.intensity = THREE.MathUtils.lerp(0, 1.2, w);
     }
   });
 

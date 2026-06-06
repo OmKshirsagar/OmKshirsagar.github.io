@@ -100,6 +100,13 @@ def build_car():
     save_and_preview(m, "car", preview=False)
 
 
+def build_sandbar():
+    """A flat sand slab — tiled along the coast curve to form the beach band."""
+    m = new_model(28, 28, 1)
+    m.fill_box(0, 0, 0, 27, 27, 0, C("sand"))
+    save_and_preview(m, "sandbar", preview=False)
+
+
 if __name__ == "__main__":
     build_cloud()
     build_tower()
@@ -108,4 +115,5 @@ if __name__ == "__main__":
     build_palm()
     build_streetlamp()
     build_car()
+    build_sandbar()
     print("MUMBAI BUILD OK")

@@ -25,66 +25,69 @@ function rng(seed: number): () => number {
   };
 }
 
-// Dense skyline: towers fill the city behind/around the college (origin),
-// avoiding the immediate college footprint. [x, z, scale, rotY]
+// ----- The Marine Drive coast (single source of truth) -----
+// Beach centre-line x at depth z. Ocean is at x > coastX (the +x sea side);
+// land (city + college) is at x < coastX. The bay bulges seaward mid-curve.
+const Z_NEAR = 2;
+const Z_FAR = -72;
+function coastX(z: number): number {
+  const t = (z - Z_NEAR) / (Z_FAR - Z_NEAR); // 0..1 along the coast
+  return 13 + 11 * Math.sin(t * Math.PI); // 13..24, bulging to 24 mid-bay
+}
+
+// Waterfront skyline: towers on the land side of the coast. [x, z, scale, rotY]
 const TOWERS: Array<[number, number, number, number]> = (() => {
   const r = rng(1337);
   const out: Array<[number, number, number, number]> = [];
-  for (let i = 0; i < 52; i++) {
-    const x = -40 + r() * 58; // -40..18 (city to the left/centre of the bay)
-    const z = -12 - r() * 50; // -12..-62
+  for (let i = 0; i < 64; i++) {
+    const z = -6 - r() * 64; // -6..-70
+    const cx = coastX(z);
+    const x = -52 + r() * (cx - 8 - -52); // land side, clear of the beach
     if (Math.abs(x) < 9 && z > -17) continue; // keep the college + path clear
-    const depth = (-z - 12) / 50; // 0..1, deeper = taller
-    const s = 0.26 + r() * 0.12 + depth * 0.16;
+    const nearCoast = (cx - 8 - x) / 44; // 0 near beach .. 1 inland
+    const s = 0.3 + r() * 0.12 + (1 - nearCoast) * 0.12; // taller toward the water
     out.push([x, z, s, Math.floor(r() * 4) * 0.4]);
   }
   return out;
 })();
 
-// Distant mountain ridge. [x, z, scale]
+// Curved sand beach — overlapping sand tiles tracking the coast line.
+const BEACH: Array<[number, number]> = (() => {
+  const out: Array<[number, number]> = [];
+  for (let z = Z_NEAR; z >= Z_FAR; z -= 4) out.push([coastX(z), z]);
+  return out;
+})();
+
+// Marine Drive promenade — lamps + palms + cars on the land edge of the beach.
+const PROMENADE: Array<[number, number, number]> = (() => {
+  const out: Array<[number, number, number]> = [];
+  let i = 0;
+  for (let z = Z_NEAR; z >= Z_FAR; z -= 3.2) out.push([coastX(z) - 7, z, i++]);
+  return out;
+})();
+
+// Distant mountain ridge, beyond the bay. [x, z, scale]
 const MOUNTAINS: Array<[number, number, number]> = (() => {
   const r = rng(99);
   const out: Array<[number, number, number]> = [];
-  for (let i = 0; i < 8; i++) {
-    out.push([-62 + r() * 124, -68 - r() * 28, 0.6 + r() * 0.32]);
+  for (let i = 0; i < 9; i++) {
+    out.push([-66 + r() * 150, -82 - r() * 26, 0.6 + r() * 0.34]);
   }
   return out;
 })();
 
-// Marine Drive arc — the "Queen's Necklace" curve hugging the bay on the +x
-// (sea) side. Concave toward the city. [x, z, angleRad, index]
-const ARC_CX = 58;
-const ARC_CZ = -28;
-const ARC_R = 40;
-const PROMENADE: Array<[number, number, number, number]> = (() => {
-  const out: Array<[number, number, number, number]> = [];
-  const N = 28;
-  for (let i = 0; i < N; i++) {
-    const t = i / (N - 1);
-    const ang = ((118 + t * 124) * Math.PI) / 180;
-    out.push([ARC_CX + ARC_R * Math.cos(ang), ARC_CZ + ARC_R * Math.sin(ang), ang, i]);
-  }
-  return out;
-})();
-
-// Cloud field. [x, y, z, scale] — high-altitude cover + low "dive" clouds.
+// Cloud field. [x, y, z, scale]
 const CLOUDS: Array<[number, number, number, number]> = (() => {
   const r = rng(7);
   const out: Array<[number, number, number, number]> = [];
   for (let i = 0; i < 22; i++) {
-    out.push([-44 + r() * 88, 15 + r() * 12, -10 - r() * 56, 0.34 + r() * 0.2]);
+    out.push([-44 + r() * 120, 16 + r() * 13, -6 - r() * 60, 0.34 + r() * 0.22]);
   }
-  // low dive-through clouds near the descent path (camera comes from high +y/+z)
-  for (let i = 0; i < 7; i++) {
-    out.push([-14 + r() * 30, 44 + r() * 14, -6 + r() * 26, 0.5 + r() * 0.12]);
+  for (let i = 0; i < 6; i++) {
+    out.push([-14 + r() * 34, 44 + r() * 14, -4 + r() * 26, 0.5 + r() * 0.12]);
   }
   return out;
 })();
-
-// Ocean slabs covering the +x (sea) side. [x, y, z, scale]
-const OCEAN: Array<[number, number, number, number]> = [
-  [70, 0.05, -10, 0.22], [70, 0.05, -55, 0.22], [95, 0.05, -32, 0.22],
-];
 
 export default function SceneMumbai({
   stateRef,
@@ -103,10 +106,13 @@ export default function SceneMumbai({
   return (
     <group>
       <group ref={city}>
-        {/* large land slab so the skyline + college sit on ground */}
-        <VoxModel url={`${V}ground.vox`} position={[-14, 0, -44]} scale={0.46} />
-        {OCEAN.map(([x, y, z, sc], i) => (
-          <VoxModel key={`o${i}`} url={`${V}ocean.vox`} position={[x, y, z]} scale={sc} />
+        {/* Big ocean plane on the +x sea side (top sits at y~0). */}
+        <VoxModel url={`${V}ocean.vox`} position={[78, -0.25, -28]} scale={0.62} />
+        {/* Grass land on the -x side, ending around the coast. */}
+        <VoxModel url={`${V}ground.vox`} position={[-26, 0, -32]} scale={0.4} />
+        {/* Curved sand beach tracking the coast. */}
+        {BEACH.map(([x, z], i) => (
+          <VoxModel key={`b${i}`} url={`${V}sandbar.vox`} position={[x, 0.02, z]} scale={0.6} />
         ))}
         {MOUNTAINS.map(([x, z, sc], i) => (
           <VoxModel
@@ -125,9 +131,8 @@ export default function SceneMumbai({
             rotation={[0, rot, 0]}
           />
         ))}
-        {/* Marine Drive promenade: street lamps everywhere, palms alternating,
-            a car on the road every few slots. */}
-        {PROMENADE.map(([x, z, ang, i]) => {
+        {/* Promenade: a lamp at every slot, palms alternating, a car every few. */}
+        {PROMENADE.map(([x, z, i]) => {
           const lampS = 0.13;
           const items = [
             <VoxModel
@@ -143,21 +148,20 @@ export default function SceneMumbai({
               <VoxModel
                 key={`p${i}`}
                 url={`${V}palm.vox`}
-                position={[x - 1.4, (PALM_H * palmS) / 2, z]}
+                position={[x - 1.6, (PALM_H * palmS) / 2, z]}
                 scale={palmS}
               />,
             );
           }
-          if (i % 4 === 1) {
+          if (i % 3 === 1) {
             const carS = 0.13;
-            // car sits on the road, just toward the sea side (+x along the arc normal)
             items.push(
               <VoxModel
                 key={`c${i}`}
                 url={`${V}car.vox`}
-                position={[x + 1.6, (CAR_H * carS) / 2, z]}
+                position={[x + 2, (CAR_H * carS) / 2, z]}
                 scale={carS}
-                rotation={[0, ang + Math.PI / 2, 0]}
+                rotation={[0, Math.PI / 2, 0]}
               />,
             );
           }

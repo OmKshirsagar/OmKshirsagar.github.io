@@ -109,23 +109,24 @@ export function useJourneyTimeline(args: Args): void {
         .to(scene, { skyWarmth: 1, duration: 1.8, ease: 'power1.inOut' }, 2.6)
         .to(scene, { globeVisible: 0, captionOpacity: 0, duration: 0.6 }, 3.0)
         .to(scene, { cloudsVisible: 1, duration: 0.4 }, 3.0)
-        .set(cam, { x: 0, y: 60, z: 32, lookAtX: 0, lookAtY: 28, lookAtZ: -12, fov: 58 }, 3.2)
+        .set(cam, { x: -6, y: 60, z: 34, lookAtX: 10, lookAtY: 26, lookAtZ: -14, fov: 58 }, 3.2)
         .to(
           cam,
-          { y: 34, z: 18, lookAtY: 12, lookAtZ: -22, duration: 2.3, ease: 'power1.in' },
+          { x: -8, y: 34, z: 20, lookAtX: 10, lookAtY: 12, lookAtZ: -22, duration: 2.3, ease: 'power1.in' },
           3.2,
         )
         .to(scene, { cityVisible: 1, duration: 0.6 }, 3.9);
 
       // ====================================================================
       // PHASE C · CITY FLYOVER (t 5.5 -> 8)
-      // Sweep down over the voxel Mumbai skyline + mountains toward the college.
+      // Sweep down along the Marine Drive coast — city on the left, the bay +
+      // ocean filling the right — toward the college.
       // ====================================================================
       tl.addLabel('city', 5.5)
         .to(
           cam,
           {
-            x: 3, y: 15, z: 9, lookAtX: 0, lookAtY: 5, lookAtZ: -30, fov: 52,
+            x: -8, y: 16, z: 13, lookAtX: 14, lookAtY: 3, lookAtZ: -32, fov: 56,
             duration: 2.5, ease: 'power1.inOut',
           },
           5.5,

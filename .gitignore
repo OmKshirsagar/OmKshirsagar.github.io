@@ -54,3 +54,6 @@ docs/voxel-previews/
 # Python bytecode (voxel builders + scripts)
 __pycache__/
 *.pyc
+
+# Local scratch dir (screenshots, dev logs, reference frames, shot script)
+.tmp/

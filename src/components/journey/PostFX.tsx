@@ -1,21 +1,19 @@
-import { EffectComposer, Bloom, DepthOfField, Vignette } from '@react-three/postprocessing';
+import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 
 /**
- * Cinematic post-processing for /journey:
- *  - Bloom    : makes the lit windows, street lamps, the JAI HIND sign and the
- *               Mumbai pin glow; lifts the golden-hour highlights
- *  - DoF      : gentle depth-of-field so distant skyline/mountains soften while
- *               the hero (near/mid) stays sharp — the "render" look
- *  - Vignette : subtle frame darkening to focus the eye
+ * Cinematic post-processing for /journey — kept light so the voxels stay CRISP.
+ *  - Bloom: only the brightest highlights (lit windows / lamps / sign / Mumbai
+ *    pin / sun) glow — high threshold so the pale dusk scene doesn't haze over
+ *  - Vignette: subtle frame darkening
  *
- * Tuned conservatively; bokeh is small so the walking hero never goes soft.
+ * (Depth-of-field was removed — its bokeh pass softened the whole image and
+ *  made the hard-edged voxel look read as low-res/blurry.)
  */
 export default function PostFX() {
   return (
-    <EffectComposer multisampling={4}>
-      <DepthOfField focusDistance={0.018} focalLength={0.05} bokehScale={1.6} height={480} />
-      <Bloom intensity={0.65} luminanceThreshold={0.68} luminanceSmoothing={0.28} mipmapBlur />
-      <Vignette offset={0.3} darkness={0.6} eskil={false} />
+    <EffectComposer multisampling={8}>
+      <Bloom intensity={0.5} luminanceThreshold={0.85} luminanceSmoothing={0.2} mipmapBlur />
+      <Vignette offset={0.3} darkness={0.55} eskil={false} />
     </EffectComposer>
   );
 }

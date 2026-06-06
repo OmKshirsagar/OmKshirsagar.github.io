@@ -45,3 +45,12 @@ coverage/
 .env
 .env.local
 .env.*.local
+
+video/
+
+# Voxel preview renders (verification only; .vox files in public/vox ARE committed)
+docs/voxel-previews/
+
+# Python bytecode (voxel builders + scripts)
+__pycache__/
+*.pyc

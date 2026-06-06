@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+#
+# Pre-commit guard: refuse to author commits from a Deloitte account on this
+# repo. The OneDrive-Deloitte path + globally configured Deloitte git identity
+# means it's easy to accidentally commit with the wrong email — this stops it
+# at the source.
+#
+# Installed via core.hooksPath = .githooks (set automatically by
+# the `prepare` npm script after `npm install`, see package.json).
+
+set -e
+
+EMAIL="$(git config user.email || true)"
+NAME="$(git config user.name || true)"
+
+# Allow opt-out for emergencies (NEVER use without thinking)
+if [[ "$ALLOW_DELOITTE_COMMIT" == "1" ]]; then
+  echo "⚠  pre-commit guard bypassed by ALLOW_DELOITTE_COMMIT=1"
+  exit 0
+fi
+
+# --- Hard block: anything @deloitte.* ---
+if [[ "$EMAIL" == *"@deloitte."* ]] || [[ "$NAME" == *"deloitte"* ]] || [[ "$NAME" == *"Deloitte"* ]]; then
+  cat <<EOF
+
+╭───────────────────────────────────────────────────────────────────────╮
+│  ❌  COMMIT BLOCKED — Deloitte account detected.                       │
+│                                                                       │
+│  This is a public personal portfolio repo. The commit you just tried  │
+│  would be authored as:                                                │
+│      user.email = $EMAIL
+│      user.name  = $NAME
+│                                                                       │
+│  Fix locally for this repo:                                           │
+│      git config user.email 'kshirsagar.om38018@gmail.com'              │
+│      git config user.name  'OmKshirsagar'                              │
+│                                                                       │
+│  (Bypass only in emergencies:  ALLOW_DELOITTE_COMMIT=1 git commit …)  │
+╰───────────────────────────────────────────────────────────────────────╯
+
+EOF
+  exit 1
+fi
+
+# --- Soft warn: non-empty email that isn't the expected personal one ---
+EXPECTED_EMAIL="kshirsagar.om38018@gmail.com"
+if [[ -n "$EMAIL" && "$EMAIL" != "$EXPECTED_EMAIL" ]]; then
+  echo "⚠  pre-commit: commit email '$EMAIL' is not your usual personal address ('$EXPECTED_EMAIL'). Proceeding anyway since it's not a Deloitte address."
+fi
+
+exit 0

@@ -10,6 +10,7 @@ export default defineConfig({
   integrations: [react()],
   vite: {
     plugins: [yaml()],
+    assetsInclude: ['**/*.vox'],
   },
   build: {
     assets: '_astro',

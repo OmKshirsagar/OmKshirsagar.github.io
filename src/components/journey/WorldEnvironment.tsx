@@ -16,6 +16,8 @@ const SPACE_AMB = new THREE.Color('#20243a');
 const DUSK_AMB = new THREE.Color('#3a3a44');
 const SPACE_KEY = new THREE.Color('#fff6ec');
 const DUSK_KEY = new THREE.Color('#ffdcab'); // warm golden light on surfaces
+const INTERIOR_BG = new THREE.Color('#140d07'); // dark warm room (lamp does the lighting)
+const INTERIOR_AMB = new THREE.Color('#3a2410');
 
 export default function WorldEnvironment({
   stateRef,
@@ -39,25 +41,29 @@ export default function WorldEnvironment({
 
   useFrame(() => {
     const w = stateRef.current.skyWarmth;
+    const i = stateRef.current.interior; // 0 = outdoor, 1 = dark warm room
     if (scene.background instanceof THREE.Color) {
-      scene.background.copy(SPACE_BG).lerp(DUSK_BG, w);
+      scene.background.copy(SPACE_BG).lerp(DUSK_BG, w).lerp(INTERIOR_BG, i);
     }
     if (scene.fog instanceof THREE.Fog) {
-      scene.fog.color.copy(SPACE_BG).lerp(DUSK_BG, w);
+      scene.fog.color.copy(SPACE_BG).lerp(DUSK_BG, w).lerp(INTERIOR_BG, i);
       // Light haze only — keep the city + ocean clear (was a thick orange soup).
       scene.fog.near = THREE.MathUtils.lerp(45, 55, w);
       scene.fog.far = THREE.MathUtils.lerp(240, 230, w);
+      // Indoors: pull fog in tight so the surrounding void reads as a dark room.
+      scene.fog.near = THREE.MathUtils.lerp(scene.fog.near, 8, i);
+      scene.fog.far = THREE.MathUtils.lerp(scene.fog.far, 26, i);
     }
     if (ambient.current) {
-      ambient.current.color.copy(SPACE_AMB).lerp(DUSK_AMB, w);
-      ambient.current.intensity = THREE.MathUtils.lerp(0.35, 0.42, w);
+      ambient.current.color.copy(SPACE_AMB).lerp(DUSK_AMB, w).lerp(INTERIOR_AMB, i);
+      ambient.current.intensity = THREE.MathUtils.lerp(THREE.MathUtils.lerp(0.35, 0.42, w), 0.22, i);
     }
     if (key.current) {
       key.current.color.copy(SPACE_KEY).lerp(DUSK_KEY, w);
-      key.current.intensity = THREE.MathUtils.lerp(2.0, 2.7, w);
+      key.current.intensity = THREE.MathUtils.lerp(THREE.MathUtils.lerp(2.0, 2.7, w), 0.12, i);
     }
     if (rim.current) {
-      rim.current.intensity = THREE.MathUtils.lerp(0, 1.2, w);
+      rim.current.intensity = THREE.MathUtils.lerp(0, 1.2, w) * (1 - i);
     }
   });
 

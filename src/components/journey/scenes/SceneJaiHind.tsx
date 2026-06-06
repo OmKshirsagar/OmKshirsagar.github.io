@@ -1,5 +1,6 @@
 import { useRef, type MutableRefObject } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { Sparkles } from '@react-three/drei';
 import type { Group } from 'three';
 import { VoxModel } from '../voxel/VoxModel';
 import { VoxelOmRig, type OmRigHandle } from '../voxel/VoxelOmRig';
@@ -34,6 +35,73 @@ function Crowd({ visible }: { visible: number }) {
   );
 }
 
+// Graduate crowd in front of Om (between camera and the stage), facing the
+// stage (-Z) so we see the tops/backs of their mortarboards.
+const GRADS: Array<[number, number]> = (() => {
+  const out: Array<[number, number]> = [];
+  for (let row = 0; row < 4; row++) {
+    const z = 1 + row * 3;
+    const n = 5 + row;
+    for (let i = 0; i < n; i++) {
+      const x = (i - (n - 1) / 2) * 2.2 + (row % 2 ? 0.7 : 0);
+      if (Math.abs(x) < 1.2 && row === 0) continue; // keep a small aisle to Om
+      out.push([x, z]);
+    }
+  }
+  return out;
+})();
+
+// Tossed-cap launch points (animated in useFrame). [x, baseY, z, phase]
+const TOSS: Array<[number, number, number, number]> = [
+  [-3, 3.2, 4, 0.0], [2, 3.0, 6, 0.35], [-1, 3.4, 8, 0.6],
+  [4, 3.1, 5, 0.2], [-5, 3.3, 7, 0.8], [1, 3.5, 3, 0.5],
+];
+
+function GradLayer({ stateRef }: { stateRef: MutableRefObject<SceneState> }) {
+  const group = useRef<Group>(null);
+  const caps = useRef<Group>(null);
+
+  useFrame(() => {
+    const vis = stateRef.current.gradVisible > 0.01;
+    if (group.current) group.current.visible = vis;
+    if (!vis || !caps.current) return;
+    const t = performance.now() * 0.001;
+    caps.current.children.forEach((cap, i) => {
+      const [x, baseY, , phase] = TOSS[i];
+      const tt = (t * 0.45 + phase) % 1;
+      cap.position.x = x;
+      cap.position.y = baseY + Math.sin(tt * Math.PI) * 4.2; // arc up + fall
+      cap.rotation.z = t * 2.2 + i;
+      cap.rotation.x = t * 1.7 + i;
+    });
+  });
+
+  return (
+    <group ref={group} visible={false}>
+      {/* seated/standing graduate crowd facing the stage (-Z) */}
+      {GRADS.map(([x, z], i) => (
+        <VoxModel
+          key={i}
+          url={`${V}grad_npc.vox`}
+          position={[x, 0.95, z]}
+          scale={0.09}
+          rotation={[0, Math.PI, 0]}
+        />
+      ))}
+      {/* tossed caps */}
+      <group ref={caps}>
+        {TOSS.map(([x, baseY, z], i) => (
+          <group key={i} position={[x, baseY, z]}>
+            <VoxModel url={`${V}mortarboard.vox`} position={[0, 0, 0]} scale={0.09} />
+          </group>
+        ))}
+      </group>
+      {/* golden fireworks/confetti above the ceremony */}
+      <Sparkles count={140} scale={[20, 9, 12]} position={[0, 7, 4]} size={7} speed={0.5} color="#ffe39c" />
+    </group>
+  );
+}
+
 export default function SceneJaiHind({ stateRef }: { stateRef: MutableRefObject<SceneState> }) {
   const omRig = useRef<OmRigHandle>(null);
   const omGroup = useRef<Group>(null);
@@ -42,7 +110,10 @@ export default function SceneJaiHind({ stateRef }: { stateRef: MutableRefObject<
   useFrame(() => {
     const s = stateRef.current;
     if (env.current) env.current.visible = s.collegeVisible > 0.01;
-    if (omRig.current) omRig.current.setWalkPhase(s.omWalkPhase);
+    if (omRig.current) {
+      omRig.current.setWalkPhase(s.omWalkPhase);
+      omRig.current.setGrad(s.gradVisible > 0.5);
+    }
     if (omGroup.current) {
       omGroup.current.position.x = s.characterX;
       omGroup.current.position.z = s.characterZ;
@@ -69,6 +140,8 @@ export default function SceneJaiHind({ stateRef }: { stateRef: MutableRefObject<
         <VoxModel url={`${V}lamp.vox`} position={[2, 0.5, -4]} scale={0.1} />
         <Crowd visible={stateRef.current.crowdVisible} />
       </group>
+      {/* Graduation layer (gown/cap on Om via the rig; crowd + caps + sparkles here) */}
+      <GradLayer stateRef={stateRef} />
       {/* Hero Om — feet at y=0 by rig construction; X/Z driven by state */}
       <group ref={omGroup}>
         <VoxelOmRig ref={omRig} scale={0.1} />

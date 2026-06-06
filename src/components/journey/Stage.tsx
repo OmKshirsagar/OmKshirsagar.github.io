@@ -4,6 +4,7 @@ import WorldEnvironment from './WorldEnvironment';
 import Scene01Globe from './scenes/Scene01Globe';
 import SceneMumbai from './scenes/SceneMumbai';
 import SceneJaiHind from './scenes/SceneJaiHind';
+import SceneLibrary from './scenes/SceneLibrary';
 
 interface Props {
   stateRef: MutableRefObject<SceneState>;
@@ -23,6 +24,7 @@ export default function Stage({ stateRef }: Props) {
       <Scene01Globe stateRef={stateRef} />
       <SceneMumbai stateRef={stateRef} />
       <SceneJaiHind stateRef={stateRef} />
+      <SceneLibrary stateRef={stateRef} />
     </>
   );
 }

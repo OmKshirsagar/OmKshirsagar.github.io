@@ -44,7 +44,7 @@ export function useJourneyTimeline(args: Args): void {
         scrollTrigger: {
           trigger: stageRef.current,
           start: 'top top',
-          end: '+=9000',
+          end: '+=16000',
           scrub: 0.5,
           pin: true,
           pinType: 'transform',
@@ -173,6 +173,77 @@ export function useJourneyTimeline(args: Args): void {
           },
           15.8,
         );
+
+      // ====================================================================
+      // PHASE E · PUBLISHED PAPER (t 18 -> 23) — interior desk, hard cut
+      // Fade to black, teleport to the warm study; the laptop reveals the
+      // "PUBLISHED PAPER / JETIR 2022" card; hold; fade back to black.
+      // ====================================================================
+      tl.addLabel('paper', 18)
+        .to(scene, { captionOpacity: 0, duration: 0.4 }, 17.6)
+        .to(scene, { fadeBlack: 1, duration: 0.6, ease: 'power1.in' }, 17.8)
+        // --- at black: teleport into the interior ---
+        .set(scene, {
+          interior: 1, paperVisible: 1, paperReveal: 0,
+          collegeVisible: 0, characterOpacity: 0, gradVisible: 0, beat: 2,
+        }, 18.4)
+        .set(cam, {
+          x: 1.8, y: 42.6, z: 8.0, lookAtX: -1.0, lookAtY: 41.3, lookAtZ: 0, fov: 42,
+        }, 18.4)
+        .to(scene, { fadeBlack: 0, duration: 0.8, ease: 'power1.out' }, 18.4)
+        .to(scene, { captionOpacity: 1, duration: 0.5 }, 19.2)
+        // screen card reveal + slow push-in on the laptop
+        .to(scene, { paperReveal: 1, duration: 1.8, ease: 'power2.out' }, 19.6)
+        .to(
+          cam,
+          {
+            x: 0.6, y: 42.1, z: 5.6, lookAtX: -1.1, lookAtY: 41.15, lookAtZ: 0.1, fov: 36,
+            duration: 2.8, ease: 'power1.inOut',
+          },
+          19.4,
+        )
+        .to({}, { duration: 0.8 }) // hold on the published card
+        .to(scene, { captionOpacity: 0, duration: 0.4 }, 22.4)
+        .to(scene, { fadeBlack: 1, duration: 0.6, ease: 'power1.in' }, 22.6);
+
+      // ====================================================================
+      // PHASE F · GRADUATION (t 23.2 -> ~31) — back outdoors at the college
+      // Om turns to face the camera, dons gown + cap + diploma; the graduate
+      // crowd, tossed caps and golden fireworks appear; celebratory push-in.
+      // ====================================================================
+      tl.addLabel('grad', 23.2)
+        // --- at black: teleport back to the college, restore the hero ---
+        .set(scene, {
+          interior: 0, paperVisible: 0, paperReveal: 0,
+          collegeVisible: 1, characterOpacity: 1,
+          characterX: 0, characterZ: -3, characterRotationY: Math.PI,
+          gradVisible: 0, signGlow: 1, beat: 3,
+        }, 23.2)
+        .set(cam, {
+          x: 3.2, y: 1.9, z: 1.0, lookAtX: 0.2, lookAtY: 1.2, lookAtZ: -4.5, fov: 40,
+        }, 23.2)
+        .to(scene, { fadeBlack: 0, duration: 0.8, ease: 'power1.out' }, 23.2)
+        // turn Om to face the camera + don the graduation kit
+        .to(scene, { characterRotationY: 0, duration: 1.2, ease: 'power2.inOut' }, 24)
+        .to(scene, { gradVisible: 1, duration: 1.0 }, 24.3)
+        .to(scene, { captionOpacity: 1, duration: 0.5 }, 24.6)
+        // swing round to a celebratory front view, elevated over the crowd
+        .to(
+          cam,
+          {
+            x: 0, y: 5.0, z: 14, lookAtX: 0, lookAtY: 2.4, lookAtZ: -3, fov: 50,
+            duration: 2.4, ease: 'power2.inOut',
+          },
+          24,
+        )
+        // slow push-in on grad-Om holding the diploma aloft
+        .to(
+          cam,
+          { y: 3.6, z: 9, lookAtY: 2.2, fov: 44, duration: 3, ease: 'power1.inOut' },
+          26.6,
+        )
+        // hold on the moment (caps + fireworks animate via useFrame)
+        .to({}, { duration: 1.6 });
 
       return () => {
         gsap.ticker.remove(lenisRafCallback);

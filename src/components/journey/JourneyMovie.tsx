@@ -34,6 +34,7 @@ export default function JourneyMovie(): ReactElement {
   const hero12Ref = useRef<HTMLDivElement>(null);
   const captionWrapRef = useRef<HTMLDivElement>(null);
   const captionTextRef = useRef<HTMLSpanElement>(null);
+  const fadeBlackRef = useRef<HTMLDivElement>(null);
 
   const showDevHud = true;
   const showMarkers = false;
@@ -58,6 +59,7 @@ export default function JourneyMovie(): ReactElement {
       if (hero07Ref.current) hero07Ref.current.style.opacity = String(s.hero07Opacity);
       if (hero12Ref.current) hero12Ref.current.style.opacity = String(s.hero12Opacity);
       if (captionWrapRef.current) captionWrapRef.current.style.opacity = String(s.captionOpacity);
+      if (fadeBlackRef.current) fadeBlackRef.current.style.opacity = String(s.fadeBlack);
       if (captionTextRef.current) {
         const next = BEAT_CAPTIONS[s.beat] ?? '';
         if (next !== lastCaption) {
@@ -120,6 +122,9 @@ export default function JourneyMovie(): ReactElement {
           <span ref={captionTextRef} />
         </div>
 
+        {/* ===== Full-screen black wipe for hard scene cuts ===== */}
+        <div ref={fadeBlackRef} className="fade-black" style={{ opacity: 0 }} />
+
         {/* ===== Dev HUD ===== */}
         {showDevHud && (
           <div className="hud">
@@ -167,6 +172,16 @@ export default function JourneyMovie(): ReactElement {
           background: #060609;
         }
         .movie-stage canvas { display: block; width: 100% !important; height: 100% !important; }
+
+        /* Full-screen black wipe (hard cuts between scene locations) */
+        .fade-black {
+          position: absolute;
+          inset: 0;
+          background: #000;
+          z-index: 6;
+          will-change: opacity;
+          pointer-events: none;
+        }
 
         /* Rolling bottom caption (non-hero beats) */
         .caption {

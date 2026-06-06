@@ -43,6 +43,13 @@ export interface SceneState {
   omRimLight: number;    // 0..1 rim highlight strength on the hero
   signGlow: number;      // 0..1 "JAI HIND COLLEGE" sign emissive strength
   crowdVisible: number;  // 0..1 NPC crowd gate
+  gradVisible: number;   // 0..1 graduation layer (gown/cap/diploma + crowd + fireworks)
+
+  /** ===== Publish-paper interior (library/desk) ===== */
+  paperVisible: number;  // 0..1 — desk scene (laptop + lamp + seated Om) gate
+  paperReveal: number;   // 0..1 — laptop screen "PUBLISHED PAPER" card reveal
+  interior: number;      // 0..1 — dims the outdoor sun/sky toward a warm dark room
+  fadeBlack: number;     // 0..1 — full-screen black wipe for hard scene cuts
 
   /** HTML overlays (per-frame DOM mutation, never re-render). */
   hero02Opacity: number;
@@ -78,6 +85,11 @@ export const initialSceneState: SceneState = {
   omRimLight: 1,
   signGlow: 1,
   crowdVisible: 1,
+  gradVisible: 0,
+  paperVisible: 0,
+  paperReveal: 0,
+  interior: 0,
+  fadeBlack: 0,
   hero02Opacity: 0,
   hero07Opacity: 0,
   hero12Opacity: 0,
@@ -87,30 +99,34 @@ export const initialSceneState: SceneState = {
 /** Bottom-of-screen caption text per SCENE. */
 export const BEAT_CAPTIONS: string[] = [
   'MUMBAI · INDIA',                              // 01 Globe → Mumbai
-  '2024 · JAI HIND COLLEGE · CHURCHGATE',        // 02 College graduation (to build)
-  'JOINING DELOITTE',                            // 03 Transition
-  'FEB 2024 · FRONTEND TRAINING',                // 04 Deloitte training
-  'APR 2024 · FIRST CLIENT PROJECT',             // 05 First project
-  'OCT 2024 · FIRST OUTSTANDING AWARD',          // 06 Award 1
-  'JAN 2025 · FASTAPI STARTER KIT',              // 07 Platform thinking
-  'AUG 2025 · VOICE AI PILOT BEGINS',            // 08 Voice AI
-  '',                                            // 09 Voice AI live ★
-  'JAN 2026 · AGENTX HACKATHON',                 // 10 Hackathon
-  'MAR 2026 · BUILDING THIS PORTFOLIO',          // 11 Sidequest
-  '',                                            // 12 Today ★ promotion
+  '2024 · JAI HIND COLLEGE · CHURCHGATE',        // 02 College arrival
+  'PUBLISHED PAPER · JETIR 2022',                // 03 Research paper (library/desk)
+  'GRADUATED · BSc IT · CGPA 9.89 / 10',         // 04 Graduation
+  'JOINING DELOITTE',                            // 05 Transition
+  'FEB 2024 · FRONTEND TRAINING',                // 06 Deloitte training
+  'APR 2024 · FIRST CLIENT PROJECT',             // 07 First project
+  'OCT 2024 · FIRST OUTSTANDING AWARD',          // 08 Award 1
+  'JAN 2025 · FASTAPI STARTER KIT',              // 09 Platform thinking
+  'AUG 2025 · VOICE AI PILOT BEGINS',            // 10 Voice AI
+  '',                                            // 11 Voice AI live ★
+  'JAN 2026 · AGENTX HACKATHON',                 // 12 Hackathon
+  'MAR 2026 · BUILDING THIS PORTFOLIO',          // 13 Sidequest
+  '',                                            // 14 Today ★ promotion
 ];
 
 export const BEAT_NAMES: string[] = [
   '01 · Mumbai · The Origin',
-  '02 · College · Graduation',
-  '03 · Joining Deloitte',
-  '04 · Training',
-  '05 · First Project',
-  '06 · First Outstanding ★',
-  '07 · FastAPI Starter Kit',
-  '08 · Voice AI Pilot',
-  '09 · Voice AI Live ★',
-  '10 · AgentX Hackathon',
-  '11 · Sidequest',
-  '12 · Promotion ★',
+  '02 · Jai Hind College',
+  '03 · Published Paper ★',
+  '04 · Graduation',
+  '05 · Joining Deloitte',
+  '06 · Training',
+  '07 · First Project',
+  '08 · First Outstanding ★',
+  '09 · FastAPI Starter Kit',
+  '10 · Voice AI Pilot',
+  '11 · Voice AI Live ★',
+  '12 · AgentX Hackathon',
+  '13 · Sidequest',
+  '14 · Promotion ★',
 ];

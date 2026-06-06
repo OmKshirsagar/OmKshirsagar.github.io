@@ -76,6 +76,15 @@ PALETTE = {
     "car_blue": (35, 70, 104, 168),
     "crest_blue": (36, 38, 64, 128),
     "glass_tint": (37, 46, 64, 82),
+    # --- graduation ---
+    "gown_navy": (38, 42, 56, 102),
+    "grad_gold": (39, 226, 186, 74),
+    "stole_red": (40, 178, 52, 52),
+    # --- publish-paper / interior desk ---
+    "laptop_silver": (41, 212, 210, 206),
+    "screen_bezel": (42, 34, 32, 36),
+    "desk_wood": (43, 150, 98, 58),
+    "lamp_warm": (44, 255, 226, 158),
 }
 
 

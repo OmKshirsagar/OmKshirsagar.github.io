@@ -70,9 +70,42 @@ def build_ocean():
     save_and_preview(m, "ocean", preview=False)
 
 
+def build_palm():
+    """A palm tree — thin trunk + a splayed frond crown. Lines the promenade."""
+    m = new_model(9, 9, 18)
+    m.fill_box(4, 4, 0, 4, 4, 12, C("trunk"))            # trunk (vertical)
+    # frond crown — a flat-ish star of green at the top
+    m.fill_box(2, 4, 13, 6, 4, 13, C("palm_green"))      # arms along x
+    m.fill_box(4, 2, 13, 4, 6, 13, C("palm_green"))      # arms along y
+    m.fill_box(1, 4, 14, 7, 4, 14, C("palm_green"))
+    m.fill_box(4, 1, 14, 4, 7, 14, C("palm_green"))
+    m.fill_box(3, 3, 15, 5, 5, 15, C("palm_green"))      # crown cap
+    save_and_preview(m, "palm", preview=False)
+
+
+def build_streetlamp():
+    """A tall street lamp with a bright glowing head — lines the roads."""
+    m = new_model(3, 3, 16)
+    m.fill_box(1, 1, 0, 1, 1, 13, C("lamp_metal"))       # post
+    m.fill_box(0, 0, 14, 2, 2, 15, C("window_glow"))     # glowing head
+    save_and_preview(m, "streetlamp", preview=False)
+
+
+def build_car():
+    """A small voxel car — body + cabin. Sits on the promenade road."""
+    m = new_model(6, 12, 6)                              # x=width, y=length, z=height
+    m.fill_box(0, 0, 0, 5, 11, 2, C("car_red"))          # body
+    m.fill_box(1, 2, 3, 4, 8, 4, C("car_silver"))        # cabin
+    m.fill_box(0, 1, 0, 5, 1, 1, C("road_dark"))         # front bumper (dark)
+    save_and_preview(m, "car", preview=False)
+
+
 if __name__ == "__main__":
     build_cloud()
     build_tower()
     build_mountain()
     build_ocean()
+    build_palm()
+    build_streetlamp()
+    build_car()
     print("MUMBAI BUILD OK")

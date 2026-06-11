@@ -67,6 +67,8 @@ export interface SceneState {
   hero07Opacity: number;
   hero12Opacity: number;
   captionOpacity: number;
+  comingSoonOpacity: number; // 0..1 — end-of-(shipped)-journey "more coming soon" card
+  degreeFlip: number; // 0..1 — graduation degree certificate flips onto the screen
 }
 
 export const initialCameraState: CameraState = {
@@ -114,6 +116,8 @@ export const initialSceneState: SceneState = {
   hero07Opacity: 0,
   hero12Opacity: 0,
   captionOpacity: 0,
+  comingSoonOpacity: 0,
+  degreeFlip: 0,
 };
 
 /** Bottom-of-screen caption text per SCENE. */

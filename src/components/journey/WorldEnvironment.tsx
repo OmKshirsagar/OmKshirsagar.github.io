@@ -1,7 +1,7 @@
-import { useRef, useEffect, type MutableRefObject } from 'react';
+import { useRef, useEffect, useMemo, type MutableRefObject } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import type { DirectionalLight, AmbientLight } from 'three';
+import type { DirectionalLight, AmbientLight, Points } from 'three';
 import type { SceneState } from './lib/state';
 
 /**
@@ -31,6 +31,24 @@ export default function WorldEnvironment({
   const ambient = useRef<AmbientLight>(null);
   const key = useRef<DirectionalLight>(null);
   const rim = useRef<DirectionalLight>(null);
+  const stars = useRef<Points>(null);
+
+  // A deep-space starfield: random points on a shell around the camera.
+  const starGeo = useMemo(() => {
+    const N = 2200;
+    const pos = new Float32Array(N * 3);
+    for (let i = 0; i < N; i++) {
+      const r = 70 + Math.random() * 60;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      pos[i * 3 + 2] = r * Math.cos(phi);
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    return g;
+  }, []);
 
   // Own the background + fog as mutable objects we lerp each frame.
   useEffect(() => {
@@ -75,10 +93,27 @@ export default function WorldEnvironment({
     if (rim.current) {
       rim.current.intensity = THREE.MathUtils.lerp(0, 1.2, w) * (1 - i) * (1 - d);
     }
+    // Stars live in deep space — visible while the globe is up, gone on descent.
+    if (stars.current) {
+      stars.current.visible = stateRef.current.globeVisible > 0.04;
+    }
   });
 
   return (
     <>
+      {/* deep-space starfield (opener) — fixed-pixel white points, no fog/tone-map */}
+      <points ref={stars} geometry={starGeo}>
+        <pointsMaterial
+          size={2}
+          sizeAttenuation={false}
+          color="#ffffff"
+          transparent
+          opacity={0.95}
+          fog={false}
+          toneMapped={false}
+          depthWrite={false}
+        />
+      </points>
       <ambientLight ref={ambient} intensity={0.35} color="#20243a" />
       <directionalLight
         ref={key}

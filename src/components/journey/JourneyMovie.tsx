@@ -41,8 +41,11 @@ export default function JourneyMovie(): ReactElement {
   const captionWrapRef = useRef<HTMLDivElement>(null);
   const captionTextRef = useRef<HTMLSpanElement>(null);
   const fadeBlackRef = useRef<HTMLDivElement>(null);
+  const comingSoonRef = useRef<HTMLDivElement>(null);
+  const scrollHintRef = useRef<HTMLDivElement>(null);
+  const degreeRef = useRef<HTMLDivElement>(null);
 
-  const showDevHud = true;
+  const showDevHud = DEV;
   const showMarkers = false;
 
   // ~10Hz tick just for the dev HUD's text fields. The visual overlays
@@ -66,6 +69,14 @@ export default function JourneyMovie(): ReactElement {
       if (hero12Ref.current) hero12Ref.current.style.opacity = String(s.hero12Opacity);
       if (captionWrapRef.current) captionWrapRef.current.style.opacity = String(s.captionOpacity);
       if (fadeBlackRef.current) fadeBlackRef.current.style.opacity = String(s.fadeBlack);
+      if (comingSoonRef.current) comingSoonRef.current.style.opacity = String(s.comingSoonOpacity);
+      if (scrollHintRef.current) scrollHintRef.current.style.opacity = String(Math.max(0, 1 - s.progress * 60));
+      if (degreeRef.current) {
+        const f = s.degreeFlip;
+        degreeRef.current.style.opacity = String(Math.min(1, f * 1.4));
+        degreeRef.current.style.transform =
+          `perspective(1500px) rotateX(${(1 - f) * 82}deg) scale(${0.66 + 0.34 * f})`;
+      }
       if (captionTextRef.current) {
         const next = BEAT_CAPTIONS[s.beat] ?? '';
         if (next !== lastCaption) {
@@ -138,8 +149,47 @@ export default function JourneyMovie(): ReactElement {
           <span ref={captionTextRef} />
         </div>
 
+        {/* ===== Scroll-to-begin hint (first frame; fades as you scroll) ===== */}
+        <div ref={scrollHintRef} className="scroll-hint">
+          <span className="sh-label">Scroll to begin the journey</span>
+          <span className="sh-mouse"><span className="sh-wheel" /></span>
+          <span className="sh-chevrons"><i /><i /></span>
+        </div>
+
         {/* ===== Full-screen black wipe for hard scene cuts ===== */}
         <div ref={fadeBlackRef} className="fade-black" style={{ opacity: 0 }} />
+
+        {/* ===== Graduation degree — flips up to fill the screen ===== */}
+        <div ref={degreeRef} className="degree" style={{ opacity: 0 }}>
+          <div className="degree-card">
+            <div className="degree-seal">U</div>
+            <div className="degree-uni">University of Mumbai</div>
+            <div className="degree-uni-mr">मुंबई विद्यापीठ</div>
+            <div className="degree-rule" />
+            <div className="degree-body">
+              This is to certify that
+              <div className="degree-name">OM KSHIRSAGAR</div>
+              of Jai Hind College, Churchgate, has been awarded the degree of
+              <div className="degree-deg">Bachelor of Science — Information Technology</div>
+              in the First Class with Distinction · CGPA 9.89 / 10
+            </div>
+            <div className="degree-foot">
+              <span>Convocation · Mumbai</span>
+              <span className="degree-sign">conferred 2023</span>
+            </div>
+          </div>
+        </div>
+
+        {/* ===== End-of-(shipped)-journey "more coming soon" card ===== */}
+        <div ref={comingSoonRef} className="coming-soon" style={{ opacity: 0 }}>
+          <div className="cs-eyebrow">// THE JOURNEY · TO BE CONTINUED</div>
+          <div className="cs-title">More <em>coming soon</em></div>
+          <div className="cs-sub">
+            The rest of the story — first projects, the outstanding award, real-time voice AI,
+            and the road ahead — is being built.
+          </div>
+          <div className="cs-hint">↑ scroll up to replay</div>
+        </div>
 
         {/* ===== Dev HUD ===== */}
         {showDevHud && (
@@ -198,6 +248,140 @@ export default function JourneyMovie(): ReactElement {
           will-change: opacity;
           pointer-events: none;
         }
+
+        /* "More coming soon" end card (sits above the black wipe) */
+        .coming-soon {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          gap: 14px;
+          padding: 0 8vw;
+          z-index: 7;
+          will-change: opacity;
+          pointer-events: none;
+          background: radial-gradient(circle at 50% 45%, rgba(28,26,38,0.0) 0%, #060609 75%);
+        }
+        .cs-eyebrow {
+          font: 700 12px/1.4 'JetBrains Mono', monospace;
+          letter-spacing: 0.32em;
+          color: #ff9460;
+          text-transform: uppercase;
+        }
+        .cs-title {
+          font: 800 clamp(38px, 7vw, 88px)/1.05 'Inter', system-ui, sans-serif;
+          color: #fff;
+          letter-spacing: -0.02em;
+        }
+        .cs-title em { color: #ffd29a; font-style: normal; }
+        .cs-sub {
+          max-width: 620px;
+          font: 400 clamp(14px, 1.6vw, 18px)/1.6 'Inter', system-ui, sans-serif;
+          color: #b9b2a4;
+        }
+        .cs-hint {
+          margin-top: 10px;
+          font: 600 11px/1.4 'JetBrains Mono', monospace;
+          letter-spacing: 0.22em;
+          color: #6f6a5e;
+          text-transform: uppercase;
+        }
+
+        /* Scroll-to-begin hint on the opening frame */
+        .scroll-hint {
+          position: absolute;
+          bottom: 6vh;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+          z-index: 8;
+          will-change: opacity;
+          pointer-events: none;
+        }
+        .sh-label {
+          font: 600 12px/1.4 'JetBrains Mono', monospace;
+          letter-spacing: 0.26em;
+          color: #ffd29a;
+          text-transform: uppercase;
+        }
+        .sh-mouse {
+          width: 24px;
+          height: 38px;
+          border: 2px solid rgba(255,210,154,0.7);
+          border-radius: 13px;
+          display: flex;
+          justify-content: center;
+          padding-top: 6px;
+        }
+        .sh-wheel {
+          width: 3px;
+          height: 7px;
+          border-radius: 2px;
+          background: #ffd29a;
+          animation: sh-wheel 1.5s ease-in-out infinite;
+        }
+        .sh-chevrons { display: flex; flex-direction: column; align-items: center; margin-top: -4px; }
+        .sh-chevrons i {
+          width: 9px; height: 9px;
+          border-right: 2px solid rgba(255,210,154,0.7);
+          border-bottom: 2px solid rgba(255,210,154,0.7);
+          transform: rotate(45deg);
+          margin-top: -3px;
+          animation: sh-bounce 1.5s ease-in-out infinite;
+        }
+        .sh-chevrons i:nth-child(2) { animation-delay: 0.18s; opacity: 0.6; }
+        @keyframes sh-wheel { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(12px); opacity: 0; } 100% { opacity: 0; } }
+        @keyframes sh-bounce { 0%, 100% { transform: rotate(45deg) translate(0,0); } 50% { transform: rotate(45deg) translate(2px,2px); } }
+
+        /* Graduation degree certificate (flips up to fill the screen) */
+        .degree {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 7;
+          transform-origin: center 60%;
+          will-change: opacity, transform;
+          pointer-events: none;
+        }
+        .degree-card {
+          width: min(66vw, 760px);
+          aspect-ratio: 1.42 / 1;
+          background: linear-gradient(160deg, #fdf6e6 0%, #f2e7cd 100%);
+          border: 3px solid #8e2b2b;
+          outline: 5px solid #b9933f;
+          outline-offset: 4px;
+          border-radius: 3px;
+          box-shadow: 0 36px 90px rgba(0,0,0,0.6), inset 0 0 0 2px #b9933f;
+          padding: clamp(16px, 2.6vw, 38px) clamp(24px, 5vw, 66px);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          color: #3a2a1a;
+          font-family: Georgia, 'Times New Roman', serif;
+        }
+        .degree-seal {
+          width: 50px; height: 50px; border-radius: 50%;
+          border: 3px solid #8e2b2b; color: #8e2b2b;
+          display: grid; place-items: center;
+          font: 800 26px/1 Georgia, serif; margin-bottom: 4px;
+        }
+        .degree-uni { font-size: clamp(22px, 3.4vw, 40px); font-weight: 800; color: #7a1f1f; }
+        .degree-uni-mr { font-size: clamp(13px, 1.8vw, 20px); color: #8e2b2b; margin-top: 2px; }
+        .degree-rule { width: 58%; height: 2px; background: #b9933f; margin: 9px 0 13px; }
+        .degree-body { font-size: clamp(12px, 1.5vw, 17px); line-height: 1.65; color: #4a3623; max-width: 92%; }
+        .degree-name { font-size: clamp(18px, 2.4vw, 28px); font-weight: 800; color: #243a7a; margin: 5px 0; letter-spacing: 0.04em; }
+        .degree-deg { font-size: clamp(14px, 2vw, 22px); font-weight: 700; color: #7a1f1f; margin: 5px 0; }
+        .degree-foot { margin-top: auto; padding-top: 12px; width: 100%; display: flex; justify-content: space-between; font-size: clamp(10px, 1.2vw, 13px); color: #6a553a; letter-spacing: 0.05em; }
+        .degree-sign { font-style: italic; }
 
         /* Rolling bottom caption (non-hero beats) */
         .caption {

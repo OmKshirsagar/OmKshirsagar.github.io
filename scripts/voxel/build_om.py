@@ -25,15 +25,18 @@ def build_head():
     # the lower third — leaving the CENTER (forehead/nose/cheeks) clearly skin.
     m = new_model(6, 6, 7)
     m.fill_box(0, 0, 0, 5, 5, 5, C("skin"))            # face/skull block (z 0..5)
-    # ---- hair volume: top cap, back, both sides (sides cover front cols x0/x5) ----
+    # ---- hair volume (top cap, back, both sides) — sides keep the FRONT column
+    #      (y=0) as skin at eye level so the dark eyes don't merge into the hair ----
     m.fill_box(0, 0, 6, 5, 5, 6, C("hair_black"))      # top cap (z=6)
     m.fill_box(0, 5, 1, 5, 5, 6, C("hair_black"))      # back slab (y=5)
-    m.fill_box(0, 0, 2, 0, 5, 6, C("hair_black"))      # left side (x=0, z2..6)
-    m.fill_box(5, 0, 2, 5, 5, 6, C("hair_black"))      # right side (x=5, z2..6)
+    m.fill_box(0, 1, 2, 0, 5, 6, C("hair_black"))      # left side VOLUME (depth y1..5)
+    m.fill_box(5, 1, 2, 5, 5, 6, C("hair_black"))      # right side VOLUME (depth y1..5)
+    m.set_voxel(0, 0, 4, C("hair_black"))              # left temple (front, above eye)
+    m.set_voxel(5, 0, 4, C("hair_black"))              # right temple
     # ---- front (y=0) detail ----
     m.fill_box(0, 0, 5, 5, 0, 5, C("hair_black"))      # hairline across z5
     m.set_voxel(1, 0, 4, C("hair_black"))              # asymmetric bang on forehead
-    m.set_voxel(1, 0, 3, C("hair_black"))              # left eye
+    m.set_voxel(1, 0, 3, C("hair_black"))              # left eye (skin on both sides now)
     m.set_voxel(4, 0, 3, C("hair_black"))              # right eye
     m.set_voxel(2, 0, 2, C("hair_black"))              # mustache (center-left)
     m.set_voxel(3, 0, 2, C("hair_black"))              # mustache (center-right)

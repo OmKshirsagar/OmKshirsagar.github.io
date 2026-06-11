@@ -1,9 +1,13 @@
 import { Canvas } from '@react-three/fiber';
 import { useEffect, useRef, useState, type ReactElement } from 'react';
+import { SheetProvider } from '@theatre/r3f';
+import { Perf } from 'r3f-perf';
+import { Leva } from 'leva';
 import CameraRig from './CameraRig';
 import Stage from './Stage';
 import PostFX from './PostFX';
 import HeroTitle from './HeroTitle';
+import { journeySheet, initJourneyStudio } from './lib/theatre';
 import {
   BEAT_CAPTIONS,
   BEAT_NAMES,
@@ -11,6 +15,8 @@ import {
   initialSceneState,
 } from './lib/state';
 import { useJourneyTimeline } from './lib/useJourneyTimeline';
+
+const DEV = import.meta.env.DEV;
 
 /**
  * Top-level /journey island. Mounts ONCE via Astro's client:only="react".
@@ -75,8 +81,15 @@ export default function JourneyMovie(): ReactElement {
 
   useJourneyTimeline({ scopeRef, stageRef, cameraRef, sceneRef, showMarkers });
 
+  // Theatre.js Studio (dev-only visual editor + gizmos for placing objects).
+  useEffect(() => {
+    void initJourneyStudio();
+  }, []);
+
   return (
     <div ref={scopeRef} className="journey-root">
+      {/* leva live-tuning panel (dev only; hidden in production) */}
+      <Leva hidden={!DEV} collapsed />
       <div ref={stageRef} className="movie-stage">
         <Canvas
           shadows
@@ -90,8 +103,11 @@ export default function JourneyMovie(): ReactElement {
           gl={{ antialias: true, alpha: false }}
         >
           <CameraRig stateRef={cameraRef} />
-          <Stage stateRef={sceneRef} />
+          <SheetProvider sheet={journeySheet()}>
+            <Stage stateRef={sceneRef} />
+          </SheetProvider>
           <PostFX />
+          {DEV && <Perf position="bottom-left" />}
         </Canvas>
 
         {/* ===== Hero title overlays (3 of them, opacity-driven) ===== */}

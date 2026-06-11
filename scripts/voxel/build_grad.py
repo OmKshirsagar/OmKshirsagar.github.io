@@ -23,20 +23,22 @@ def build_mortarboard():
 
 
 def build_gown():
-    """Navy gown that drapes over the torso + hips, with a red stole.
-    Sized to overlay the rig around y 5..19 (centered model -> place at y~12)."""
-    W, D, H = 10, 6, 16
+    """Navy gown that drapes SYMMETRICALLY over the torso + both arms, with a
+    red stole and cream collar. Wide enough (model 12) to cover the rig's arms
+    at x=±4 on BOTH sides, centred so neither arm pokes out.
+    Sized to overlay the rig around y 4..20 (centered model -> place at y~12)."""
+    W, D, H = 12, 6, 16
     m = new_model(W, D, H)
-    # gown body, slightly flared toward the bottom
+    # gown body: NARROW at the shoulders (so both arms stay visible at the
+    # sides) and flared wide at the hem — symmetric around the model centre.
     for z in range(H):
-        flare = 0 if z > 5 else (5 - z) // 2
-        m.fill_box(1 - 0 + flare * 0, 0, z, W - 1, D - 1, z, C("gown_navy"))
-        m.fill_box(max(0, 1 - flare), 0, z, min(W - 1, W - 2 + flare), D - 1, z, C("gown_navy"))
-    # red stole: two vertical strips down the front (y=0)
-    m.fill_box(3, 0, 4, 3, 0, H - 1, C("stole_red"))
-    m.fill_box(6, 0, 4, 6, 0, H - 1, C("stole_red"))
-    # cream collar / shirt V at the top front
-    m.fill_box(4, 0, H - 2, 5, 0, H - 1, C("cloud_white"))
+        hw = 5 if z <= 5 else 3  # wide hem (bottom) / narrow shoulders (top)
+        m.fill_box(6 - hw, 0, z, 5 + hw, D - 1, z, C("gown_navy"))
+    # red stole: two vertical strips down the front (y=0), symmetric
+    m.fill_box(4, 0, 3, 4, 0, H - 1, C("stole_red"))
+    m.fill_box(7, 0, 3, 7, 0, H - 1, C("stole_red"))
+    # cream collar / shirt V at the top front centre
+    m.fill_box(5, 0, H - 2, 6, 0, H - 1, C("cloud_white"))
     save_and_preview(m, "gown", preview=False)
 
 

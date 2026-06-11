@@ -51,6 +51,17 @@ export interface SceneState {
   interior: number;      // 0..1 — dims the outdoor sun/sky toward a warm dark room
   fadeBlack: number;     // 0..1 — full-screen black wipe for hard scene cuts
 
+  /** ===== Deloitte chapter (exterior tower + office montage) ===== */
+  dayBlue: number;       // 0..1 — bright blue daytime sky blend (Deloitte exterior/office)
+  deloitteVisible: number; // 0..1 — glass tower + plaza + revolving door
+  badgeVisible: number;  // 0..1 — blue lanyard + ID on voxel-Om
+  trainingVisible: number; // 0..1 — open-plan training office (SHOT 11, first day)
+  officeVisible: number; // 0..1 — interior office (desk + monitor + window skyline)
+  officeScreen: number;  // monitor content index (1=training,2=project,3=starter,4=voice,5=hackathon,6=portfolio)
+  trophyReveal: number;  // 0..1 — award trophy rise + sparkles
+  waveLevel: number;     // 0..1 — voice-AI waveform activity
+  confetti: number;      // 0..1 — promotion finale confetti
+
   /** HTML overlays (per-frame DOM mutation, never re-render). */
   hero02Opacity: number;
   hero07Opacity: number;
@@ -90,6 +101,15 @@ export const initialSceneState: SceneState = {
   paperReveal: 0,
   interior: 0,
   fadeBlack: 0,
+  dayBlue: 0,
+  deloitteVisible: 0,
+  badgeVisible: 0,
+  trainingVisible: 0,
+  officeVisible: 0,
+  officeScreen: 1,
+  trophyReveal: 0,
+  waveLevel: 0,
+  confetti: 0,
   hero02Opacity: 0,
   hero07Opacity: 0,
   hero12Opacity: 0,

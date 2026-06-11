@@ -85,6 +85,48 @@ PALETTE = {
     "screen_bezel": (42, 34, 32, 36),
     "desk_wood": (43, 150, 98, 58),
     "lamp_warm": (44, 255, 226, 158),
+    # --- Deloitte (tower, office, lanyard, trophy) ---
+    "deloitte_green": (45, 134, 188, 37),
+    "glass_blue": (46, 150, 186, 214),
+    "glass_blue_dk": (47, 92, 130, 166),
+    "lanyard_blue": (48, 36, 92, 174),
+    "monitor_dark": (49, 28, 30, 38),
+    "steel": (50, 150, 156, 168),
+    # --- dense desk props (om-working / fastapi-2 reference clips) ---
+    "key_dark": (51, 36, 38, 46),       # mechanical keyboard body/keys
+    "key_glow": (52, 96, 196, 236),     # blue keyboard backlight strip
+    "mug_white": (53, 230, 226, 216),   # coffee mug
+    "pot_clay": (54, 178, 96, 66),      # terracotta plant pot
+    "plant_leaf": (55, 92, 158, 88),    # foliage
+    "plant_leaf_dk": (56, 54, 112, 64), # foliage shadow
+    "coffee": (57, 78, 50, 34),         # coffee liquid
+    "screen_glow_grn": (58, 120, 220, 110),  # rising-chart green
+    # --- Deloitte plaza (entering-deloitte clip): bronze, glass, paving ---
+    "bronze": (59, 178, 138, 92),       # warm entrance/door metal
+    "bronze_dk": (60, 132, 98, 62),     # bronze shadow / mullions
+    "paving": (61, 214, 204, 186),      # plaza stone
+    "paving_dk": (62, 190, 178, 158),   # plaza joint lines
+    "mat_brown": (63, 92, 70, 50),      # entrance doormat
+    "hedge": (64, 74, 120, 70),         # planter hedges
+    "sun_glow": (65, 255, 240, 205),    # sunset bloom disc
+    "glass_warm": (66, 196, 188, 196),  # sun-reflecting glass highlight
+    # --- the real La Tour Deloitte: angular dark-blue glass tower + sign ---
+    "dnavy": (67, 46, 66, 102),         # Deloitte tower dark-blue glass
+    "dnavy_lit": (68, 120, 152, 196),   # lit/sun-reflecting window
+    "dnavy_mull": (69, 30, 42, 66),     # vertical mullion lines
+    "sign_body": (70, 38, 42, 52),      # sign monolith (dark charcoal)
+    "deloitte_dot": (71, 134, 188, 37), # the green Deloitte "." dot
+    # --- open-plan office (training scene): ergonomic chair, desks, ceiling ---
+    "chair_dark": (72, 34, 36, 44),     # chair mesh/fabric shadow + seams
+    "chair_mid": (73, 60, 64, 76),      # chair mesh/fabric face
+    "chair_metal": (74, 158, 164, 178), # polished base / arms / gas lift
+    "chair_wheel": (75, 26, 26, 32),    # castor wheels
+    "desk_top": (76, 222, 214, 200),    # light laminate desk surface
+    "desk_leg": (77, 90, 96, 108),      # steel desk leg
+    "ceiling": (78, 232, 230, 224),     # office ceiling panel
+    "panel_light": (79, 255, 248, 226), # recessed ceiling light glow
+    "carpet": (80, 132, 120, 104),      # warm office carpet
+    "wood_warm": (81, 170, 120, 70),    # warm wood accent (desk edge)
 }
 
 

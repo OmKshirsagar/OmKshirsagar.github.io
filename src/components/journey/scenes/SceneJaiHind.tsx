@@ -118,7 +118,8 @@ export default function SceneJaiHind({ stateRef }: { stateRef: MutableRefObject<
       omGroup.current.position.x = s.characterX;
       omGroup.current.position.z = s.characterZ;
       omGroup.current.rotation.y = s.characterRotationY;
-      omGroup.current.visible = s.characterOpacity > 0.01;
+      // gate by collegeVisible too so the shared hero doesn't bleed into other scenes
+      omGroup.current.visible = s.characterOpacity > 0.01 && s.collegeVisible > 0.01;
     }
   });
 

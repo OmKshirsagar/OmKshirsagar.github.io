@@ -44,7 +44,7 @@ export function useJourneyTimeline(args: Args): void {
         scrollTrigger: {
           trigger: stageRef.current,
           start: 'top top',
-          end: '+=16000',
+          end: '+=32000',
           scrub: 0.5,
           pin: true,
           pinType: 'transform',
@@ -244,6 +244,111 @@ export function useJourneyTimeline(args: Args): void {
         )
         // hold on the moment (caps + fireworks animate via useFrame)
         .to({}, { duration: 1.6 });
+
+      // ====================================================================
+      // PHASE G · JOINING DELOITTE (t 31.5 -> 37) — bright-day glass tower
+      // Fade to black, cut to the plaza; Om (now in a blue lanyard) steps out
+      // of the revolving door toward camera. Sky shifts to bright blue day.
+      // ====================================================================
+      tl.addLabel('deloitte', 31.5)
+        .to(scene, { captionOpacity: 0, duration: 0.4 }, 31.0)
+        .to(scene, { fadeBlack: 1, duration: 0.6, ease: 'power1.in' }, 31.2)
+        .set(scene, {
+          gradVisible: 0, collegeVisible: 0, cityVisible: 0, cloudsVisible: 0,
+          interior: 0, dayBlue: 0, skyWarmth: 1,
+          deloitteVisible: 1, badgeVisible: 0, characterOpacity: 1,
+          characterX: 0, characterZ: -2.6, characterRotationY: 0, omWalkPhase: 0, beat: 4,
+        }, 31.8)
+        .set(cam, { x: 0, y: 3.4, z: 11, lookAtX: 0, lookAtY: 2.3, lookAtZ: -6, fov: 52 }, 31.8)
+        .to(scene, { fadeBlack: 0, duration: 0.8, ease: 'power1.out' }, 31.8)
+        .to(scene, { captionOpacity: 1, duration: 0.5 }, 32.6)
+        // Om walks out toward camera (ends close = hero close-up)
+        .to(scene, { omWalkPhase: 4, duration: 3, ease: 'none' }, 32.8)
+        .to(scene, { characterZ: -0.2, duration: 3, ease: 'power1.inOut' }, 32.8)
+        .to(cam, { y: 1.75, z: 4.6, lookAtY: 1.7, lookAtZ: -3, fov: 42, duration: 3.2, ease: 'power2.inOut' }, 32.8)
+        .to({}, { duration: 0.9 });
+
+      // ====================================================================
+      // PHASE H · DELOITTE OFFICE MONTAGE (t 37 -> ~64)
+      // One evolving office; the monitor content, captions, hero cards, trophy,
+      // waveform and confetti change per career beat. Interior lives at y≈60.
+      // ====================================================================
+      const OY = 60; // office world-Y offset
+      tl.addLabel('office', 37)
+        .to(scene, { captionOpacity: 0, duration: 0.4 }, 36.4)
+        .to(scene, { fadeBlack: 1, duration: 0.6, ease: 'power1.in' }, 36.5)
+        .set(scene, {
+          deloitteVisible: 0, trainingVisible: 1, officeVisible: 0, officeScreen: 1, characterOpacity: 0,
+          trophyReveal: 0, waveLevel: 0, confetti: 0, beat: 5,
+        }, 37.1)
+        .set(cam, { x: 1.5, y: OY + 3.4, z: 5.5, lookAtX: -1.0, lookAtY: OY + 2.3, lookAtZ: -6.5, fov: 52 }, 37.1)
+        .to(scene, { fadeBlack: 0, duration: 0.8, ease: 'power1.out' }, 37.1)
+
+        // --- Beat 5 · Training (Feb 2024) · SHOT 11 React-basics training room ---
+        .to(scene, { captionOpacity: 1, duration: 0.5 }, 37.9)
+        .to(cam, { x: 0.6, y: OY + 3.0, z: 3.6, lookAtX: -1.4, lookAtY: OY + 2.1, lookAtZ: -7.0, fov: 50, duration: 2.4, ease: 'power2.inOut' }, 38)
+        .to({}, { duration: 0.6 })
+
+        // --- Beat 6 · First Project (Apr 2024) — fade back to the (legacy) office box for now ---
+        .to(scene, { fadeBlack: 1, duration: 0.35, ease: 'power1.in' }, 40.2)
+        .set(scene, { trainingVisible: 0, officeVisible: 1, officeScreen: 2, beat: 6 }, 40.6)
+        .to(scene, { fadeBlack: 0, duration: 0.5, ease: 'power1.out' }, 40.7)
+        .to(cam, { x: -1.4, y: OY + 1.9, z: 5.0, lookAtX: -1.8, fov: 40, duration: 2.2, ease: 'power1.inOut' }, 40.8)
+        .to({}, { duration: 0.6 })
+
+        // --- Beat 7 · First Outstanding Award (Oct 2024) ★ hero ---
+        .to(scene, { captionOpacity: 0, duration: 0.4 }, 43.2)
+        .set(scene, { beat: 7 }, 43.4)
+        .to(cam, { x: 2.6, y: OY + 2.3, z: 6.4, lookAtX: 0.8, lookAtY: OY + 1.7, lookAtZ: 0.4, fov: 44, duration: 2, ease: 'power2.inOut' }, 43.4)
+        .to(scene, { trophyReveal: 1, duration: 1.4, ease: 'back.out(1.4)' }, 43.6)
+        .to(scene, { hero02Opacity: 1, duration: 0.6 }, 44.2)
+        .to({}, { duration: 1.0 })
+        .to(scene, { hero02Opacity: 0, duration: 0.5 }, 46.6)
+
+        // --- Beat 8 · FastAPI Starter Kit (Jan 2025) ---
+        .set(scene, { officeScreen: 3, beat: 8 }, 47.2)
+        .to(scene, { trophyReveal: 0, duration: 0.6 }, 47.0)
+        .to(scene, { captionOpacity: 1, duration: 0.5 }, 47.4)
+        .to(cam, { x: -1.8, y: OY + 2.0, z: 5.2, lookAtX: -1.8, lookAtY: OY + 2.0, lookAtZ: 0, fov: 42, duration: 2.2, ease: 'power1.inOut' }, 47.2)
+        .to({}, { duration: 0.5 })
+
+        // --- Beat 9 · Voice AI Pilot (Aug 2025) ---
+        .set(scene, { officeScreen: 4, beat: 9 }, 49.8)
+        .to(scene, { waveLevel: 0.6, duration: 0.8 }, 50.0)
+        .to(cam, { x: -1.8, z: 4.8, lookAtY: OY + 2.0, fov: 40, duration: 2, ease: 'power1.inOut' }, 50.0)
+        .to({}, { duration: 0.5 })
+
+        // --- Beat 10 · Voice AI goes live (Oct 2025) ★ hero ---
+        .to(scene, { captionOpacity: 0, duration: 0.4 }, 52.2)
+        .set(scene, { beat: 10 }, 52.4)
+        .to(scene, { waveLevel: 1, duration: 1.0, ease: 'power2.out' }, 52.4)
+        .to(scene, { hero07Opacity: 1, duration: 0.6 }, 52.8)
+        .to(cam, { x: -1.8, z: 4.4, fov: 38, duration: 2.4, ease: 'power1.inOut' }, 52.4)
+        .to({}, { duration: 1.0 })
+        .to(scene, { hero07Opacity: 0, duration: 0.5 }, 55.0)
+        .to(scene, { waveLevel: 0.35, duration: 0.6 }, 55.0)
+
+        // --- Beat 11 · AgentX Hackathon (Jan 2026) ---
+        .set(scene, { officeScreen: 5, beat: 11 }, 55.8)
+        .to(scene, { waveLevel: 0, duration: 0.4 }, 55.6)
+        .to(scene, { captionOpacity: 1, duration: 0.5 }, 56.0)
+        .to(cam, { x: -1.6, y: OY + 2.1, z: 5.2, lookAtX: -1.8, lookAtY: OY + 2.0, fov: 42, duration: 2.2, ease: 'power1.inOut' }, 55.8)
+        .to({}, { duration: 0.5 })
+
+        // --- Beat 12 · Building this portfolio (Mar 2026) ---
+        .set(scene, { officeScreen: 6, beat: 12 }, 58.4)
+        .to(cam, { x: -1.8, z: 4.9, fov: 40, duration: 2.2, ease: 'power1.inOut' }, 58.6)
+        .to({}, { duration: 0.6 })
+
+        // --- Beat 13 · Promotion · Software Engineer I (Jun 2026) ★ finale ---
+        .to(scene, { captionOpacity: 0, duration: 0.4 }, 61.0)
+        .set(scene, { officeScreen: 7, beat: 13 }, 61.2)
+        .to(scene, { confetti: 1, duration: 0.8 }, 61.2)
+        .to(cam, { x: 2.6, y: OY + 2.4, z: 7.0, lookAtX: 0.6, lookAtY: OY + 1.85, lookAtZ: 0.3, fov: 46, duration: 2.6, ease: 'power2.inOut' }, 61.2)
+        .to(scene, { hero12Opacity: 1, duration: 0.7 }, 62.0)
+        // slow final push-in to hold on the finale
+        .to(cam, { x: 2.2, z: 5.8, y: OY + 2.2, lookAtX: 0.7, lookAtY: OY + 1.8, fov: 42, duration: 3, ease: 'power1.inOut' }, 63.0)
+        .to({}, { duration: 2.0 });
 
       return () => {
         gsap.ticker.remove(lenisRafCallback);

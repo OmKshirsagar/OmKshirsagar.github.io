@@ -13,6 +13,8 @@ export type OmRigHandle = {
   setBadge: (on: boolean) => void;
   // eslint-disable-next-line no-unused-vars
   setSeated: (on: boolean) => void;
+  // eslint-disable-next-line no-unused-vars
+  setCheer: (on: boolean) => void;
   group: THREE.Group | null;
 };
 
@@ -39,6 +41,7 @@ export const VoxelOmRig = forwardRef<OmRigHandle, { scale?: number }>(
     const grad = useRef(false);
     const badgeOn = useRef(false);
     const seated = useRef(false);
+    const cheer = useRef(false);
 
     useImperativeHandle(ref, () => ({
       setWalkPhase: (t: number) => {
@@ -52,6 +55,9 @@ export const VoxelOmRig = forwardRef<OmRigHandle, { scale?: number }>(
       },
       setSeated: (on: boolean) => {
         seated.current = on;
+      },
+      setCheer: (on: boolean) => {
+        cheer.current = on;
       },
       group: root.current,
     }));
@@ -79,6 +85,16 @@ export const VoxelOmRig = forwardRef<OmRigHandle, { scale?: number }>(
         if (armL.current) armL.current.rotation.x = -1.05;
         if (armR.current) armR.current.rotation.x = -1.05;
         if (root.current) root.current.position.y = 0;
+        return;
+      }
+      if (cheer.current) {
+        // Triumph: both arms thrown up overhead, a little victory bob.
+        const t = performance.now() * 0.006;
+        if (thighL.current) thighL.current.rotation.x = 0;
+        if (thighR.current) thighR.current.rotation.x = 0;
+        if (armL.current) armL.current.rotation.x = 2.7;
+        if (armR.current) armR.current.rotation.x = 2.7;
+        if (root.current) root.current.position.y = Math.max(0, Math.sin(t) * 0.6);
         return;
       }
       const p = walkPose(((phase.current % 1) + 1) % 1);

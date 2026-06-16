@@ -56,6 +56,8 @@ export interface SceneState {
   deloitteVisible: number; // 0..1 — glass tower + plaza + revolving door
   badgeVisible: number;  // 0..1 — blue lanyard + ID on voxel-Om
   trainingVisible: number; // 0..1 — open-plan training office (SHOT 11, first day)
+  warRoomVisible: number;  // 0..1 — night "war room" first-project debugging scene
+  warFix: number;          // 0..1 — code run goes from red FAILED -> green PASSING
   officeVisible: number; // 0..1 — interior office (desk + monitor + window skyline)
   officeScreen: number;  // monitor content index (1=training,2=project,3=starter,4=voice,5=hackathon,6=portfolio)
   trophyReveal: number;  // 0..1 — award trophy rise + sparkles
@@ -107,6 +109,8 @@ export const initialSceneState: SceneState = {
   deloitteVisible: 0,
   badgeVisible: 0,
   trainingVisible: 0,
+  warRoomVisible: 0,
+  warFix: 0,
   officeVisible: 0,
   officeScreen: 1,
   trophyReveal: 0,
@@ -128,7 +132,7 @@ export const BEAT_CAPTIONS: string[] = [
   'GRADUATED · BSc IT · CGPA 9.89 / 10',         // 04 Graduation
   'JOINING DELOITTE',                            // 05 Transition
   'FEB 2024 · FRONTEND TRAINING',                // 06 Deloitte training
-  'APR 2024 · FIRST CLIENT PROJECT',             // 07 First project
+  'APR 2024 · FIRST PROJECT · WAR ROOM',          // 07 First project (Takeda/NMT)
   'OCT 2024 · FIRST OUTSTANDING AWARD',          // 08 Award 1
   'JAN 2025 · FASTAPI STARTER KIT',              // 09 Platform thinking
   'AUG 2025 · VOICE AI PILOT BEGINS',            // 10 Voice AI
@@ -145,7 +149,7 @@ export const BEAT_NAMES: string[] = [
   '04 · Graduation',
   '05 · Joining Deloitte',
   '06 · Training',
-  '07 · First Project',
+  '07 · War Room',
   '08 · First Outstanding ★',
   '09 · FastAPI Starter Kit',
   '10 · Voice AI Pilot',

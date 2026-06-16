@@ -44,7 +44,7 @@ export function useJourneyTimeline(args: Args): void {
         scrollTrigger: {
           trigger: stageRef.current,
           start: 'top top',
-          end: '+=21000',
+          end: '+=24000',
           scrub: 0.5,
           pin: true,
           pinType: 'transform',
@@ -276,6 +276,7 @@ export function useJourneyTimeline(args: Args): void {
       // waveform and confetti change per career beat. Interior lives at y≈60.
       // ====================================================================
       const OY = 60; // office world-Y offset
+      const WROY = 80; // war-room world-Y offset
       tl.addLabel('office', 37)
         .to(scene, { captionOpacity: 0, duration: 0.4 }, 36.4)
         .to(scene, { fadeBlack: 1, duration: 0.6, ease: 'power1.in' }, 36.5)
@@ -289,14 +290,28 @@ export function useJourneyTimeline(args: Args): void {
         // --- Beat 5 · Training (Feb 2024) · SHOT 11 React-basics training room ---
         .to(scene, { captionOpacity: 1, duration: 0.5 }, 37.9)
         .to(cam, { x: 0.6, y: OY + 3.0, z: 3.6, lookAtX: -1.4, lookAtY: OY + 2.1, lookAtZ: -7.0, fov: 50, duration: 2.4, ease: 'power2.inOut' }, 38)
-        .to({}, { duration: 1.2 })
+        .to({}, { duration: 0.8 })
 
-        // --- OUTRO · "more coming soon" — ship the journey up to Training; the
-        //     rest of the career arc (award → voice AI → promotion) is WIP. ---
-        .to(scene, { captionOpacity: 0, duration: 0.4 }, 40.8)
-        .to(scene, { fadeBlack: 1, duration: 1.0, ease: 'power1.in' }, 41.2)
-        .set(scene, { trainingVisible: 0 }, 42.3)
-        .to(scene, { comingSoonOpacity: 1, duration: 0.9, ease: 'power1.out' }, 42.5)
+        // --- Beat 6 · War Room (First Project · Takeda · 2024) — the code goes green ---
+        .to(scene, { captionOpacity: 0, duration: 0.4 }, 40.4)
+        .to(scene, { fadeBlack: 1, duration: 0.7, ease: 'power1.in' }, 40.7)
+        .set(scene, { trainingVisible: 0, warRoomVisible: 1, warFix: 0, beat: 6 }, 41.5)
+        .set(cam, { x: 0.0, y: WROY + 3.2, z: 7.0, lookAtX: 0.4, lookAtY: WROY + 1.7, lookAtZ: -0.6, fov: 46 }, 41.5)
+        .to(scene, { fadeBlack: 0, duration: 0.8, ease: 'power1.out' }, 41.6)
+        .to(scene, { captionOpacity: 1, duration: 0.5 }, 42.2)
+        // tension — behind the team, looking over their shoulders at the red FAILED screen
+        .to(cam, { x: 0.0, y: WROY + 2.9, z: 6.1, lookAtX: 0.4, lookAtY: WROY + 1.85, lookAtZ: -0.7, fov: 44, duration: 2.2, ease: 'power1.inOut' }, 42.2)
+        .to({}, { duration: 0.9 })
+        // THE FIX — code runs green; Om turns to camera, the team celebrates
+        .to(scene, { warFix: 1, duration: 1.1, ease: 'power2.inOut' }, 45.4)
+        .to(cam, { x: -0.5, y: WROY + 2.7, z: 5.4, lookAtX: 0.3, lookAtY: WROY + 1.7, lookAtZ: 1.3, fov: 48, duration: 1.8, ease: 'power2.out' }, 45.6)
+        .to({}, { duration: 1.6 })
+
+        // --- OUTRO · "more coming soon" — ship the journey up to the War Room ---
+        .to(scene, { captionOpacity: 0, duration: 0.4 }, 48.6)
+        .to(scene, { fadeBlack: 1, duration: 1.0, ease: 'power1.in' }, 49.0)
+        .set(scene, { warRoomVisible: 0 }, 50.1)
+        .to(scene, { comingSoonOpacity: 1, duration: 0.9, ease: 'power1.out' }, 50.3)
         .to({}, { duration: 2.4 });
 
       return () => {

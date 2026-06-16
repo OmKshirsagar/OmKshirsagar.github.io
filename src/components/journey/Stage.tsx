@@ -7,6 +7,7 @@ import SceneJaiHind from './scenes/SceneJaiHind';
 import SceneLibrary from './scenes/SceneLibrary';
 import SceneDeloitte from './scenes/SceneDeloitte';
 import SceneTraining from './scenes/SceneTraining';
+import SceneWarRoom from './scenes/SceneWarRoom';
 import SceneOffice from './scenes/SceneOffice';
 
 interface Props {
@@ -30,6 +31,7 @@ export default function Stage({ stateRef }: Props) {
       <SceneLibrary stateRef={stateRef} />
       <SceneDeloitte stateRef={stateRef} />
       <SceneTraining stateRef={stateRef} />
+      <SceneWarRoom stateRef={stateRef} />
       <SceneOffice stateRef={stateRef} />
     </>
   );

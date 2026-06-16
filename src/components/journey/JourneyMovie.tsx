@@ -97,27 +97,34 @@ export default function JourneyMovie(): ReactElement {
     void initJourneyStudio();
   }, []);
 
+  // ---- mobile/perf budget: cap DPR, drop shadows + heavy MSAA on phones ----
+  const [perf] = useState(() => {
+    if (typeof window === 'undefined') return { mobile: false, dpr: [1, 2] as [number, number] };
+    const mobile = (window.matchMedia?.('(pointer: coarse)').matches ?? false) || window.innerWidth < 820;
+    return { mobile, dpr: (mobile ? [1, 1.3] : [1, 1.75]) as [number, number] };
+  });
+
   return (
     <div ref={scopeRef} className="journey-root">
       {/* leva live-tuning panel (dev only; hidden in production) */}
       <Leva hidden={!DEV} collapsed />
       <div ref={stageRef} className="movie-stage">
         <Canvas
-          shadows
-          dpr={[1, 2]}
+          shadows={!perf.mobile}
+          dpr={perf.dpr}
           camera={{
             position: [initialCameraState.x, initialCameraState.y, initialCameraState.z],
             fov: initialCameraState.fov,
             near: 0.1,
             far: 100,
           }}
-          gl={{ antialias: true, alpha: false }}
+          gl={{ antialias: !perf.mobile, alpha: false, powerPreference: 'high-performance' }}
         >
           <CameraRig stateRef={cameraRef} />
           <SheetProvider sheet={journeySheet()}>
             <Stage stateRef={sceneRef} />
           </SheetProvider>
-          <PostFX />
+          <PostFX low={perf.mobile} />
           {DEV && <Perf position="bottom-left" />}
         </Canvas>
 

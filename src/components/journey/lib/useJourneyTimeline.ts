@@ -33,11 +33,31 @@ export function useJourneyTimeline(args: Args): void {
 
   useGSAP(
     () => {
-      const lenis = new Lenis({ smoothWheel: true, duration: 0.9 });
-      const lenisRafCallback = (time: number): void => lenis.raf(time * 1000);
-      lenis.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add(lenisRafCallback);
-      gsap.ticker.lagSmoothing(0);
+      // Mobile address-bar show/hide resizes the viewport and makes the pinned
+      // ScrollTrigger jump — tell GSAP to ignore that resize.
+      ScrollTrigger.config({ ignoreMobileResize: true });
+
+      // Touch devices: let GSAP own/normalize scrolling (kills the address-bar
+      // jank + the Lenis-vs-pin "vibration"). Desktop keeps Lenis smoothing.
+      const isTouch =
+        typeof window !== 'undefined' && (window.matchMedia?.('(pointer: coarse)').matches ?? false);
+      let cleanupScroll = (): void => {};
+      if (isTouch) {
+        ScrollTrigger.normalizeScroll(true);
+        cleanupScroll = () => {
+          ScrollTrigger.normalizeScroll(false);
+        };
+      } else {
+        const lenis = new Lenis({ smoothWheel: true, duration: 0.9 });
+        const raf = (time: number): void => lenis.raf(time * 1000);
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add(raf);
+        gsap.ticker.lagSmoothing(0);
+        cleanupScroll = () => {
+          gsap.ticker.remove(raf);
+          lenis.destroy();
+        };
+      }
 
       const tl = gsap.timeline({
         defaults: { ease: 'power2.inOut', duration: 1 },
@@ -300,8 +320,7 @@ export function useJourneyTimeline(args: Args): void {
         .to({}, { duration: 2.4 });
 
       return () => {
-        gsap.ticker.remove(lenisRafCallback);
-        lenis.destroy();
+        cleanupScroll();
       };
     },
     { scope: scopeRef, dependencies: [showMarkers] },

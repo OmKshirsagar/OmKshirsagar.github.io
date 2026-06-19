@@ -7,6 +7,7 @@ import CameraRig from './CameraRig';
 import Stage from './Stage';
 import PostFX from './PostFX';
 import HeroTitle from './HeroTitle';
+import JourneyLoader from './JourneyLoader';
 import { journeySheet, initJourneyStudio } from './lib/theatre';
 import {
   BEAT_CAPTIONS,
@@ -106,6 +107,8 @@ export default function JourneyMovie(): ReactElement {
 
   return (
     <div ref={scopeRef} className="journey-root">
+      {/* 0->100 boot loader (sits above the canvas; hooks DefaultLoadingManager) */}
+      <JourneyLoader />
       {/* leva live-tuning panel (dev only; hidden in production) */}
       <Leva hidden={!DEV} collapsed />
       <div ref={stageRef} className="movie-stage">

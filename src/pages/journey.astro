@@ -3,17 +3,28 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import JourneyMovie from '@/components/journey/JourneyMovie';
 ---
 <BaseLayout title="Journey · Om Kshirsagar">
-  <!--
-    Three.js + WebGL cannot SSR — mount as a client-only React island.
-    The component creates its own scroll runway via ScrollTrigger's pin.
-  -->
+  {/* ---- STATIC PRE-HYDRATION LOADER ---------------------------------------
+       Shows immediately on page load (zero JS dependency). The React
+       JourneyLoader takes over the same slot once the bundle hydrates and
+       starts tracking real asset progress. The static one stays visible
+       UNDER the React one until React removes it (`#journey-static-loader`
+       gets `aria-hidden=true` -> CSS hides it instantly when the React
+       loader is mounted, so there's no double-loader flash).
+  ----------------------------------------------------------------------- */}
+  <div id="journey-static-loader" aria-hidden="false">
+    <div class="jsl-stars"></div>
+    <div class="jsl-content">
+      <div class="jsl-eyebrow">// THE JOURNEY</div>
+      <div class="jsl-spinner" aria-hidden="true"></div>
+      <div class="jsl-status">Loading the world…</div>
+    </div>
+  </div>
+
+  {/* Three.js + WebGL cannot SSR — mount as a client-only React island.
+      The component creates its own scroll runway via ScrollTrigger's pin. */}
   <JourneyMovie client:only="react" />
 
-  <!--
-    Tiny fallback that shows during the brief moment before the React
-    island hydrates (or if JS is disabled). Will be hidden by the
-    mounted island.
-  -->
+  {/* Fallback for users with JS disabled */}
   <noscript>
     <main style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:40px;text-align:center;">
       <p style="font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-orange); margin-bottom: 16px;">
@@ -27,4 +38,79 @@ import JourneyMovie from '@/components/journey/JourneyMovie';
       </p>
     </main>
   </noscript>
+
+  <style is:global>
+    /* Static pre-hydration loader (CSS-only; visible immediately on page
+       load, no JS needed). The React JourneyLoader hides this once
+       hydration starts so the two never overlap. */
+    #journey-static-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 99; /* sits below React loader (z=100) */
+      background: #060810;
+      color: #ffd29a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      pointer-events: auto;
+    }
+    #journey-static-loader[aria-hidden="true"] {
+      display: none;
+    }
+    /* Same starfield aesthetic as the React loader so the handoff is seamless */
+    #journey-static-loader .jsl-stars {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,0.5) 50%, transparent 51%),
+        radial-gradient(1px 1px at 82% 28%, rgba(255,255,255,0.45) 50%, transparent 51%),
+        radial-gradient(1px 1px at 28% 72%, rgba(255,255,255,0.5) 50%, transparent 51%),
+        radial-gradient(1px 1px at 64% 88%, rgba(255,255,255,0.4) 50%, transparent 51%),
+        radial-gradient(1px 1px at 48% 38%, rgba(255,255,255,0.3) 50%, transparent 51%),
+        radial-gradient(1px 1px at 92% 62%, rgba(255,255,255,0.35) 50%, transparent 51%),
+        radial-gradient(1px 1px at 8% 78%, rgba(255,255,255,0.35) 50%, transparent 51%),
+        radial-gradient(2px 2px at 22% 42%, rgba(255,255,255,0.4) 50%, transparent 51%),
+        radial-gradient(1px 1px at 70% 58%, rgba(255,255,255,0.35) 50%, transparent 51%);
+      opacity: 0.55;
+    }
+    #journey-static-loader .jsl-content {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      padding: 0 24px;
+      text-align: center;
+    }
+    #journey-static-loader .jsl-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.34em;
+      font-weight: 700;
+      color: #ff9460;
+      text-transform: uppercase;
+    }
+    /* Animated ring (so users know it's not frozen even before JS loads). */
+    #journey-static-loader .jsl-spinner {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 210, 154, 0.18);
+      border-top-color: #ffd29a;
+      animation: jsl-spin 1s linear infinite;
+    }
+    #journey-static-loader .jsl-status {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      font-weight: 600;
+      color: #6f6a5e;
+      text-transform: uppercase;
+    }
+    @keyframes jsl-spin {
+      to { transform: rotate(360deg); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #journey-static-loader .jsl-spinner { animation: none; }
+    }
+  </style>
 </BaseLayout>

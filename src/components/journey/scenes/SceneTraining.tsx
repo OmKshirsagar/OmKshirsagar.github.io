@@ -1,6 +1,7 @@
 import { useRef, type MutableRefObject } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Sparkles, Text } from '@react-three/drei';
+import { Text } from '@react-three/drei';
+import { Sparkles } from '../Sparkles';
 import type { Group } from 'three';
 import { VoxModel } from '../voxel/VoxModel';
 import { VoxelOmRig, type OmRigHandle } from '../voxel/VoxelOmRig';
